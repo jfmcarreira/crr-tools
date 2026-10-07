@@ -5,12 +5,13 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
+from starlette.datastructures import FormData
 from ...database import get_db
 from ...models import Assignment, MonthlyPattern, RotationMember, Schedule, SwapRequest, Team
 from ...i18n import MONTHS, month_name
 from ...services.scheduling import ensure_month_assignments
 from ..assignment_helpers import _apply_pattern_to_open_rows
-from ..dependencies import _check_csrf, _context, _flash, _month_nav, _parse_month, _redirect, _require_admin
+from ..dependencies import _check_csrf, _context, _flash, _month_nav, _parse_month, _raw_form, _redirect, _require_admin
 from ..schedule_helpers import _all_schedules, _get_schedule, _pattern_map, _render_admin_schedules, _schedule_card, _schedule_groups, _schedule_teams
 
 router = APIRouter()
@@ -98,14 +99,15 @@ def _open_swap_requests(db: Session, schedule_id: int) -> list[SwapRequest]:
     )
 
 
+# Sync endpoint: the DB work runs in the threadpool (see _raw_form for the form).
 @router.post("/admin/schedules/{schedule_id}/pattern")
-async def admin_schedule_pattern(
+def admin_schedule_pattern(
     schedule_id: int,
     request: Request,
+    form: FormData = Depends(_raw_form),
     db: Session = Depends(get_db),
 ):
     _require_admin(request, db)
-    form = await request.form()
     _check_csrf(request, str(form.get("csrf_token", "")))
     schedule = _get_schedule(db, schedule_id)
     if schedule.schedule_type == "rotation":

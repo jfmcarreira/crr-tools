@@ -19,6 +19,20 @@ class LoginInput(RequestSchema):
         return value
 
 
+def cookie_secure(request: Request) -> bool:
+    """Whether the session cookie is marked Secure.
+
+    Decided per request unless SESSION_COOKIE_SECURE forces it: HTTPS already
+    arrives as such, and behind the trusted proxy uvicorn resolves the scheme
+    from X-Forwarded-Proto, so trusting the proxy covers plain `http` requests
+    that the proxy is expected to have terminated TLS for.
+    """
+    forced = request.app.state.settings.session_cookie_secure
+    if forced is not None:
+        return forced
+    return request.url.scheme == "https" or request.app.state.settings.trust_proxy
+
+
 @router.post("/login")
 def login(body: LoginInput, request: Request, response: Response):
     # Checking, recording and resetting attempts must be atomic across ASGI workers.
@@ -36,7 +50,7 @@ def finish_login(body: LoginInput, request: Request, response: Response):
         raise AppError(401, "A palavra-passe está incorreta.")
     limiter.clear(key)
     response.set_cookie(COOKIE_NAME, create_token(settings), path=settings.app_base_path,
-                        httponly=True, samesite="strict", secure=request.url.scheme == "https",
+                        httponly=True, samesite="strict", secure=cookie_secure(request),
                         max_age=settings.session_lifetime_ms // 1000)
     return {"authenticated": True}
 
@@ -44,7 +58,7 @@ def finish_login(body: LoginInput, request: Request, response: Response):
 @router.post("/logout")
 def logout(request: Request, response: Response):
     response.delete_cookie(COOKIE_NAME, path=request.app.state.settings.app_base_path,
-                           httponly=True, samesite="strict", secure=request.url.scheme == "https")
+                           httponly=True, samesite="strict", secure=cookie_secure(request))
     return {"authenticated": False}
 
 

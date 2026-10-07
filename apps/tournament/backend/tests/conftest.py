@@ -7,7 +7,7 @@ from app.main import create_app
 
 @pytest.fixture
 def settings(tmp_path):
-    return Settings(admin_password="test-password", session_secret="test-secret-not-for-production",
+    return Settings(admin_password="test-password", session_secret="test-secret-not-for-production-0000",
                     database_path=str(tmp_path / "tournament.sqlite"), app_base_path="/jogo/")
 
 

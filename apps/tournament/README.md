@@ -22,7 +22,8 @@ make tournament-frontend-dev
 ```
 
 Copy `apps/tournament/.env.example` to `apps/tournament/.env` and configure
-`ADMIN_PASSWORD` and `SESSION_SECRET`. Uvicorn listens on port 8080 and Vite on
+`ADMIN_PASSWORD` and `SESSION_SECRET` (at least 32 random characters; the app
+refuses to start while either is empty). Uvicorn listens on port 8080 and Vite on
 5173. Development data is stored in `apps/tournament/tournament.sqlite`.
 Use consistent `APP_BASE_PATH` and `VITE_BASE_PATH`; `/jogo/` is the example
 deployment prefix, while both also support `/`.

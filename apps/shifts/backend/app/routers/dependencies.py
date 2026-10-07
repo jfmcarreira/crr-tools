@@ -5,6 +5,7 @@ from fastapi import HTTPException, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from starlette.datastructures import FormData
 from ..config import settings
 from ..models import Team, User
 from ..security import new_csrf_token
@@ -65,6 +66,15 @@ def _check_csrf(request: Request, token: str) -> None:
     expected = request.session.get("csrf")
     if not expected or token != expected:
         raise HTTPException(status_code=400, detail="Token CSRF inválido")
+
+
+async def _raw_form(request: Request) -> FormData:
+    """Parse the body once, on the event loop.
+
+    Declaring it as a dependency lets a sync endpoint (which FastAPI runs in
+    the threadpool) receive the form without ever blocking the loop itself.
+    """
+    return await request.form()
 
 
 def _flash(request: Request, message: str, level: str = "info") -> None:

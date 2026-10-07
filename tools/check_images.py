@@ -71,11 +71,11 @@ def check(image: str, port: int, environment: dict[str, str], routes: list[str],
 if __name__ == "__main__":
     check("crr-tournament", 8080, {
         "ADMIN_PASSWORD": "smoke-test-password",
-        "SESSION_SECRET": "smoke-test-secret",
+        "SESSION_SECRET": "smoke-test-session-secret-0123456789-abcdef",
     }, ["/api/public/state", "/results"], proxy_prefix="/jogo")
     check("crr-shifts", 8000, {
         "DATABASE_URL": "sqlite:////data/smoke.db",
-        "SECRET_KEY": "smoke-test-secret",
+        "SECRET_KEY": "smoke-test-secret-key-0123456789-abcdefghijklmn",
         "INITIAL_ADMIN_PASSWORD": "smoke-test-password",
         "SMTP_HOST": "",
     }, ["/health", "/login"])

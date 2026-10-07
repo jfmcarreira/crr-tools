@@ -7,12 +7,26 @@ from sqlalchemy.orm import Session
 
 from ..config import settings
 from ..models import Schedule, Team, User
-from ..security import hash_password
+from ..security import MIN_PASSWORD_LENGTH, hash_password
+
+# Values the app must never turn into a real administrator account.
+_PLACEHOLDER_PASSWORDS = {"", "change-me-now"}
+
+
+def _require_initial_password() -> None:
+    """Refuse to bootstrap the admin with a known or trivial password."""
+    password = settings.initial_admin_password.strip()
+    if password in _PLACEHOLDER_PASSWORDS or len(password) < MIN_PASSWORD_LENGTH:
+        raise RuntimeError(
+            "INITIAL_ADMIN_PASSWORD não está definida (ou ainda é a palavra-passe "
+            "padrão). Defina uma palavra-passe real no .env antes do primeiro arranque."
+        )
 
 
 def ensure_initial_data(db: Session) -> None:
     team_count = db.scalar(select(Team.id).limit(1))
     if team_count is None:
+        _require_initial_password()
         db.add(
             Team(
                 name=settings.initial_admin_name,

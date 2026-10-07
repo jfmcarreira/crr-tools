@@ -10,7 +10,7 @@ _TMP = TemporaryDirectory(prefix="crr-export-tests-")
 os.environ.update({
     "DATABASE_URL": f"sqlite:///{_TMP.name}/test.db",
     "BACKUP_DIR": f"{_TMP.name}/backups",
-    "SECRET_KEY": "test-secret",
+    "SECRET_KEY": "test-secret-key-for-unit-tests-only-0123456789",
     "APP_NAME": "Contínuos CRR",
     "BASE_URL": "http://testserver",
     "CALENDAR_TOKEN": "",
@@ -42,6 +42,7 @@ from app.database import Base, SessionLocal, engine, run_migrations
 from app.main import app
 from app.models import Schedule, Team, User
 from app.security import hash_password
+from app.security.rate_limit import LoginRateLimiter
 
 
 def sign_in(client: TestClient, username: str, password: str) -> TestClient:
@@ -73,6 +74,13 @@ def cleanup_database() -> Iterator[None]:
     yield
     engine.dispose()
     _TMP.cleanup()
+
+
+@pytest.fixture(autouse=True)
+def reset_rate_limiter() -> Iterator[None]:
+    """Failed logins accumulate on the shared app; start every test fresh."""
+    app.state.limiter = LoginRateLimiter()
+    yield
 
 
 @pytest.fixture

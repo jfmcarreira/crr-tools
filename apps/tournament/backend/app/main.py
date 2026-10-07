@@ -37,7 +37,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.events = events
     app.state.limiter = LoginRateLimiter()
     if settings.trust_proxy:
-        app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+        # Only the listed proxies may set X-Forwarded-*; uvicorn then walks the
+        # header right-to-left to the first untrusted hop, so the client cannot
+        # spoof its own address by prepending X-Forwarded-For entries.
+        raw = settings.trusted_proxies.strip()
+        trusted_hosts = "*" if raw == "*" else [item.strip() for item in raw.split(",") if item.strip()]
+        app.add_middleware(ProxyHeadersMiddleware, trusted_hosts=trusted_hosts)
     install_errors(app)
     for router in [auth.router, public.router, settings_router.router, display.router, groups.router,
                    teams.router, calendar.router, matches.router, final_stage.router]:

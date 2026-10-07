@@ -35,7 +35,7 @@ def _swap_side(
     return assignment
 
 
-def _swap_partner(db: Session, schedule: Schedule, team_id: int | None) -> Team | None:
+def _swap_partner(db: Session, schedule: Schedule, team_id: int | None) -> Team:
     """The one team this swap is with: active and working the same schedule."""
     if not team_id:
         raise HTTPException(status_code=400, detail="Escolha a equipa que fica com o turno")

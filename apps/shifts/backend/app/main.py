@@ -30,6 +30,7 @@ from .i18n import (
     window_label,
 )
 from .routers import router
+from .security.rate_limit import LoginRateLimiter
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -50,6 +51,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan, root_path=settings.root_path)
+# In-process counter of failed logins; see security/rate_limit.py for the limits.
+app.state.limiter = LoginRateLimiter()
 # Behind a reverse proxy, uvicorn runs with --proxy-headers so X-Forwarded-Proto/Host
 # set the public scheme and host; ROOT_PATH adds the prefix the proxy serves us under.
 app.add_middleware(

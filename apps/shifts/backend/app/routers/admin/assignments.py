@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
+from starlette.datastructures import FormData
 from ...config import settings
 from ...database import get_db
 from ...models import Assignment, SwapRequest, Team
@@ -12,9 +13,9 @@ from ...i18n import day_numeric_long, day_short, month_name
 from ...services.notifications import send_many
 from ...services.scheduling import ensure_month_assignments, month_bounds
 from ..assignment_helpers import _apply_pattern_forward, _apply_rotation_to_rows, _clear_assignments_from, _default_team, _generate_rotation_range, _month_assignments, _notify_assignment_changes, _save_assignments, _set_assignee
-from ..dependencies import _check_csrf, _context, _flash, _parse_month, _redirect, _require_admin, _user_label
+from ..dependencies import _check_csrf, _context, _flash, _parse_month, _raw_form, _redirect, _require_admin, _user_label
 from ..schedule_helpers import _active_schedules, _get_schedule
-from ..swap_helpers import _swap_ownership_holds, _swap_partner
+from ..swap_helpers import _complete_swap, _swap_ownership_holds, _swap_partner
 
 router = APIRouter()
 
@@ -107,19 +108,10 @@ def admin_schedule_assign_swap(
         db.commit()
         raise HTTPException(status_code=409, detail="O turno já foi alterado")
 
-    swap.assignment.team_id = new_team.id
-    swap.assignment.source = "swap"
-    swap.accepted_team_id = new_team.id
-    swap.status = "approved"
-    for other in db.scalars(
-        select(SwapRequest).where(
-            SwapRequest.assignment_id == swap.assignment_id,
-            SwapRequest.id != swap.id,
-            SwapRequest.status.in_(["open", "pending_approval"]),
-        )
-    ).all():
-        other.status = "cancelled"
-    db.commit()
+    # Atomic two-sided swap: both shifts change hands, competing requests on
+    # either side are cancelled, and the request is committed — exactly what
+    # the team-side accept/approve paths do.
+    _complete_swap(db, swap, new_team)
 
     subject = "Troca de turno aprovada"
     body = (
@@ -144,18 +136,21 @@ def _schedule_page(schedule_id: int, year: str, month: str) -> str:
     return f"/admin/schedules/{schedule_id}"
 
 
+# Saving runs SQLite commits and one e-mail per change; as a sync endpoint
+# FastAPI runs it in the threadpool, so it can never stall the event loop.
+# The form itself is parsed by the async _raw_form dependency on the loop.
 @router.post("/admin/schedules/{schedule_id}/assignments")
-async def admin_schedule_assignments(
+def admin_schedule_assignments(
     schedule_id: int,
     request: Request,
+    form: FormData = Depends(_raw_form),
     db: Session = Depends(get_db),
 ):
     _require_admin(request, db)
-    form = await request.form()
     _check_csrf(request, str(form.get("csrf_token", "")))
     schedule = _get_schedule(db, schedule_id)
-    year = int(form.get("year", date.today().year))
-    month = int(form.get("month", date.today().month))
+    year = int(str(form.get("year", date.today().year)))
+    month = int(str(form.get("month", date.today().month)))
     assignments = [row for row in _month_assignments(db, year, month) if row.schedule_id == schedule.id]
     changed = _save_assignments(db, assignments, form)
     _flash(request, f"Foram guardadas {changed} alteração(ões) de turno.")

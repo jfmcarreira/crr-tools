@@ -24,6 +24,9 @@ make shifts-dev
 
 Copy `apps/shifts/.env.example` to `apps/shifts/backend/.env` and configure
 `SECRET_KEY`, `INITIAL_ADMIN_PASSWORD`, and the remaining deployment settings.
+Both are enforced: startup fails without a `SECRET_KEY` of at least 32 random
+characters (e.g. `openssl rand -hex 24`), and the first start refuses to create
+the administrator with an empty or placeholder `INITIAL_ADMIN_PASSWORD`.
 The local server listens on port 8000. Migrations, backups and initial data run
 on startup; SQLite data defaults to `backend/data/bar_rota.db`. `make shifts-dev`
 creates its data directory. Create that directory before using CLI initialization
