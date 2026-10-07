@@ -25,8 +25,8 @@ make tournament-frontend-dev
 Copy `apps/tournament/.env.example` to `apps/tournament/.env` and configure
 `ADMIN_PASSWORD` and `SESSION_SECRET`. Uvicorn listens on port 8080 and Vite
 on 5173. Development data is stored in `apps/tournament/tournament.sqlite`.
-Use consistent `APP_BASE_PATH` and `VITE_BASE_PATH`; `/jogo/` remains the example
-deployment prefix, while both support `/`.
+Use consistent `APP_BASE_PATH` and `VITE_BASE_PATH`; the default site-root
+configuration is `/`, while `/jogo/` remains supported for legacy sub-path deployments.
 
 ```sh
 docker compose up --build tournament
