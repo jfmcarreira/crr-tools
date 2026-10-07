@@ -1,0 +1,51 @@
+name: Independent app release
+on:
+  push:
+    tags: ['tournament-v*', 'shifts-v*']
+permissions:
+  contents: read
+  packages: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.31'
+      - id: plan
+        env:
+          TAG: ${{ github.ref_name }}
+          SERVER: ${{ github.server_url }}
+          OWNER: ${{ github.repository_owner }}
+          REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
+        run: uv run --no-project --python 3.13 python tools/release.py "$TAG" --server "$SERVER" --owner "$OWNER" --registry "$REGISTRY" --output "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        if: steps.plan.outputs.app == 'tournament'
+        with:
+          node-version: '22'
+      - if: steps.plan.outputs.app == 'tournament'
+        run: make tournament-install tournament-test tournament-build
+      - if: steps.plan.outputs.app == 'shifts'
+        run: make shifts-test
+      - run: make python-common-test
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ steps.plan.outputs.registry }}
+          username: ${{ secrets.REGISTRY_USERNAME || github.actor }}
+          password: ${{ secrets.REGISTRY_TOKEN || secrets.GITHUB_TOKEN }}
+      - name: Build and publish only the selected app
+        env:
+          IMAGE: ${{ steps.plan.outputs.image }}
+          VERSION: ${{ steps.plan.outputs.version }}
+          DOCKERFILE: ${{ steps.plan.outputs.dockerfile }}
+          SOURCE: ${{ github.server_url }}/${{ github.repository }}
+          REVISION: ${{ github.sha }}
+          LATEST: ${{ steps.plan.outputs.publish_latest }}
+        run: |
+          docker build -f "$DOCKERFILE" -t "$IMAGE:$VERSION" --label "org.opencontainers.image.version=$VERSION" --label "org.opencontainers.image.revision=$REVISION" --label "org.opencontainers.image.source=$SOURCE" .
+          docker push "$IMAGE:$VERSION"
+          if [ "$LATEST" = true ]; then
+            docker tag "$IMAGE:$VERSION" "$IMAGE:latest"
+            docker push "$IMAGE:latest"
+          fi

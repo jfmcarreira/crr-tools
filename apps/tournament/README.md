@@ -1,13 +1,13 @@
 # Tournament
 
 The FastAPI backend lives in `backend/app`, with app-specific SQLAlchemy models,
-Alembic history, Pydantic schemas, domain services and routers. Vue continues to
-use `src/client` and `src/shared` with its existing `/api/...` contract. The final
-frontend directory move and removal of retired TypeScript server sources are
-tracked as cleanup work in the migration plan.
+Alembic history, Pydantic schemas, domain services and routers. Vue lives in
+`frontend/src` with its existing `/api/...` contract. The frontend owns its
+`package.json`, lockfile, Vite config and strict TypeScript config. Built SPA
+assets are in `frontend/dist` and served by the Python backend.
 
 Shared CRR assets and CSS come from `packages/crr-brand` through Vite's
-`@crr-brand` alias. Tokens/base/components load before `src/client/styles.css`;
+`@crr-brand` alias. Tokens/base/components load before `frontend/src/styles.css`;
 the app owns its responsive layout and print-card dimensions. Vite's public
 asset directory uses the canonical package, including the favicon.
 
@@ -44,12 +44,17 @@ synchronous engine construction and Alembic configuration. Tournament owns its
 connection pragmas, legacy-schema validation and transactional adoption policy.
 Production installs the shared package as a wheel inside the image.
 
-Tests require Node 22+ and uv. `make tournament-test` runs backend pytest,
-frontend/shared tests, Vue typechecking and the preserved legacy compatibility
-assertions against actual Python services and HTTP/SSE servers. Those assertions
-live in `migration/contracts`; their transports are generated only in ignored
-`.migration/` staging. CI uses Node 22/Python 3.13 and does not execute snapshots.
-Node backend dependencies (Fastify, better-sqlite3 and Zod) have been removed.
+Tests require Node 22+ and uv. `make tournament-test` runs 72 native backend pytest
+scenarios, frontend tests and Vue typechecking. Native service/router tests include
+the 44 scenarios previously executed through temporary legacy transports, including
+a real HTTP/SSE server. `make tournament-compat-test` selects compatibility tests.
+CI uses Node 22/Python 3.13 and runs from `apps/`. Node backend code/config and
+dependencies have been retired; the original source baseline is under `originals/`.
+
+For an independent release, update this app's backend project version and
+`frontend/package.json`/lockfile together, then use a `tournament-vX.Y.Z` tag.
+The release workflow verifies versions and publishes only the Tournament image.
+See `docs/RELEASES.md` at the repository root for registry and runner setup.
 
 ## Existing SQLite data
 

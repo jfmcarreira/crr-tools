@@ -39,7 +39,7 @@ def main(migrated: bool = False, branding: bool = False, reference: Path | None 
         output = WORK / "screenshots" if migrated else ROOT / "migration/screenshots"
     output.mkdir(parents=True, exist_ok=True)
     suffix = "-migrated" if migrated else ""
-    tournament_source = ROOT / "apps/tournament" if migrated else WORK / "tournament"
+    tournament_source = ROOT / "apps/tournament/frontend" if migrated else WORK / "tournament"
     shifts_source = ROOT / "apps/shifts/backend" if migrated else WORK / "shifts"
     tournament_db = WORK / f"visual-tournament{suffix}.sqlite"
     shutil.copyfile(ROOT / "migration/fixtures/tournament.sqlite", tournament_db)
@@ -56,7 +56,7 @@ def main(migrated: bool = False, branding: bool = False, reference: Path | None 
         "ADMIN_PASSWORD": "migration-fixture-password",
         "SESSION_SECRET": "migration-fixture-secret-not-for-production",
         "APP_BASE_PATH": "/", "DATABASE_PATH": str(tournament_db),
-        "CLIENT_DIST_PATH": str(tournament_source / "dist/client"),
+        "CLIENT_DIST_PATH": str(tournament_source / ("dist" if migrated else "dist/client")),
     }
     python = str(ROOT / ".venv/bin/python" if migrated else WORK / "shifts/.venv/bin/python")
     subprocess.run([python, "-m", "app.cli", "seed-demo"], cwd=shifts_source, env=env, check=True)

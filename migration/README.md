@@ -341,12 +341,76 @@ its app/package tests use saved fixtures and owned compatibility contracts, all
 of which remain present and pass. Snapshot retention/restoration must be resolved
 before declaring the full migration acceptance criteria complete.
 
+## Phase 6 — cleanup and independent releases: local delivery verified; exit pending remote CI
+
+- Finalized Tournament's independent `frontend/` layout: source, API types,
+  package/lockfile, strict TypeScript config and Vite config live together. The
+  Python backend serves `frontend/dist`; Docker, Makefile, env loading and visual
+  checks use the final paths.
+- Removed the retired TypeScript server files/config, backend-only shared seeding
+  implementation, temporary Python/Vitest transport adapters, duplicated contract
+  copies and completed one-time structural generators.
+- Ported all 44 legacy assertions to permanent native backend pytest: 19 HTTP
+  scenarios (including a real network SSE server) and 25 calendar/classification/
+  bracket/seeding scenarios. The full backend suite now has 72 tests; the frontend
+  has its 9 format/score tests. `phase6/native-test-coverage.json` records the paths.
+- Recovered both absent legacy source snapshots from the isolated copies. Every
+  one of the 125 files matched its captured SHA-256 before copying; the recovery
+  refused any existing destination. `phase6/snapshot-recovery.json` records this.
+  Nested Git repositories/history were not available and have not been fabricated.
+  Source checksum verification is operational again.
+- Added host-independent, git-based affected-app selection and independent tag
+  planning/version checks. The actual remote is Gitea, so `.gitea/workflows/`
+  contains CI/releases; identical `.github/workflows/` mirrors support GitHub.
+  App-specific tags select/test/build/publish only that app's image. Stable tags
+  also publish its `latest`; prerelease tags do not. Registry/runner details are
+  documented in `docs/RELEASES.md`.
+- Developer commands use `python -m pytest`/`python -m uvicorn`, avoiding stale
+  virtualenv console-script shebangs after a workspace relocation. Baseline
+  evidence arguments likewise normalize historical paths across relocations.
+
+| Check | Result |
+| --- | --- |
+| Tournament native backend | 72 passed |
+| Tournament frontend + strict typecheck/build | 9 passed; typecheck/build passed |
+| Shared Python package | 7 passed |
+| Shifts pytest + preserved workflow checks | 16 passed; 96 requests matched |
+| CI/release/path/version tooling tests | 11 passed |
+| Existing Tournament and Shifts SQLite fixtures | Adoption/startup/data checks passed |
+| `make migration-visual-check` | All 14 captures match Phase 2 byte-for-byte |
+| Tournament final-layout Docker build | Passed |
+| Independent container smoke checks | Fresh/adopted Tournament and Shifts passed |
+| `make baseline-preserve` | Recovered sources and all nine Tournament fixture tables verified |
+| Current independent release plans | `tournament-v1.0.0` and `shifts-v0.1.0` validated |
+
+### Final acceptance status
+
+The applications are independently runnable/testable/buildable from their final
+paths, with separate schemas/histories/databases/auth/version/image contracts.
+Vue works against FastAPI, both share canonical branding, `crr-python` contains
+only infrastructure, app-limited releases select one image, and production code
+does not import snapshots or the retired Node backend.
+
+The full migration is **not yet marked complete**:
+
+1. Remote CI and authenticated registry publication have not run against these
+   uncommitted changes. Local workflow/version/build checks do not substitute for
+   an observed successful remote run.
+2. The plan explicitly gates deleting Shifts' migrated requirements files on CI
+   passing. They are retained until that condition is verified; runtime/CI use uv.
+3. Recovered source content matches the freeze manifest, but original nested Git
+   histories were absent from the available recovery copies. Their loss remains
+   recorded as a historical limitation.
+
+No tags, commits, pushes or registry publication were performed during this work.
+`originals/` retains the recovered read-only source baseline. Once CI passes,
+remove the two migrated Shifts requirements files and verify the release runner.
+
 ## Next work
 
-1. Verify the new CI jobs on Node 22/Python 3.13 after publishing the changes.
-2. Phase 6: final layout and retired Node-source cleanup, compatibility-scaffolding
-   review, dependency/documentation cleanup and independent release workflows.
+1. Verify Gitea CI on Node 22/Python 3.13 after publishing the intended changes.
+2. Remove Shifts' migrated requirements files after that successful CI run.
+3. Verify an independent tagged release with configured registry credentials.
 
-Phase 6 is not complete.
-Independent tag-triggered release workflows and final dependency cleanup belong
-to later phases.
+Phase 6's local implementation/checks are delivered; the exit conditions above
+remain pending.

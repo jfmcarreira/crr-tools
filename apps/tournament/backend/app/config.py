@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     session_secret: str = Field(min_length=1)
     database_path: str = "/data/tournament.sqlite"
     app_base_path: str = "/"
-    client_dist_path: Path = Path(__file__).resolve().parents[2] / "dist/client"
+    client_dist_path: Path = Path(__file__).resolve().parents[2] / "frontend/dist"
     trust_proxy: bool = False
     session_lifetime_ms: int = 7 * 24 * 60 * 60 * 1000
 

@@ -1,6 +1,6 @@
 # CRR tools
 
-Two independently runnable applications migrating into one monorepo:
+Two independently runnable applications in one monorepo:
 
 - [Tournament](apps/tournament/README.md): Vue 3 and FastAPI on Python 3.13.
 - [Shifts](apps/shifts/README.md): FastAPI, Jinja, SQLAlchemy and Alembic on Python 3.13.
@@ -40,11 +40,23 @@ docker compose up --build shifts
 
 Each service has its own Dockerfile, image, database volume, and credentials.
 Set the application's secrets in its environment file before deployment.
-Release tags will be app-specific: `tournament-v...` and `shifts-v...`.
+Release tags are app-specific: `tournament-v...` and `shifts-v...`. Tag workflows
+validate each app's version and publish only its image. See
+[release setup and commands](docs/RELEASES.md).
+
+## CI and releases
+
+The configured remote uses Gitea. `.gitea/workflows/` contains path-aware CI and
+independent tag-release workflows; `.github/workflows/` mirrors them for GitHub.
+They use compatible contexts and git-based change detection, with shared changes
+testing both consumers. `make tooling-test` verifies selection/version logic.
+Remote runner execution and registry publication are pending verification.
 
 ## Baselines
 
-`originals/` is read-only, including its nested Git repositories. Baseline checks
+`originals/` is read-only. The missing legacy source trees were recovered from
+isolated copies using the saved checksums; their nested Git histories were not
+available. Baseline checks
 run in disposable `.migration/` copies using `make baseline-test`; production
 code and CI run exclusively from `apps/`. See `migration/README.md` for fixture
 and screenshot commands. Root Docker contexts exclude both the snapshots and

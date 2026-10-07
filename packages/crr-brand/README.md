@@ -16,7 +16,7 @@ Application CSS owns sizes, typography hierarchy, responsive layout, control
 spacing, specialist badges and print-card dimensions. Local variable names are
 aliases of `--crr-*` tokens, keeping existing styles/components compatible.
 
-Tournament resolves `@crr-brand` through Vite and uses `assets/` as its public
+Tournament's `frontend/` resolves `@crr-brand` through Vite and uses `assets/` as its public
 asset directory. Shifts mounts this directory at `/brand` using FastAPI
 `StaticFiles`; Jinja uses `url_for('brand', ...)` so `ROOT_PATH` is respected.
 Its PDF exporter reads this same logo. Both Docker builds copy the package from

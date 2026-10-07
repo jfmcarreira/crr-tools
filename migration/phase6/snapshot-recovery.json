@@ -1,0 +1,12 @@
+{
+  "tournament": {
+    "source": "originals/tournment-manager-web",
+    "files_verified": 71,
+    "nested_git_history_recovered": false
+  },
+  "shifts": {
+    "source": "originals/crr-shifts",
+    "files_verified": 54,
+    "nested_git_history_recovered": false
+  }
+}

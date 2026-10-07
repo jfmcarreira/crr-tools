@@ -1,8 +1,8 @@
 FROM node:22-alpine AS frontend
-WORKDIR /workspace/apps/tournament
-COPY apps/tournament/package.json apps/tournament/package-lock.json ./
+WORKDIR /workspace/apps/tournament/frontend
+COPY apps/tournament/frontend/package.json apps/tournament/frontend/package-lock.json ./
 RUN npm ci
-COPY apps/tournament/ ./
+COPY apps/tournament/frontend/ ./
 COPY packages/crr-brand/ /workspace/packages/crr-brand/
 ARG VITE_BASE_PATH=/jogo/
 ENV VITE_BASE_PATH=${VITE_BASE_PATH}
@@ -19,7 +19,7 @@ COPY apps/shifts/backend/pyproject.toml apps/shifts/backend/pyproject.toml
 COPY packages/crr-python/ packages/crr-python/
 RUN uv sync --frozen --package crr-tournament --no-dev --no-editable
 COPY apps/tournament/backend/ apps/tournament/backend/
-COPY --from=frontend /workspace/apps/tournament/dist/client apps/tournament/dist/client/
+COPY --from=frontend /workspace/apps/tournament/frontend/dist apps/tournament/frontend/dist/
 RUN groupadd --gid 1000 tournament && useradd --uid 1000 --gid 1000 --no-create-home tournament && mkdir /data && chown tournament /data
 WORKDIR /workspace/apps/tournament/backend
 USER tournament

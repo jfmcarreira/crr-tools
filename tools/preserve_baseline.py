@@ -8,6 +8,17 @@ import xml.etree.ElementTree as ET
 from migration_baseline import ROOT, SOURCES, hashes
 
 
+def portable_argument(argument: str) -> str:
+    """Keep historical evidence relative even after the workspace is relocated."""
+    prefix, separator, value = argument.partition("=")
+    path = value if separator else argument
+    for marker in ("/.migration/", "/migration/results/"):
+        if marker in path:
+            relative = path[path.index(marker) + 1:]
+            return prefix + "=" + relative if separator else relative
+    return argument.replace(str(ROOT) + "/", "")
+
+
 def main() -> None:
     output = ROOT / "migration/baseline"
     output.mkdir(parents=True, exist_ok=True)
@@ -17,7 +28,7 @@ def main() -> None:
         assert hashes(source) == manifest["sha256"], f"Snapshot changed: {app}"
         assert all(check["exit_code"] == 0 for check in manifest["checks"])
         for check in manifest["checks"]:
-            check["command"] = [arg.replace(str(ROOT) + "/", "") for arg in check["command"]]
+            check["command"] = [portable_argument(arg) for arg in check["command"]]
         if app == "tournament":
             report = json.loads((results / "tests.json").read_text())
             manifest["tests"] = [
