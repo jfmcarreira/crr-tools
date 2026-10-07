@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: apps/tournament/Dockerfile
       args:
-        VITE_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/}
+        VITE_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/jogo/}
     image: crr-tournament
     ports:
       - "8080:8080"
@@ -12,7 +12,7 @@ services:
       - path: apps/tournament/.env
         required: false
     environment:
-      APP_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/}
+      APP_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/jogo/}
       DATABASE_PATH: /data/tournament.sqlite
     volumes:
       - tournament-data:/data

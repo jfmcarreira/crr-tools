@@ -1,7 +1,4 @@
-"""initial schema
-
-The history was squashed: this revision is the whole schema as it stands, so a new
-database is created in one step and an existing one only needs `alembic stamp head`.
+"""Initial schema.
 
 Revision ID: 0001_initial
 Revises:

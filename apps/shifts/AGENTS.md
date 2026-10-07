@@ -2,7 +2,7 @@
 
 - Preserve Portuguese messages, Jinja templates, form fields, routes, session auth,
   CSRF, `ROOT_PATH` deployment, existing SQLite data, and Alembic history.
-- Backend commands run from `backend/`; production code must not import originals.
+- Backend commands run from `backend/`.
 - `services/` owns bootstrap, scheduling, calendar feeds, notifications and PDF
   rendering. `models/` contains app-specific persistence classes; its package
   exports the established model names.

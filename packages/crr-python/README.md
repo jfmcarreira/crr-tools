@@ -15,7 +15,7 @@ Both applications consume it explicitly through workspace dependencies.
   paths, escapes URL interpolation characters, and optionally attaches a caller-
   owned connection for transactional migrations.
 
-Schema validation, baseline revisions, upgrades/stamps, transaction ownership,
+Schema validation, revision histories, upgrades/stamps, transaction ownership,
 SQLite pragmas, backups, sessions, domain models and authentication belong to
 each application. The package contains no app imports, switches or domain code.
 It neither opens migration connections nor runs DDL.

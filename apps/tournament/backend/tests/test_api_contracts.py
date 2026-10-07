@@ -11,14 +11,14 @@ def test_login_validation_error_shape(client, payload):
 def test_login_limiter_cookie_and_logout(client):
     for _ in range(5):
         assert client.post("/api/auth/login", json={"password": "wrong"}).status_code == 401
-    assert client.post("/api/auth/login", json={"password": "migration-fixture-password"}).status_code == 429
+    assert client.post("/api/auth/login", json={"password": "test-password"}).status_code == 429
     response = client.post("/api/auth/logout")
     assert response.json() == {"authenticated": False}
     assert "Path=/jogo/" in response.headers["set-cookie"]
     assert "HttpOnly" in response.headers["set-cookie"]
 
 
-def test_head_and_malformed_json_follow_legacy_contract(client):
+def test_head_and_malformed_json_follow_api_contract(client):
     response = client.head("/api/public/state")
     assert response.status_code == 200 and response.content == b""
     response = client.post("/api/auth/login", content="{", headers={"content-type": "application/json"})

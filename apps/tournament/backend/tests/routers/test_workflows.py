@@ -1,4 +1,4 @@
-"""Native equivalents of the nineteen frozen legacy HTTP integration scenarios."""
+"""Native equivalents of the nineteen frozen Tournament HTTP integration scenarios."""
 
 from copy import deepcopy
 from itertools import combinations
@@ -55,14 +55,14 @@ def test_authentication_contract(client):
     assert "error" in call(client, "GET", "/api/admin/teams", status=401)
     assert call(client, "GET", "/api/auth/session") == {"authenticated": False}
     call(client, "POST", "/api/auth/login", {"password": "wrong"}, 401)
-    response = client.post("/api/auth/login", json={"password": "migration-fixture-password"})
+    response = client.post("/api/auth/login", json={"password": "test-password"})
     assert response.status_code == 200 and response.json() == {"authenticated": True}
     client.headers["cookie"] = f"tournament_admin_session={response.cookies['tournament_admin_session']}"
     assert call(client, "GET", "/api/auth/session") == {"authenticated": True}
 
 
 def test_deployment_cookie_path(client):
-    response = client.post("/api/auth/login", json={"password": "migration-fixture-password"})
+    response = client.post("/api/auth/login", json={"password": "test-password"})
     assert response.status_code == 200
     assert "Path=/jogo/" in response.headers["set-cookie"]
 
@@ -95,7 +95,7 @@ def test_live_sse_notifies_connected_displays(settings):
             time.sleep(.02)
         assert server.started
         with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=3) as client:
-            login = client.post("/api/auth/login", json={"password": "migration-fixture-password"})
+            login = client.post("/api/auth/login", json={"password": "test-password"})
             client.headers["cookie"] = f"tournament_admin_session={login.cookies['tournament_admin_session']}"
             with client.stream("GET", "/api/public/events") as response:
                 assert response.status_code == 200

@@ -7,7 +7,7 @@ dependencies are managed with `uv` and the root `uv.lock`.
 
 The internal `crr-python` workspace dependency supplies synchronous engine
 construction and Alembic configuration. Shifts owns its sessions, backups,
-startup adoption rules and migration history. Docker installs the shared package
+startup database handling and migration history. Docker installs the shared package
 as a wheel alongside the app's dependencies.
 
 The canonical logo, favicon and common CSS live in `packages/crr-brand`, mounted

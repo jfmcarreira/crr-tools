@@ -5,7 +5,7 @@
     {"root": "apps/tournament/backend"},
     {"root": "packages/crr-python", "extraPaths": ["packages/crr-python/src"]}
   ],
-  "exclude": ["originals", ".migration", "**/node_modules", "**/__pycache__"],
+  "exclude": ["**/node_modules", "**/__pycache__"],
   "venvPath": ".",
   "venv": ".venv",
   "pythonVersion": "3.13"

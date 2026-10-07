@@ -14,10 +14,7 @@ from .config import settings
 from .database import (
     SessionLocal,
     backup_database,
-    current_revision,
-    has_tables,
     run_migrations,
-    stamp,
 )
 from .i18n import (
     day_long,
@@ -46,10 +43,6 @@ async def lifespan(app: FastAPI):
             print(f"Database backup written to {backup}")
     except Exception as exc:  # a failed backup must never stop the app
         print(f"Could not back up the database: {exc}")
-    # Databases created before Alembic existed have no version stamp: adopt them
-    # at the baseline revision so the migrations can continue from there.
-    if has_tables() and current_revision() is None:
-        stamp("0001_initial")
     run_migrations()
     with SessionLocal() as db:
         ensure_initial_data(db)

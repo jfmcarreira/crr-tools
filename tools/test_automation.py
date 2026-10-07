@@ -5,14 +5,9 @@ import unittest
 
 from ci_changes import affected
 from release import release_plan
-from preserve_baseline import portable_argument
 
 
 class ChangedPaths(unittest.TestCase):
-    def test_historical_paths_stay_portable_after_relocation(self):
-        self.assertEqual(portable_argument("/old/workspace/.migration/shifts/.venv/bin/python"), ".migration/shifts/.venv/bin/python")
-        self.assertEqual(portable_argument("--junitxml=/old/workspace/migration/results/shifts/tests.xml"), "--junitxml=migration/results/shifts/tests.xml")
-
     def test_each_app_is_selected_independently(self):
         self.assertEqual(affected(["apps/tournament/frontend/src/App.vue"]), {"tournament": True, "shifts": False})
         self.assertEqual(affected(["apps/shifts/backend/app/routers/auth.py"]), {"tournament": False, "shifts": True})
@@ -21,12 +16,8 @@ class ChangedPaths(unittest.TestCase):
         for path in ["packages/crr-brand/styles/tokens.css", "packages/crr-python/src/crr_common/database.py", "uv.lock", "Makefile", ".github/workflows/ci.yaml"]:
             self.assertEqual(affected([path]), {"tournament": True, "shifts": True})
 
-    def test_originals_and_documentation_do_not_build_apps(self):
-        self.assertEqual(affected(["originals/crr-shifts/app/web.py", "README.md"]), {"tournament": False, "shifts": False})
-
-    def test_fixtures_select_their_own_app(self):
-        self.assertEqual(affected(["migration/fixtures/shifts.sqlite"]), {"tournament": False, "shifts": True})
-        self.assertEqual(affected(["migration/fixtures/tournament.sqlite"]), {"tournament": True, "shifts": False})
+    def test_documentation_does_not_build_apps(self):
+        self.assertEqual(affected(["README.md", "docs/RELEASES.md"]), {"tournament": False, "shifts": False})
 
 
 class ReleaseTags(unittest.TestCase):

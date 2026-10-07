@@ -2,28 +2,7 @@ UV ?= uv
 PYTHON ?= python3
 .DEFAULT_GOAL := test
 
-.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-compat-test tournament-build shifts-dev shifts-test shifts-build test
-
-baseline-test:
-	$(PYTHON) tools/migration_baseline.py all
-
-baseline-fixtures:
-	node --import ./.migration/tournament/node_modules/tsx/dist/loader.mjs migration/capture_tournament.mjs
-
-baseline-screenshots:
-	$(UV) pip install --python .migration/shifts/.venv/bin/python playwright
-	.migration/shifts/.venv/bin/python -m playwright install chromium
-	.migration/shifts/.venv/bin/python migration/capture_screenshots.py
-
-baseline-preserve:
-	$(PYTHON) tools/preserve_baseline.py
-
-migration-visual-check:
-	.migration/shifts/.venv/bin/python migration/capture_screenshots.py --migrated --reference migration/phase2/screenshots
-
-branding-visual-check:
-	.migration/shifts/.venv/bin/python migration/capture_screenshots.py --branding
-	.migration/shifts/.venv/bin/python migration/capture_screenshots.py --migrated --branding
+.PHONY: images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-build shifts-dev shifts-test shifts-build test
 
 images-smoke-test:
 	$(PYTHON) tools/check_images.py
@@ -44,9 +23,6 @@ tournament-test:
 	$(UV) run --directory apps/tournament/backend --package crr-tournament --locked python -m pytest
 	npm --prefix apps/tournament/frontend test
 	npm --prefix apps/tournament/frontend run typecheck
-
-tournament-compat-test:
-	$(UV) run --directory apps/tournament/backend --package crr-tournament --locked python -m pytest tests/routers tests/services tests/test_api_compatibility.py
 
 tournament-build:
 	npm --prefix apps/tournament/frontend run build

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from fastapi.testclient import TestClient
 
 from app.main import create_app
@@ -26,7 +24,7 @@ def test_limiter_expiry_ip_isolation_and_successful_login_reset(client):
     assert not limiter.attempts
     for _ in range(4):
         assert client.post("/api/auth/login", json={"password": "wrong"}).status_code == 401
-    assert client.post("/api/auth/login", json={"password": "migration-fixture-password"}).status_code == 200
+    assert client.post("/api/auth/login", json={"password": "test-password"}).status_code == 200
     for _ in range(5):
         assert client.post("/api/auth/login", json={"password": "wrong"}).status_code == 401
     assert client.post("/api/auth/login", json={"password": "wrong"}).status_code == 429
@@ -35,29 +33,15 @@ def test_limiter_expiry_ip_isolation_and_successful_login_reset(client):
 def test_cookie_https_and_proxy_trust(settings):
     for trust, secure in [(False, False), (True, True)]:
         with TestClient(create_app(settings.model_copy(update={"trust_proxy": trust}))) as client:
-            response = client.post("/api/auth/login", json={"password": "migration-fixture-password"},
+            response = client.post("/api/auth/login", json={"password": "test-password"},
                                    headers={"x-forwarded-proto": "https"})
             cookie = response.headers["set-cookie"]
             assert ("; Secure" in cookie) is secure
             assert "HttpOnly" in cookie and "SameSite=strict" in cookie
             assert "Max-Age=604800" in cookie and "Path=/jogo/" in cookie
     with TestClient(create_app(settings), base_url="https://testserver") as client:
-        response = client.post("/api/auth/login", json={"password": "migration-fixture-password"})
+        response = client.post("/api/auth/login", json={"password": "test-password"})
         assert "; Secure" in response.headers["set-cookie"]
-
-
-def test_client_assets_load_when_app_is_deployed_under_a_base_path(settings, tmp_path):
-    dist = tmp_path / "dist"
-    dist.mkdir()
-    (dist / "index.html").write_text("<html>ok</html>")
-    (dist / "assets").mkdir()
-    (dist / "assets" / "app.js").write_text("console.log('ok');")
-    settings = settings.model_copy(update={"client_dist_path": dist})
-
-    with TestClient(create_app(settings), base_url="http://testserver") as client:
-        assert client.get("/jogo/").status_code == 200
-        assert client.get("/jogo/assets/app.js").status_code == 200
-        assert client.get("/jogo/favicon.png").status_code == 404
 
 
 def test_parallel_failed_logins_do_not_bypass_five_attempt_limit(client):

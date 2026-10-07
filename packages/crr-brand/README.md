@@ -2,8 +2,8 @@
 
 Canonical CRR visual assets and framework-independent CSS, consumed by both apps.
 
-- `assets/logo.png`: the original Tournament logo, copied without conversion.
-- `assets/favicon.png`: the original Tournament favicon.
+- `assets/logo.png`: canonical CRR logo.
+- `assets/favicon.png`: canonical CRR favicon.
 - `styles/tokens.css`: shared palette around `#ed1c24`, font stack, radii,
   shadows, spacing and focus-ring values.
 - `styles/base.css`: box sizing, body defaults, links, controls, focus and tables.
@@ -25,8 +25,4 @@ the repository-root context, preserving its relative path to each application.
 Brand-only changes trigger both application CI jobs. This package contains no
 domain code or UI framework components and has no independent public version.
 
-After changing branding, run both app checks/builds and `make branding-visual-check`
-to compare desktop/mobile geometry and Tournament print cards against the legacy
-baseline. `make migration-visual-check` compares rendered pages to the approved
-Phase 2 screenshots. Baseline staging and Playwright prerequisites are documented
-in `migration/README.md`.
+After changing branding, run both application test/build commands and verify the affected desktop, mobile and print layouts.

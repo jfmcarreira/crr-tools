@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import inspect
 from sqlalchemy.exc import IntegrityError
 
-from app.database import create_database_engine, run_migrations, validate_legacy_schema
+from app.database import create_database_engine, run_migrations
 
 
 def test_fresh_database_schema_defaults_and_pragmas(tmp_path):
@@ -10,7 +10,6 @@ def test_fresh_database_schema_defaults_and_pragmas(tmp_path):
     try:
         run_migrations(engine)
         with engine.connect() as connection:
-            validate_legacy_schema(connection)
             assert connection.exec_driver_sql("SELECT name FROM tournament_settings").scalar_one() == "Torneio"
             assert connection.exec_driver_sql("PRAGMA foreign_keys").scalar_one() == 1
             assert connection.exec_driver_sql("PRAGMA journal_mode").scalar_one() == "wal"
@@ -36,10 +35,13 @@ def test_database_constraints_and_player_cascade(tmp_path):
 
 def test_failed_upgrade_rolls_back_schema_creation(tmp_path, monkeypatch):
     from app import database
+
     engine = create_database_engine(str(tmp_path / "failed.sqlite"))
+
     def fail(config, revision):
         config.attributes["connection"].exec_driver_sql("CREATE TABLE incomplete(id INTEGER)")
         raise RuntimeError("migration failed")
+
     monkeypatch.setattr(database.command, "upgrade", fail)
     try:
         with pytest.raises(RuntimeError, match="migration failed"):

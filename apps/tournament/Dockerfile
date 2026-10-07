@@ -4,14 +4,14 @@ COPY apps/tournament/frontend/package.json apps/tournament/frontend/package-lock
 RUN npm ci
 COPY apps/tournament/frontend/ ./
 COPY packages/crr-brand/ /workspace/packages/crr-brand/
-ARG VITE_BASE_PATH=/
+ARG VITE_BASE_PATH=/jogo/
 ENV VITE_BASE_PATH=${VITE_BASE_PATH}
 RUN npm run build
 
 FROM ghcr.io/astral-sh/uv:0.11.31 AS uv
 FROM python:3.13-slim AS runtime
 COPY --from=uv /uv /uvx /bin/
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_PROJECT_ENVIRONMENT=/opt/venv PATH="/opt/venv/bin:$PATH" DATABASE_PATH=/data/tournament.sqlite APP_BASE_PATH=/
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_PROJECT_ENVIRONMENT=/opt/venv PATH="/opt/venv/bin:$PATH" DATABASE_PATH=/data/tournament.sqlite APP_BASE_PATH=/jogo/
 WORKDIR /workspace
 COPY pyproject.toml uv.lock ./
 COPY apps/tournament/backend/pyproject.toml apps/tournament/backend/pyproject.toml

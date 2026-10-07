@@ -1,4 +1,4 @@
-"""Exact baseline of the Node SQLite schema; adopted databases are stamped only."""
+"""Initial Tournament database schema."""
 
 from alembic import op
 
@@ -7,7 +7,7 @@ down_revision = None
 branch_labels = None
 depends_on = None
 
-# Frozen SQL belongs to this migration, never application startup or runtime models.
+# Keep schema-changing SQL inside Alembic revisions.
 SCHEMA = """
 CREATE TABLE tournament_settings (
  id INTEGER PRIMARY KEY CHECK (id = 1),

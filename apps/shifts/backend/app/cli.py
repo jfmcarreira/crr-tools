@@ -12,9 +12,7 @@ from .config import settings
 from .database import (
     SessionLocal,
     current_revision,
-    has_tables,
     run_migrations,
-    stamp,
 )
 from . import models
 from .models import (
@@ -31,13 +29,8 @@ from .services.notifications import send_email_notification
 from .services.scheduling import ensure_month_assignments
 from .security import hash_password
 
-BASELINE_REVISION = "0001_initial"
-
 
 def migrate() -> None:
-    if has_tables() and current_revision() is None:
-        stamp(BASELINE_REVISION)
-        print(f"Existing database stamped at {BASELINE_REVISION}.")
     run_migrations()
     print(f"Database at revision {current_revision()}.")
 

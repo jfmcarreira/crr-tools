@@ -21,7 +21,7 @@ def number(value):
 
 
 def identifier(value):
-    # Zod's coerce.number() is used for URL IDs and team group IDs in the legacy app.
+    # URL IDs and team group IDs accept numeric coercion.
     try:
         if isinstance(value, str):
             value = value.strip()

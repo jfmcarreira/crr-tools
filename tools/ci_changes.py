@@ -13,9 +13,9 @@ def affected(paths: list[str]) -> dict[str, bool]:
     for path in paths:
         if path in ROOT_FILES or path.startswith((".github/workflows/", "packages/", "tools/ci_changes.py", "tools/release.py", "tools/test_automation.py")):
             result = {key: True for key in result}
-        elif path.startswith("apps/tournament/") or path.startswith("migration/fixtures/tournament"):
+        elif path.startswith("apps/tournament/"):
             result["tournament"] = True
-        elif path.startswith("apps/shifts/") or path in {"migration/check_shifts_structure.py", "migration/phase4/baseline.json", "migration/phase5/shifts-definition-overrides.json", "migration/fixtures/shifts.sqlite"}:
+        elif path.startswith("apps/shifts/"):
             result["shifts"] = True
     return result
 

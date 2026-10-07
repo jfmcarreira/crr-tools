@@ -17,7 +17,7 @@ on startup, as they do in production.
   modules. The package exports the established model names and registers all
   classes with the existing app-specific `Base`; mappings and relationships are
   preserved.
-- `migrations/`: one Alembic revision, `0001_initial`, holding the whole schema (the history was squashed for a test environment). The app upgrades to `head` on start, and an existing database is adopted by stamping `head`; a database created before Alembic existed has no stamp and is adopted at the baseline.
+- `migrations/`: Alembic revision history. The app upgrades to `head` on start.
 - `backend/app/services/`: bootstrap, deterministic scheduling, calendar feeds,
   SMTP notifications and PDF rendering.
 - `backend/app/routers/`: auth, account, calendar, exports, dashboard and swaps.
@@ -65,15 +65,6 @@ For larger installations, the SQLAlchemy configuration can point to PostgreSQL, 
 ## Testing
 
 Run `make shifts-test` from the monorepo root. It uses the locked uv project to
-run pytest and the structural/workflow compatibility verifier. HTTPX supports
-FastAPI `TestClient`; pypdf verifies downloaded documents. Fixtures configure
-temporary SQLite storage before importing app modules, disable SMTP, run the
-existing migration and clean up afterwards. The compatibility verifier copies
-a populated synthetic SQLite fixture, checks startup preservation, and compares
-schema/ORM/relationships/OpenAPI plus 96 HTTP requests across `/` and `/crr`
-against the pre-refactor baseline. Runtime-only randomness/timestamps are
-normalized, and calendar clocks are fixed for reproducible comparisons. Raw
-comparison results are under ignored `.migration/phase4-results/`; verified
-evidence is under `migration/phase4/` and `migration/phase5/`. Phase 5 records the
-exact `alembic_config` helper delegation by old/new AST hashes while retaining
-the original Phase 4 baseline and guarding the other definitions.
+run pytest. HTTPX supports FastAPI `TestClient`; pypdf verifies downloaded
+documents. Fixtures configure temporary SQLite storage before importing app
+modules, disable SMTP, apply Alembic revisions and clean up afterwards.

@@ -23,7 +23,7 @@ class PageResources(HTMLParser):
 
 
 def check(image: str, port: int, environment: dict[str, str], routes: list[str], proxy_prefix: str = "") -> None:
-    name = f"crr-migration-{uuid4().hex[:12]}"
+    name = f"crr-smoke-{uuid4().hex[:12]}"
     command = ["docker", "run", "--rm", "--detach", "--name", name,
                "--tmpfs", "/data:mode=1777", "--publish", f"127.0.0.1::{port}"]
     for key, value in environment.items():
@@ -56,7 +56,7 @@ def check(image: str, port: int, environment: dict[str, str], routes: list[str],
                     assert resources.urls, route
                     for url in resources.urls:
                         path = urlsplit(url).path
-                        # Tournament's legacy sub-path deployment strips the prefix at its proxy.
+                        # Tournament sub-path deployments may strip the prefix at the proxy.
                         if proxy_prefix and path.startswith(proxy_prefix + "/"):
                             path = path[len(proxy_prefix):]
                         with urlopen(base + path, timeout=5) as resource:
@@ -70,12 +70,12 @@ def check(image: str, port: int, environment: dict[str, str], routes: list[str],
 
 if __name__ == "__main__":
     check("crr-tournament", 8080, {
-        "ADMIN_PASSWORD": "migration-smoke-only-password",
-        "SESSION_SECRET": "migration-smoke-only-secret",
+        "ADMIN_PASSWORD": "smoke-test-password",
+        "SESSION_SECRET": "smoke-test-secret",
     }, ["/api/public/state", "/results"], proxy_prefix="/jogo")
     check("crr-shifts", 8000, {
         "DATABASE_URL": "sqlite:////data/smoke.db",
-        "SECRET_KEY": "migration-smoke-only-secret",
-        "INITIAL_ADMIN_PASSWORD": "migration-smoke-only-password",
+        "SECRET_KEY": "smoke-test-secret",
+        "INITIAL_ADMIN_PASSWORD": "smoke-test-password",
         "SMTP_HOST": "",
     }, ["/health", "/login"])

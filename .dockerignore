@@ -1,8 +1,5 @@
 .git
 **/.git
-originals/
-original/
-.migration/
 .venv/
 **/__pycache__/
 **/.pytest_cache/
@@ -13,4 +10,3 @@ original/
 **/data/
 **/*.sqlite*
 **/*.db*
-migration/

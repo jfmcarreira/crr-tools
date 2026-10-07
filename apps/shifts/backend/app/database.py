@@ -10,10 +10,8 @@ from urllib.parse import urlparse
 from alembic import command
 from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
-from alembic.script import ScriptDirectory
 from crr_common.database import create_sync_engine
 from crr_common.migrations import migration_config
-from sqlalchemy import inspect
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from .config import settings
@@ -43,18 +41,6 @@ def current_revision() -> str | None:
     with engine.connect() as connection:
         return MigrationContext.configure(connection).get_current_revision()
 
-
-def has_tables() -> bool:
-    """True when the database already holds the pre-Alembic schema."""
-    return bool(set(inspect(engine).get_table_names()) - {"alembic_version"})
-
-
-def head_revision() -> str:
-    return ScriptDirectory.from_config(alembic_config()).get_current_head() or ""
-
-
-def stamp(revision: str) -> None:
-    command.stamp(alembic_config(), revision)
 
 
 def get_db() -> Generator[Session, None, None]:

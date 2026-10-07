@@ -7,7 +7,7 @@ from app.main import create_app
 
 @pytest.fixture
 def settings(tmp_path):
-    return Settings(admin_password="migration-fixture-password", session_secret="migration-fixture-secret-not-for-production",
+    return Settings(admin_password="test-password", session_secret="test-secret-not-for-production",
                     database_path=str(tmp_path / "tournament.sqlite"), app_base_path="/jogo/")
 
 
@@ -19,7 +19,7 @@ def client(settings):
 
 @pytest.fixture
 def admin(client):
-    response = client.post("/api/auth/login", json={"password": "migration-fixture-password"})
+    response = client.post("/api/auth/login", json={"password": "test-password"})
     assert response.status_code == 200
     client.headers["cookie"] = f"tournament_admin_session={response.cookies['tournament_admin_session']}"
     return client

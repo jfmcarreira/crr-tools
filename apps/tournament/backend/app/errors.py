@@ -26,7 +26,7 @@ def install_errors(app: FastAPI) -> None:
     @app.exception_handler(RequestValidationError)
     async def validation_error(_request: Request, _error: RequestValidationError):
         if any(item["type"] == "json_invalid" for item in _error.errors()):
-            # The legacy Fastify error handler treats malformed JSON as an unexpected error.
+            # Malformed JSON uses the generic unexpected-error response.
             return JSONResponse({"error": "Ocorreu um erro inesperado. Tente novamente."}, status_code=500)
         return JSONResponse({"error": "Os dados enviados não são válidos."}, status_code=400)
 
