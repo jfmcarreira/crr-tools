@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from .bootstrap import ensure_initial_data
+from .services.bootstrap import ensure_initial_data
 from .branding import BRAND_DIR
 from .config import settings
 from .database import (
@@ -32,7 +32,7 @@ from .i18n import (
     weekday_name,
     window_label,
 )
-from .web import router
+from .routers import router
 
 BASE_DIR = Path(__file__).resolve().parent
 

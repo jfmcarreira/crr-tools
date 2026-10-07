@@ -4,18 +4,35 @@
 
 Single FastAPI process with server-rendered HTML and a SQLite database volume. This keeps deployment suitable for a small VPS, NAS or home server.
 
-For local development, `make dev` prepares the host virtualenv and default `data/` directory, then runs Uvicorn on `127.0.0.1:8000` with auto-reload for `app/`. Override the port with `make dev PORT=8001`. The app uses environment/`.env` settings and performs migrations and initial seeding during startup, just as it does in production.
+From the monorepo root, `make shifts-dev` prepares the backend's default `data/`
+directory and runs Uvicorn on `127.0.0.1:8000` through uv, with auto-reload.
+Dependencies resolve through the root `uv.lock` into the root `.venv`. Settings
+come from the environment and `backend/.env`; migrations and initial seeding run
+on startup, as they do in production.
 
 ## Layers
 
-- `models.py`: persistence schema.
+- `backend/app/models/`: persistence schema split into user, team, schedule
+  (including patterns/rotation members), assignment, swap and notification
+  modules. The package exports the established model names and registers all
+  classes with the existing app-specific `Base`; mappings and relationships are
+  preserved.
 - `migrations/`: one Alembic revision, `0001_initial`, holding the whole schema (the history was squashed for a test environment). The app upgrades to `head` on start, and an existing database is adopted by stamping `head`; a database created before Alembic existed has no stamp and is adopted at the baseline.
-- `scheduling.py`: deterministic month/rotation generation.
-- `web.py`: authentication, admin editing and change-request orchestration.
-- `notifications.py`: synchronous SMTP adapter + durable send log.
-- `pdf.py`: ReportLab-rendered A4 schedule lists, with embedded Unicode fonts and
+- `backend/app/services/`: bootstrap, deterministic scheduling, calendar feeds,
+  SMTP notifications and PDF rendering.
+- `backend/app/routers/`: auth, account, calendar, exports, dashboard and swaps.
+  `admin/` splits teams, users, schedules, assignments and notification-log pages.
+  Each domain owns its routes; the package composes their routers for `main.py`.
+- `routers/dependencies.py`: session/current-user/admin checks, CSRF validation,
+  flash/context, redirect and month-navigation helpers. Schedule, swap, assignment
+  and user helper modules support the domains that actually share them. They do
+  not import feature routers, keeping the dependency graph acyclic.
+- `backend/app/security/`: the existing PBKDF2 password codec and CSRF-token
+  generator. HTTP/session orchestration stays in routers.
+- `services/notifications.py`: synchronous SMTP adapter + durable send log.
+- `services/pdf.py`: ReportLab-rendered A4 schedule lists, with embedded Unicode fonts and
   adaptive layout to keep the selected range on one page.
-- `cli.py`: maintenance commands that can be run manually or by cron.
+- `backend/app/cli.py`: maintenance commands that can be run manually or by cron.
 
 ## Data lifecycle
 
@@ -28,7 +45,13 @@ For local development, `make dev` prepares the host virtualenv and default `data
 
 ## Deployment
 
-`Dockerfile` provides a `production` target (the default) and a `dev` target with development dependencies and Uvicorn auto-reload. Both serve `app.main:app` on port 8000. `compose.yaml` is a minimal deployment example: it builds the production target, loads `.env`, publishes `${PORT:-8000}`, and mounts `${DATA_DIR:-./data}` at `/app/data`. It fixes the container database URL to the SQLite file on that mount; default backups also live there. See [the deployment guide](../README.md#run-with-docker-compose) for setup commands.
+`apps/shifts/Dockerfile` uses a repository-root build context, Python 3.13 and uv,
+and copies the shared brand package beside the backend. It serves `app.main:app`
+on port 8000. Root `compose.yaml` loads `apps/shifts/backend/.env` and mounts the
+independent `shifts-data` volume at `/data`, with its database URL pointing to
+`/data/bar_rota.db`; default backups live beside it. Run
+`docker compose up --build shifts` from the monorepo root. See
+[the application README](../README.md) for environment and CLI commands.
 
 Maintenance commands are provided by `python -m app.cli`: `init-db`, `migrate`, `seed-demo`, `db-shell`, and `send-reminders`. Settings come from environment variables and `.env` through `app/config.py`.
 
@@ -38,4 +61,14 @@ For larger installations, the SQLAlchemy configuration can point to PostgreSQL, 
 
 ## Testing
 
-Run `make test` on the host. It creates/reuses `.venv`, installs development dependencies, and invokes pytest; it needs no running application or container. `pyproject.toml` limits discovery to `tests/`. HTTPX supports FastAPI `TestClient` tests, and pypdf verifies PDF downloads. Fixtures configure temporary SQLite storage before importing the app, disable SMTP, run migrations and clean up after the suite. See [the testing guide](../README.md#run-tests).
+Run `make shifts-test` from the monorepo root. It uses the locked uv project to
+run pytest and the structural/workflow compatibility verifier. HTTPX supports
+FastAPI `TestClient`; pypdf verifies downloaded documents. Fixtures configure
+temporary SQLite storage before importing app modules, disable SMTP, run the
+existing migration and clean up afterwards. The compatibility verifier copies
+a populated synthetic SQLite fixture, checks startup preservation, and compares
+schema/ORM/relationships/OpenAPI plus 96 HTTP requests across `/` and `/crr`
+against the pre-refactor baseline. Runtime-only randomness/timestamps are
+normalized, and calendar clocks are fixed for reproducible comparisons. Raw
+comparison results are under ignored `.migration/phase4-results/`; verified
+evidence is under `migration/phase4/`.

@@ -228,12 +228,70 @@ exit criteria are verified. Remote GitHub Actions execution is still unverified.
 On this machine, the pyenv override described above also applies to Tournament
 Makefile commands; uv still executes the applications on Python 3.13.
 
+## Phase 4 — Shifts structural refactor: locally verified complete
+
+- Moved bootstrap, scheduling, calendar-feed, notification and PDF modules into
+  `apps/shifts/backend/app/services/`, updating CLI, startup and test imports.
+- Split persistence into `models/{user,team,schedule,assignment,swap,notification}.py`.
+  `models/__init__.py` exports the established class names; forward relationship
+  typing uses `TYPE_CHECKING` while SQLAlchemy registers all classes normally.
+- Split password hashing/verification and CSRF-token generation into `security/`.
+  Session/current-user/admin checks, CSRF validation, flash/context, redirects and
+  navigation helpers moved into `routers/dependencies.py`.
+- Replaced `web.py` with the planned auth/account/calendar/exports/dashboard/swaps
+  routers and admin teams/users/schedules/assignments/notifications routers.
+  Supporting schedule/swap/assignment/user helpers have an acyclic dependency
+  graph. All 48 route declarations and their forms/dependencies moved intact.
+- Updated architecture/contributor/development documentation and wired the new
+  compatibility check into `make shifts-test` and path-aware CI.
+
+Before changing application code, captured `phase4/baseline.json` and produced
+`fixtures/shifts.sqlite` through the existing Shifts code. The fixture contains
+synthetic admin/member users, a multi-team login, rotation membership, and
+generated/manual/swapped assignments. It contains no production data.
+
+The one-time structural generator relocated definitions verbatim and selected
+explicit imports, refusing existing destinations. Verification compares **173
+top-level function/class AST fingerprints**, ORM columns/defaults/constraints/
+indexes/relationships, full OpenAPI and existing migration-file checksums against
+the baseline. It copies the populated fixture before each run and confirms that
+startup preserves every existing row.
+
+| Check | Result |
+| --- | --- |
+| Shifts pytest | 16 passed |
+| `make shifts-compat-test` | 96 request/response and resulting-data comparisons matched across `/` and `/crr` |
+| ORM/schema and relationship comparison | Identical |
+| Route/form/OpenAPI contract | Identical; 48 declarations retained |
+| Existing migration history and function/class ASTs | Identical |
+| Populated Shifts SQLite fixture on startup | All existing rows preserved |
+| `make migration-visual-check` | All 14 captures match Phase 2 byte-for-byte, including print cards |
+| Shifts image build | Passed after starting Docker Desktop |
+| Container smoke checks | Shifts and both Tournament fresh/adopted-fixture checks passed |
+| Tournament regression checks | 28 Python tests, 13 frontend/shared tests, 44 legacy assertions and Vue typecheck passed |
+
+Workflows cover authentication/CSRF/authorization, calendar feeds, PDF exports,
+swap creation/acceptance/approval/reversal, administrative CRUD, rotation edits,
+assignment changes, password editing and logout. Swap operations exchange both
+assignments; explicit generation retains manual/swapped rows. Timestamps, CSRF
+nonces and new password salts are normalized only in comparison artefacts;
+application behavior is unchanged. The verifier fixes its runtime calendar date
+to the capture date so CI can reproduce default-month/navigation HTML later.
+
+`phase4/structure.json` records router ownership and relocated function hashes;
+`phase4/verification.json` records successful checks and fixture/baseline hashes.
+Raw reports and difference diagnostics stay under `.migration/phase4-results/`.
+`make shifts-test` includes this check; `make shifts-compat-test` runs it alone.
+Do not rerun the one-time generator or overwrite the baseline. The original
+snapshots and branding/compatibility baselines remain intact. Remote CI is still
+unverified.
+
 ## Next work
 
 1. Verify the new CI jobs on Node 22/Python 3.13 after publishing the changes.
-2. Phase 4: Shifts service/model/security extraction and router split, preserving
-   routes, templates, forms, authentication, SQLite data and migration history.
+2. Phase 5: compare the two final Python backends and extract only infrastructure
+   that demonstrably removes generic duplication without app-specific switches.
 
-Phases 4–6 are not complete. No shared Python package has been extracted yet.
+Phases 5–6 are not complete. No shared Python package has been extracted yet.
 Independent tag-triggered release workflows and final dependency cleanup belong
 to later phases.

@@ -13,9 +13,9 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from .config import settings
-from .i18n import day_long, day_numeric_long, window_label
-from .models import Assignment, Schedule, Team
+from ..config import settings
+from ..i18n import day_long, day_numeric_long, window_label
+from ..models import Assignment, Schedule, Team
 
 # How much of the rota the feed publishes: recent history and the next months.
 MONTHS_BACK = 1

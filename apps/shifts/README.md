@@ -1,8 +1,9 @@
 # Contínuos CRR — Shifts
 
-The server-rendered FastAPI application lives in `backend/`. Phase 1 preserves
-its service/model/router layout, Jinja templates and `0001_initial` Alembic
-history. Python dependencies are managed with `uv` and the root `uv.lock`.
+The server-rendered FastAPI application lives in `backend/`. Its models,
+services, security primitives and domain routers are organized separately, with
+the established Jinja/form contracts and `0001_initial` Alembic history. Python
+dependencies are managed with `uv` and the root `uv.lock`.
 
 The canonical logo, favicon and common CSS live in `packages/crr-brand`, mounted
 at `/brand` with root-path-aware Jinja links. PDF exports read that same logo.
@@ -42,6 +43,11 @@ uv run --directory apps/shifts/backend --package crr-shifts --locked python -m a
 
 The requirements files are retained during migration until CI verifies the
 lockfile workflow. Tests use isolated synthetic SQLite data and disabled SMTP.
-See `docs/DOMAIN.md` for domain rules and `docs/ARCHITECTURE.md` for the preserved
-application lifecycle (legacy dependency/deployment commands there are being
-superseded by this README).
+`make shifts-test` runs pytest and the Phase 4 compatibility check: ORM/schema
+definitions and relationships, OpenAPI, migration history, existing data at
+startup and 96 requests across `/` and `/crr`. `make shifts-compat-test` runs the
+compatibility check alone. The synthetic fixture is under `migration/fixtures/`
+and the expected contract under `migration/phase4/`.
+
+See `docs/DOMAIN.md` for domain rules and `docs/ARCHITECTURE.md` for the current
+module layout, application lifecycle and deployment commands.

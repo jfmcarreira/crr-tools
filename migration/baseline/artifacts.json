@@ -1,5 +1,6 @@
 {
   "fixtures": {
+    "shifts.sqlite": "95b06188ce5076a17b842523c6a969358cdd48e30221de4292e6628f40c9b292",
     "tournament-api.json": "cb6f1745a5c4158359326080d92958af08163d491476cadbee4af567bb404fc8",
     "tournament-cookie.json": "7f2797f7330acc4fae4dda40fc6c9d1ec500c0616d8777361b25a9439cc40afe",
     "tournament-routes.json": "79b605e2cb3e3845d0e1ec43a48d163b649e878d3c2089730f18c4b1291b94e7",

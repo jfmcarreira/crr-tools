@@ -7,7 +7,7 @@ from datetime import date, timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from .models import Assignment, MonthlyPattern, RotationMember, Schedule, Team
+from ..models import Assignment, MonthlyPattern, RotationMember, Schedule, Team
 
 
 def month_bounds(year: int, month: int) -> tuple[date, date]:

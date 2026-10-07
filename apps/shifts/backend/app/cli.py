@@ -7,7 +7,7 @@ from datetime import date, timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
-from .bootstrap import ensure_initial_data
+from .services.bootstrap import ensure_initial_data
 from .config import settings
 from .database import (
     SessionLocal,
@@ -27,8 +27,8 @@ from .models import (
     Team,
 )
 from .i18n import day_long, day_numeric
-from .notifications import send_email_notification
-from .scheduling import ensure_month_assignments
+from .services.notifications import send_email_notification
+from .services.scheduling import ensure_month_assignments
 from .security import hash_password
 
 BASELINE_REVISION = "0001_initial"

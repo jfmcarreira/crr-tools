@@ -7,7 +7,7 @@ from sqlalchemy import select
 
 from app.config import settings
 from app.models import Assignment, Schedule, Team
-from app.pdf import build_schedule_pdf
+from app.services.pdf import build_schedule_pdf
 
 
 def download(client, schedule, start="2026-09-19", end="2026-12-26"):

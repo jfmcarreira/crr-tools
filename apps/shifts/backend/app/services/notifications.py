@@ -6,8 +6,8 @@ from email.message import EmailMessage
 
 from sqlalchemy.orm import Session
 
-from .config import settings
-from .models import NotificationLog, Team
+from ..config import settings
+from ..models import NotificationLog, Team
 
 
 def send_email_notification(

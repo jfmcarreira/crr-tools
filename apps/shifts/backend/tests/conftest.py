@@ -37,7 +37,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.bootstrap import ensure_initial_data
+from app.services.bootstrap import ensure_initial_data
 from app.database import Base, SessionLocal, engine, run_migrations
 from app.main import app
 from app.models import Schedule, Team, User

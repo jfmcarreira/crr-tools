@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 import hmac
 import os
-import secrets
 
 ITERATIONS = 310_000
 
@@ -34,7 +33,3 @@ def verify_password(password: str, encoded: str | None) -> bool:
         return hmac.compare_digest(digest.hex(), digest_hex)
     except (ValueError, TypeError):
         return False
-
-
-def new_csrf_token() -> str:
-    return secrets.token_urlsafe(32)

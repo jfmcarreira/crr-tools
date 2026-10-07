@@ -5,9 +5,9 @@ from datetime import date, time
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from .config import settings
-from .models import Schedule, Team, User
-from .security import hash_password
+from ..config import settings
+from ..models import Schedule, Team, User
+from ..security import hash_password
 
 
 def ensure_initial_data(db: Session) -> None:

@@ -27,7 +27,7 @@ jobs:
               - 'apps/tournament/**'
               - 'migration/contracts/**'
               - 'migration/python_*'
-              - 'migration/fixtures/**'
+              - 'migration/fixtures/tournament*'
               - 'tools/check_tournament_compat.py'
               - 'packages/crr-brand/**'
               - 'packages/crr-python/**'
@@ -39,6 +39,9 @@ jobs:
               - '.github/workflows/**'
             shifts:
               - 'apps/shifts/**'
+              - 'migration/check_shifts_structure.py'
+              - 'migration/phase4/baseline.json'
+              - 'migration/fixtures/shifts.sqlite'
               - 'packages/crr-brand/**'
               - 'packages/crr-python/**'
               - 'pyproject.toml'

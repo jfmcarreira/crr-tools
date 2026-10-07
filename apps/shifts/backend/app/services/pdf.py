@@ -20,10 +20,10 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
-from .config import settings
-from .branding import LOGO_PATH
-from .i18n import month_name
-from .models import Assignment, Schedule
+from ..config import settings
+from ..branding import LOGO_PATH
+from ..i18n import month_name
+from ..models import Assignment, Schedule
 
 # ReportLab ships these Unicode fonts, including Portuguese accents, in its wheel.
 FONT_DIR = Path(reportlab.__file__).parent / "fonts"
