@@ -5,6 +5,7 @@ Two independently runnable applications migrating into one monorepo:
 - [Tournament](apps/tournament/README.md): Vue 3 and FastAPI on Python 3.13.
 - [Shifts](apps/shifts/README.md): FastAPI, Jinja, SQLAlchemy and Alembic on Python 3.13.
 - [CRR brand](packages/crr-brand/README.md): shared logo, favicon and CSS primitives.
+- [CRR Python](packages/crr-python/README.md): shared engine/threading and Alembic configuration helpers.
 
 See [the migration plan](MONOREPO_MIGRATION_PLAN.md) and
 [verified progress and baseline evidence](migration/README.md).
@@ -17,6 +18,7 @@ Requires Node 22+, Python 3.13, `uv`, and `make`.
 make tournament-install
 make tournament-test tournament-build
 make shifts-test
+make python-common-test
 make test
 ```
 

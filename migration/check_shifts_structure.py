@@ -296,10 +296,20 @@ def main(backend: Path, capture: bool):
         output.write_text(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True) + "\n")
         if not capture:
             baseline = json.loads((REPORT / "baseline.json").read_text())
+            override_path = ROOT / "migration/phase5/shifts-definition-overrides.json"
+            overrides = {}
+            if override_path.exists():
+                override_report = json.loads(override_path.read_text())
+                assert override_report["baseline_sha256"] == hashlib.sha256((REPORT / "baseline.json").read_bytes()).hexdigest()
+                overrides = override_report["definitions"]
+                for name, fingerprints in overrides.items():
+                    assert baseline["definitions"][name] == fingerprints["before"], name
+                    assert result["definitions"][name] == fingerprints["after"], name
+                    baseline["definitions"][name] = fingerprints["after"]
             comparison = differences(normalized_report(baseline), normalized_report(result))
             (results / "differences.json").write_text(json.dumps(comparison, indent=2, ensure_ascii=False) + "\n")
             assert not comparison, f"{len(comparison)} structural/workflow differences; inspect .migration/phase4-results/differences.json"
-            verification = {"definitions_preserved": len(result["definitions"]),
+            verification = {"definitions_preserved": len(result["definitions"]) - len(overrides),
                             "orm_mapping_and_relationships_unchanged": True,
                             "openapi_unchanged": True, "migration_files_unchanged": True,
                             "existing_fixture_rows_preserved_at_startup": True,
@@ -307,7 +317,11 @@ def main(backend: Path, capture: bool):
                             "deployment_prefixes": list(result["workflows"]),
                             "fixture_sha256": hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
                             "baseline_sha256": hashlib.sha256((REPORT / "baseline.json").read_bytes()).hexdigest()}
-            (REPORT / "verification.json").write_text(json.dumps(verification, indent=2) + "\n")
+            verification_path = REPORT / "verification.json"
+            if overrides:
+                verification["shared_infrastructure_delegations"] = overrides
+                verification_path = ROOT / "migration/phase5/shifts-compatibility.json"
+            verification_path.write_text(json.dumps(verification, indent=2) + "\n")
         print(f"Shifts {'baseline captured' if capture else 'structural/workflow parity verified'}: {sum(len(value['requests']) for value in result['workflows'].values())} requests across both deployment prefixes.")
 
 

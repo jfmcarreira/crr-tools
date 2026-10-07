@@ -286,12 +286,67 @@ Do not rerun the one-time generator or overwrite the baseline. The original
 snapshots and branding/compatibility baselines remain intact. Remote CI is still
 unverified.
 
+## Phase 5 — proven Python infrastructure: locally verified complete
+
+Compared both final backends and extracted two concrete common operations into
+the internal `crr-python` uv member (`src/crr_common`):
+
+- `create_sync_engine`: synchronous SQLAlchemy construction with SQLite request-
+  worker threading support. It recognizes SQLAlchemy URL/dialect objects, honors
+  explicit connection options and forwards engine/pool options. Each app still
+  controls its connection pragmas, filesystem setup and session factories.
+- `migration_config`: Alembic ini/script/database wiring, with absolute paths,
+  interpolation-safe URLs and an optional caller-owned connection. Baseline
+  validation, stamping/upgrades, transactions and history stay app-specific.
+
+This removes duplicated setup without app-name switches or domain concepts.
+No models, schemas, auth primitives, error messages or business rules moved into
+the package. Both applications declare an explicit workspace dependency and
+resolve it through the root lockfile. Local commands use the workspace install;
+both independent production images install a non-editable wheel in `/opt/venv`.
+
+Added `make python-common-test`, included it in root `make test` and both affected
+app CI jobs. Shared-package paths already trigger both jobs. Docker contexts now
+include the package before their frozen uv install step.
+
+| Check | Result |
+| --- | --- |
+| Shared package tests | 7 passed: cross-thread SQLite, memory/pool forwarding, consumer-owned pragmas, non-SQLite/explicit options, paths/URL escaping and connection ownership |
+| Tournament backend | 28 passed |
+| Tournament frontend/shared + Vue typecheck/build | 13 passed; typecheck and build passed |
+| Legacy Tournament assertions on Python | 44 passed |
+| Shifts pytest | 16 passed |
+| Shifts workflow/schema/ORM/OpenAPI compatibility | 96 requests matched across both prefixes; mappings, data and histories preserved |
+| `make migration-visual-check` | All 14 screenshots match Phase 2 byte-for-byte |
+| Independent Docker builds | Both passed |
+| Shared-package imports in both images | Verified `/opt/venv/lib/python3.13/site-packages/crr_common` |
+| Container startup/resource/adoption smoke checks | Fresh Tournament, populated Node fixture and Shifts passed |
+
+The Phase 4 baseline remains unchanged. `phase5/shifts-definition-overrides.json`
+records only the intentional `alembic_config` delegation, with exact before/after
+AST fingerprints and the baseline checksum. The verifier still guards the other
+172 definitions and all route/form/ORM/data/history expectations; its latest
+evidence is in `phase5/shifts-compatibility.json`. Unknown changes continue to
+fail rather than being normalized away. `tools/record_shared_infrastructure.py`
+was the one-time manifest generator and refuses to overwrite recorded evidence.
+
+Remote GitHub Actions execution is still unverified. The apps retain independent
+versions, images, databases and auth models; `crr-python` has an internal 0.1.0
+version and is released through its consuming applications.
+
+Historical-source checksum revalidation is blocked: `originals/` is currently
+empty, and both referenced legacy directories are missing. `make baseline-preserve`
+therefore cannot verify their checksums. Phase 5 did not modify these directories;
+its app/package tests use saved fixtures and owned compatibility contracts, all
+of which remain present and pass. Snapshot retention/restoration must be resolved
+before declaring the full migration acceptance criteria complete.
+
 ## Next work
 
 1. Verify the new CI jobs on Node 22/Python 3.13 after publishing the changes.
-2. Phase 5: compare the two final Python backends and extract only infrastructure
-   that demonstrably removes generic duplication without app-specific switches.
+2. Phase 6: final layout and retired Node-source cleanup, compatibility-scaffolding
+   review, dependency/documentation cleanup and independent release workflows.
 
-Phases 5–6 are not complete. No shared Python package has been extracted yet.
+Phase 6 is not complete.
 Independent tag-triggered release workflows and final dependency cleanup belong
 to later phases.

@@ -1,8 +1,9 @@
 {
-  "include": ["apps/shifts/backend/app", "apps/shifts/backend/tests", "apps/tournament/backend/app", "apps/tournament/backend/tests"],
+  "include": ["apps/shifts/backend/app", "apps/shifts/backend/tests", "apps/tournament/backend/app", "apps/tournament/backend/tests", "packages/crr-python/src", "packages/crr-python/tests"],
   "executionEnvironments": [
     {"root": "apps/shifts/backend"},
-    {"root": "apps/tournament/backend"}
+    {"root": "apps/tournament/backend"},
+    {"root": "packages/crr-python", "extraPaths": ["packages/crr-python/src"]}
   ],
   "exclude": ["originals", ".migration", "**/node_modules", "**/__pycache__"],
   "venvPath": ".",

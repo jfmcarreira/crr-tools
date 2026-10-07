@@ -41,6 +41,7 @@ jobs:
               - 'apps/shifts/**'
               - 'migration/check_shifts_structure.py'
               - 'migration/phase4/baseline.json'
+              - 'migration/phase5/shifts-definition-overrides.json'
               - 'migration/fixtures/shifts.sqlite'
               - 'packages/crr-brand/**'
               - 'packages/crr-python/**'
@@ -68,6 +69,7 @@ jobs:
           version: '0.11.31'
           enable-cache: true
       - run: make tournament-install tournament-test tournament-build
+      - run: make python-common-test
       - run: docker compose config --quiet
       - run: docker build -f apps/tournament/Dockerfile -t crr-tournament .
 
@@ -82,5 +84,6 @@ jobs:
           version: '0.11.31'
           enable-cache: true
       - run: make shifts-test
+      - run: make python-common-test
       - run: docker compose config --quiet
       - run: make shifts-build

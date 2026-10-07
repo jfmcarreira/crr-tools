@@ -4,6 +4,7 @@ version = "1.0.0"
 description = "CRR Tournament FastAPI backend"
 requires-python = ">=3.13,<3.14"
 dependencies = [
+  "crr-python",
   "fastapi>=0.115,<1",
   "uvicorn[standard]>=0.30,<1",
   "SQLAlchemy>=2.0,<3",
@@ -13,6 +14,9 @@ dependencies = [
 
 [dependency-groups]
 dev = ["pytest>=8,<9", "httpx>=0.27,<1"]
+
+[tool.uv.sources]
+crr-python = {workspace = true}
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

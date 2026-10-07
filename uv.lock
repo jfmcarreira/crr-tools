@@ -4,6 +4,7 @@ requires-python = "==3.13.*"
 
 [manifest]
 members = [
+    "crr-python",
     "crr-shifts",
     "crr-tournament",
 ]
@@ -127,11 +128,35 @@ wheels = [
 ]
 
 [[package]]
+name = "crr-python"
+version = "0.1.0"
+source = { editable = "packages/crr-python" }
+dependencies = [
+    { name = "alembic" },
+    { name = "sqlalchemy" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "alembic", specifier = ">=1.13,<2" },
+    { name = "sqlalchemy", specifier = ">=2.0,<3" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8,<9" }]
+
+[[package]]
 name = "crr-shifts"
 version = "0.1.0"
 source = { virtual = "apps/shifts/backend" }
 dependencies = [
     { name = "alembic" },
+    { name = "crr-python" },
     { name = "email-validator" },
     { name = "fastapi" },
     { name = "itsdangerous" },
@@ -153,6 +178,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = ">=1.13,<2" },
+    { name = "crr-python", editable = "packages/crr-python" },
     { name = "email-validator", specifier = ">=2.2,<3" },
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "itsdangerous", specifier = ">=2.2,<3" },
@@ -177,6 +203,7 @@ version = "1.0.0"
 source = { virtual = "apps/tournament/backend" }
 dependencies = [
     { name = "alembic" },
+    { name = "crr-python" },
     { name = "fastapi" },
     { name = "pydantic-settings" },
     { name = "sqlalchemy" },
@@ -192,6 +219,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = ">=1.13,<2" },
+    { name = "crr-python", editable = "packages/crr-python" },
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "pydantic-settings", specifier = ">=2.5,<3" },
     { name = "sqlalchemy", specifier = ">=2.0,<3" },

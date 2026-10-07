@@ -33,6 +33,9 @@ on startup, as they do in production.
 - `services/pdf.py`: ReportLab-rendered A4 schedule lists, with embedded Unicode fonts and
   adaptive layout to keep the selected range on one page.
 - `backend/app/cli.py`: maintenance commands that can be run manually or by cron.
+- `packages/crr-python`: shared synchronous engine/threading and Alembic-config
+  construction. Each app supplies its own database setting, script location and
+  migration policy; the package contains no models or authentication code.
 
 ## Data lifecycle
 
@@ -71,4 +74,6 @@ schema/ORM/relationships/OpenAPI plus 96 HTTP requests across `/` and `/crr`
 against the pre-refactor baseline. Runtime-only randomness/timestamps are
 normalized, and calendar clocks are fixed for reproducible comparisons. Raw
 comparison results are under ignored `.migration/phase4-results/`; verified
-evidence is under `migration/phase4/`.
+evidence is under `migration/phase4/` and `migration/phase5/`. Phase 5 records the
+exact `alembic_config` helper delegation by old/new AST hashes while retaining
+the original Phase 4 baseline and guarding the other definitions.

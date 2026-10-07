@@ -2,7 +2,7 @@ UV ?= uv
 PYTHON ?= python3
 .DEFAULT_GOAL := test
 
-.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-compat-test tournament-build shifts-dev shifts-test shifts-compat-test shifts-build test
+.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-compat-test tournament-build shifts-dev shifts-test shifts-compat-test shifts-build test
 
 baseline-test:
 	$(PYTHON) tools/migration_baseline.py all
@@ -27,6 +27,9 @@ branding-visual-check:
 
 images-smoke-test:
 	$(PYTHON) tools/check_images.py
+
+python-common-test:
+	$(UV) run --directory packages/crr-python --package crr-python --locked pytest
 
 tournament-install:
 	npm --prefix apps/tournament ci
@@ -64,4 +67,4 @@ shifts-compat-test:
 shifts-build:
 	docker build -f apps/shifts/Dockerfile -t crr-shifts .
 
-test: tournament-test shifts-test
+test: python-common-test tournament-test shifts-test

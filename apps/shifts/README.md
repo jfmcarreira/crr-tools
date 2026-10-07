@@ -5,6 +5,11 @@ services, security primitives and domain routers are organized separately, with
 the established Jinja/form contracts and `0001_initial` Alembic history. Python
 dependencies are managed with `uv` and the root `uv.lock`.
 
+The internal `crr-python` workspace dependency supplies synchronous engine
+construction and Alembic configuration. Shifts owns its sessions, backups,
+startup adoption rules and migration history. Docker installs the shared package
+as a wheel alongside the app's dependencies.
+
 The canonical logo, favicon and common CSS live in `packages/crr-brand`, mounted
 at `/brand` with root-path-aware Jinja links. PDF exports read that same logo.
 App-specific layouts and forms remain in `backend/app/static/app.css`; Docker

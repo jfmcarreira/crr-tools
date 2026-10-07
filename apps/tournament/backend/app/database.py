@@ -2,8 +2,9 @@ import re
 from pathlib import Path
 
 from alembic import command
-from alembic.config import Config
-from sqlalchemy import CheckConstraint, DefaultClause, UniqueConstraint, URL, create_engine, event, inspect
+from crr_common.database import create_sync_engine
+from crr_common.migrations import migration_config
+from sqlalchemy import CheckConstraint, DefaultClause, UniqueConstraint, URL, event, inspect
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.pool import StaticPool
 
@@ -16,8 +17,7 @@ def create_database_engine(path: str) -> Engine:
     if path != ":memory:":
         Path(path).resolve().parent.mkdir(parents=True, exist_ok=True)
     options = {"poolclass": StaticPool} if path == ":memory:" else {}
-    engine = create_engine(URL.create("sqlite", database=path),
-                           connect_args={"check_same_thread": False}, **options)
+    engine = create_sync_engine(URL.create("sqlite", database=path), **options)
 
     @event.listens_for(engine, "connect")
     def pragmas(connection, _record):
@@ -91,8 +91,8 @@ def run_migrations(engine: Engine) -> None:
         # SQLite's legacy driver transaction mode does not begin on DDL.
         # Explicitly enclose validation, stamping and upgrade in one real transaction.
         connection.exec_driver_sql("BEGIN IMMEDIATE")
-        config = Config(str(BACKEND / "alembic.ini"))
-        config.attributes["connection"] = connection
+        config = migration_config(BACKEND / "alembic.ini", BACKEND / "migrations",
+                                  database_url=engine.url, connection=connection)
         tables = set(inspect(connection).get_table_names())
         if tables and "alembic_version" not in tables:
             validate_legacy_schema(connection)

@@ -11,7 +11,9 @@ from alembic import command
 from alembic.config import Config
 from alembic.runtime.migration import MigrationContext
 from alembic.script import ScriptDirectory
-from sqlalchemy import create_engine, inspect
+from crr_common.database import create_sync_engine
+from crr_common.migrations import migration_config
+from sqlalchemy import inspect
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from .config import settings
@@ -23,16 +25,13 @@ class Base(DeclarativeBase):
     pass
 
 
-connect_args = {"check_same_thread": False} if settings.database_url.startswith("sqlite") else {}
-engine = create_engine(settings.database_url, connect_args=connect_args, future=True)
+engine = create_sync_engine(settings.database_url, future=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False, class_=Session)
 
 
 def alembic_config() -> Config:
-    config = Config(str(MIGRATIONS_DIR.parent / "alembic.ini"))
-    config.set_main_option("script_location", str(MIGRATIONS_DIR))
-    config.set_main_option("sqlalchemy.url", settings.database_url)
-    return config
+    return migration_config(MIGRATIONS_DIR.parent / "alembic.ini", MIGRATIONS_DIR,
+                            database_url=settings.database_url)
 
 
 def run_migrations() -> None:

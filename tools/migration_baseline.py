@@ -19,6 +19,8 @@ IGNORED = {".git", "node_modules", ".venv", "__pycache__", ".pytest_cache", "dis
 
 
 def hashes(source: Path) -> dict[str, str]:
+    if not source.is_dir():
+        raise FileNotFoundError(f"Baseline source directory is missing: {source}")
     return {
         str(path.relative_to(source)): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted(source.rglob("*"))

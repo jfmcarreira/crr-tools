@@ -39,6 +39,11 @@ controls both the frontend build path and backend path (default `/jogo/`). The
 backend project metadata. The image builds Vue with Node 22 and runs Python 3.13
 as UID/GID 1000, matching the old container's database ownership.
 
+Both backends consume the internal `crr-python` workspace dependency for
+synchronous engine construction and Alembic configuration. Tournament owns its
+connection pragmas, legacy-schema validation and transactional adoption policy.
+Production installs the shared package as a wheel inside the image.
+
 Tests require Node 22+ and uv. `make tournament-test` runs backend pytest,
 frontend/shared tests, Vue typechecking and the preserved legacy compatibility
 assertions against actual Python services and HTTP/SSE servers. Those assertions
