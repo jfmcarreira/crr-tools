@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Pedir troca · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow"><a href="{{ app_path('/swaps') }}">Trocas</a></p>
+    <h1>Pedir troca</h1>
+    <p class="muted">Uma troca é entre duas equipas da mesma escala: cada uma fica com o turno da outra.</p>
+  </div>
+  <div class="month-nav">
+    <a class="button secondary" href="{{ app_path('/swaps/new?year=' ~  prev[0]  ~ '&month=' ~  prev[1] ) }}">← Anterior</a>
+    <a class="button secondary" href="{{ app_path('/swaps/new?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
+  </div>
+</div>
+
+<div class="stack gap-lg">
+{% for group in groups %}
+  <section class="panel">
+    <div class="row between wrap gap">
+      <h2>{{ group.schedule.name }}</h2>
+      <span class="muted">{{ month_name }} {{ year }}</span>
+    </div>
+    <form method="post" action="{{ app_path('/swaps/new') }}" class="form-grid">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label>O turno que passo
+        <select name="assignment_id" required>
+          {% for shift in group.shifts %}<option value="{{ shift.id }}">{{ shift.label }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>O turno que quero em troca
+        <select name="target_assignment_id" required>
+          {% for shift in group.wanted %}<option value="{{ shift.id }}">{{ shift.label }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Mensagem <span class="muted">(opcional)</span>
+        <input name="message" maxlength="500" placeholder="Não consigo fazer este dia…">
+      </label>
+      <div class="row end"><button class="primary" type="submit">Enviar pedido</button></div>
+    </form>
+  </section>
+{% else %}
+  <div class="empty">Não há turnos disponíveis para {{ month_name|lower }} de {{ year }}.</div>
+{% endfor %}
+</div>
+{% endblock %}

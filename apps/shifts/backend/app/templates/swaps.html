@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Pedidos de troca</h1></div>
+</div>
+
+<div class="stack gap-lg">
+{% for swap in swaps %}
+  <article class="panel">
+    <div class="row between wrap gap">
+      <div>
+        <div class="eyebrow">{{ swap.assignment.date|dia_longo }}</div>
+        <h2>{{ swap.assignment.schedule.name }}</h2>
+        <p><strong>{{ swap.requester.name }}</strong> passa o turno de <strong>{{ swap.assignment.date|dia }}</strong>
+        {%- if swap.target_assignment %} e fica com o de <strong>{{ swap.target_assignment.date|dia }}</strong>{% endif %}
+        {%- if swap.target_team %} ({{ swap.target_team.name }}){% endif %}.</p>
+        {% if swap.message %}<p class="quote">{{ swap.message }}</p>{% endif %}
+        {% if swap.accepted_by %}<p>Aceite por <strong>{{ swap.accepted_by.name }}</strong>.</p>{% endif %}
+      </div>
+      <span class="status status-{{ swap.status }}">{{ swap.status|estado }}</span>
+    </div>
+
+    <div class="actions">
+      {% set eligible = swap.requester_id not in my_team_ids and (swap.target_team_id is none or swap.target_team_id in my_team_ids) %}
+      {% set can_accept = swap.status == 'open' and eligible %}
+      {% set can_decline = swap.status in ['open', 'pending_approval'] and (current_user.is_admin or (swap.status == 'open' and eligible)) %}
+      {% if can_accept %}
+      <form method="post" action="{{ app_path('/swaps/' ~  swap.id  ~ '/accept') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="primary" type="submit">Aceitar turno</button>
+      </form>
+      {% endif %}
+      {% if can_decline %}
+      {% set decline_action = '/swaps/' ~ swap.id ~ ('/admin-reject' if current_user.is_admin else '/reject') %}
+      <form method="post" action="{{ app_path(decline_action) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="{% if current_user.is_admin %}danger{% else %}secondary{% endif %}" type="submit">Recusar</button>
+      </form>
+      {% endif %}
+      {% if swap.requester_id in my_team_ids and swap.status in ['open', 'pending_approval'] %}
+      <form method="post" action="{{ app_path('/swaps/' ~  swap.id  ~ '/cancel') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="secondary" type="submit">Cancelar pedido</button>
+      </form>
+      {% endif %}
+      {% if current_user.is_admin and swap.status == 'approved' and swap.target_assignment %}
+      <form method="post" action="{{ app_path('/swaps/' ~  swap.id  ~ '/revert') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <button class="secondary" type="submit">Reverter troca</button>
+      </form>
+      {% endif %}
+      {% if current_user.is_admin and swap.status in ['open', 'pending_approval'] %}
+      <form method="post" action="{{ app_path('/swaps/' ~  swap.id  ~ '/approve') }}" class="inline-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% if swap.accepted_by %}
+        <button class="primary" type="submit">Aprovar ({{ swap.accepted_by.name }})</button>
+        {% elif swap.target_team %}
+        {# Nobody accepted yet: approve it exactly as it was requested. #}
+        <button class="primary" type="submit">Aprovar para {{ swap.target_team.name }}</button>
+        {% else %}
+        <select name="team_id" required><option value="">Aprovar e atribuir a…</option>{% for team in schedule_teams.get(swap.assignment.schedule_id, []) %}{% if team.id != swap.requester_id %}<option value="{{ team.id }}">{{ team.name }}</option>{% endif %}{% endfor %}</select>
+        <button class="primary" type="submit">Aprovar</button>
+        {% endif %}
+      </form>
+      {% endif %}
+    </div>
+  </article>
+{% else %}
+  <div class="empty">Ainda não há pedidos de troca.</div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+[tool.uv.workspace]
+members = ["apps/shifts/backend"]
+
+# Tournament joins the Python workspace when its FastAPI backend is created.
+# Shared Python infrastructure is introduced only after proven duplication.

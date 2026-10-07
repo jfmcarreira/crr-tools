@@ -1,0 +1,1 @@
+"tournament_admin_session=<token>; Max-Age=604800; Path=/jogo/; HttpOnly; SameSite=Strict"

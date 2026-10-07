@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}A minha conta · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow"><a href="{{ app_path('/') }}">Rota</a></p>
+    <h1>A minha conta</h1>
+    <p class="muted">{{ current_user.name or current_user.username }} · @{{ current_user.username }}</p>
+    {% if current_teams %}
+    <p class="muted">Este utilizador entra em nome de {{ current_teams|length }} equipa(s): {{ current_teams|map(attribute='name')|join(', ') }}. Vê e controla os turnos de todas.</p>
+    {% endif %}
+  </div>
+</div>
+
+<section class="panel">
+  <h2>Alterar palavra-passe</h2>
+  <form method="post" action="{{ app_path('/account') }}" class="form-grid">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="password" name="new_password" minlength="4" autocomplete="new-password" required autofocus>
+    <div><button class="primary" type="submit">Alterar palavra-passe</button></div>
+  </form>
+</section>
+{% endblock %}

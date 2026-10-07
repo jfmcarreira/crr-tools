@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+{% set schedule = card.schedule %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow"><a href="{{ app_path('/admin/schedules') }}">Escalas</a></p>
+    <h1>{{ schedule.name }}</h1>
+    <p class="muted">{{ card.kind_label }} · {{ schedule|horario }}</p>
+  </div>
+  <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/settings') }}" class="inline-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Das horas<input type="time" name="start_time" value="{{ schedule.start_time.strftime('%H:%M') }}" required></label>
+    <label>Às horas<input type="time" name="end_time" value="{{ schedule.end_time.strftime('%H:%M') }}" required></label>
+    <label class="check"><input type="checkbox" name="requires_manager_approval" {% if schedule.requires_manager_approval %}checked{% endif %}> Aprovação da gestão</label>
+    <label class="check"><input type="checkbox" name="is_active" {% if schedule.is_active %}checked{% endif %}> Ativa</label>
+    <button class="secondary" type="submit">Guardar</button>
+  </form>
+</div>
+<div class="stack gap-lg">
+{% if card.kind == 'rotation' %}
+  <section class="panel">
+    <div class="row between wrap gap">
+      <div><h3>{{ month_name }} {{ year }}</h3></div>
+      <div class="month-nav">
+        <a class="button secondary" href="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '?year=' ~  prev[0]  ~ '&month=' ~  prev[1] ) }}">← Anterior</a>
+        <a class="button secondary" href="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
+      </div>
+    </div>
+    <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/apply-rotation') }}" class="inline-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="year" value="{{ year }}"><input type="hidden" name="month" value="{{ month }}">
+      <button class="secondary" type="submit">Aplicar rotação em {{ month_name }}</button>
+    </form>
+    <p class="muted">Deixa sem atribuição os turnos <strong>automáticos</strong> do mês e ano escolhidos e de todos os seguintes. Nenhum turno é apagado e as atribuições manuais e as trocas concluídas são mantidas. Use Limpar turnos antes de Aplicar rotação, para recalcular tudo a partir de um ponto.</p>
+    <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/assignments') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="year" value="{{ year }}"><input type="hidden" name="month" value="{{ month }}">
+      <div class="table-wrap"><table><thead><tr><th>Data</th><th>Equipa</th><th>Origem</th><th>Ação</th></tr></thead><tbody>
+      {% for assignment in assignments %}
+        <tr><td>{{ assignment.date|dia }}</td><td><select name="assignment_{{ assignment.id }}"><option value="">Sem atribuição</option>{% for team in teams %}<option value="{{ team.id }}" {% if assignment.team_id == team.id %}selected{% endif %}>{{ team.name }}</option>{% endfor %}</select></td><td><span class="badge">{{ assignment.source|origem }}</span></td><td><button class="secondary small" type="submit" form="regenerate-{{ assignment.id }}" aria-label="Recalcular o turno de {{ assignment.date|dia }}">Recalcular</button></td></tr>
+      {% endfor %}
+      </tbody></table></div>
+      <div class="sticky-actions"><button class="primary" type="submit">Guardar {{ month_name }}</button></div>
+    </form>
+    {% for assignment in assignments %}
+    <form id="regenerate-{{ assignment.id }}" method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/assignments/' ~  assignment.id  ~ '/regenerate') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    </form>
+    {% endfor %}
+  </section>
+  <section class="panel">
+    <h3>Próximas datas</h3>
+    <p class="date-list">{{ card.dates | join(' · ') }}</p>
+  </section>
+  <section class="panel" id="rotation-order">
+    <h3>Ordem da rotação</h3>
+    <p class="muted">Rotação independente, preenchida por ordem. Depois de alterar a ordem, use Aplicar rotação acima para atualizar os turnos automáticos deste mês.</p>
+    <ol class="rotation-list">
+      {% for member in schedule.rotation_members %}
+      <li>
+        <span>{{ member.team.name }}</span>
+        <div class="actions compact">
+          <form method="post" action="{{ app_path('/admin/rotation/' ~  member.id  ~ '/move') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="direction" value="up"><button class="secondary small" type="submit" aria-label="Subir {{ member.team.name }}">↑</button></form>
+          <form method="post" action="{{ app_path('/admin/rotation/' ~  member.id  ~ '/move') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="direction" value="down"><button class="secondary small" type="submit" aria-label="Descer {{ member.team.name }}">↓</button></form>
+          <form method="post" action="{{ app_path('/admin/rotation/' ~  member.id  ~ '/remove') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="danger small" type="submit">Remover</button></form>
+        </div>
+      </li>
+      {% else %}<li class="muted">Ainda não há membros.</li>{% endfor %}
+    </ol>
+    <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/rotation') }}" class="inline-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <select name="team_id" required><option value="">Adicionar equipa…</option>{% for team in teams %}<option value="{{ team.id }}">{{ team.name }}</option>{% endfor %}</select>
+      <button class="primary" type="submit">Adicionar à rotação</button>
+    </form>
+  </section>
+{% else %}
+  <section class="panel">
+    <h3>Repete todos os meses</h3>
+    <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/pattern') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="pattern-grid">
+      {% for day in pattern_days %}
+        <label class="pattern-day"><span>{{ day }}</span>
+          <select name="day_{{ day }}">
+            <option value="">—</option>
+            {% for team in teams %}<option value="{{ team.id }}" {% if pattern.get(day) == team.id %}selected{% endif %}>{{ team.name }}</option>{% endfor %}
+          </select>
+        </label>
+      {% endfor %}
+      </div>
+      <div class="sticky-actions"><button class="primary" type="submit">Guardar padrão</button></div>
+    </form>
+  </section>
+  <section class="panel">
+    <h3>Aplicar novo padrão</h3>
+    <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/apply-pattern') }}" class="inline-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label><select name="month">
+        {% for name in months %}<option value="{{ loop.index }}" {% if loop.index == month %}selected{% endif %}>{{ name }}</option>{% endfor %}
+      </select></label>
+      <label><input type="number" name="year" value="{{ year }}" min="2000" max="2100" required></label>
+      <button class="secondary" type="submit">Aplicar padrão</button>
+    </form>
+    <p class="muted">Atualiza os turnos <strong>automáticos</strong> já existentes do mês e ano escolhidos e de todos os seguintes, para refletirem o padrão guardado acima. As atribuições manuais e as trocas concluídas são mantidas, os dias sem equipa no padrão ficam como estão e nenhum turno é criado.</p>
+  </section>
+{% endif %}
+  <section class="panel">
+    <h3>Limpar atribuições</h3>
+    <p class="muted">Limpar atribuições a partir do mês de:</p>
+    <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/clear-from') }}" class="inline-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label><select name="month">
+        {% for name in months %}<option value="{{ loop.index }}" {% if loop.index == month %}selected{% endif %}>{{ name }}</option>{% endfor %}
+      </select></label>
+      <label><input type="number" name="year" value="{{ year }}" min="2000" max="2100" required></label>
+      <button class="danger" type="submit">Limpar turnos</button>
+    </form>
+  </section>
+  <section class="panel" id="swap-requests">
+    <h3>Pedidos de troca</h3>
+    <p class="muted">Um administrador pode atribuir o turno a outra equipa, mesmo que nenhuma pessoa entre na aplicação por ela. Só se aplica se quem pediu a troca continuar a ser o titular do turno.</p>
+    <ul class="link-list">
+    {% for item in swap_requests %}
+      <li>
+        <div>
+          <strong>{{ item.assignment.date|dia }}</strong> · {{ item.assignment.schedule.name }}
+          — pedido por {{ item.requester.name }}
+          {% if item.target_assignment %}em troca de <strong>{{ item.target_assignment.date|dia }}</strong>{% endif %}
+          {% if item.target_team %}para {{ item.target_team.name }}{% endif %}
+          {% if item.accepted_by %}, aceite por {{ item.accepted_by.name }}{% endif %}
+          {% if item.message %}<br><span class="muted">“{{ item.message }}”</span>{% endif %}
+        </div>
+        <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/swaps/' ~  item.id  ~ '/assign') }}" class="inline-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <input type="hidden" name="year" value="{{ year }}"><input type="hidden" name="month" value="{{ month }}">
+          <select name="team_id" required>
+            <option value="">Atribuir a…</option>
+            {% for team in schedule_teams %}
+              {% if team.id != item.requester_id %}
+              <option value="{{ team.id }}" {% if team.id == (item.accepted_team_id or item.target_team_id) %}selected{% endif %}>{{ team.name }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <button class="secondary small" type="submit">Atribuir turno</button>
+        </form>
+      </li>
+    {% else %}
+      <li class="muted">Não há pedidos de troca nesta escala.</li>
+    {% endfor %}
+    </ul>
+  </section>
+</div>
+{% endblock %}

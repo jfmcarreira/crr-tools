@@ -1,0 +1,35 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--crr-background);
+  color: var(--crr-text);
+  font-family: var(--crr-font-family);
+}
+
+a { color: inherit; }
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+input, select {
+  width: 100%;
+  border: 1px solid var(--crr-control-border);
+  border-radius: var(--crr-radius-control);
+  background: var(--crr-surface);
+  color: var(--crr-text);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--crr-primary);
+  box-shadow: var(--crr-focus-shadow);
+}
+
+button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: var(--crr-focus-outline);
+  outline-offset: 2px;
+}
+
+table { width: 100%; border-collapse: collapse; }
+th { text-transform: uppercase; }

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Entrar · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <div class="auth-brand" aria-hidden="true">
+    <img src="{{ url_for('brand', path='assets/logo.png') }}" alt="">
+  </div>
+  <h1>Entrar</h1>
+  <p class="muted">Use o seu utilizador e a sua palavra-passe da escala.</p>
+  <form method="post" action="{{ app_path('/login') }}" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>Utilizador
+      <input name="username" autocomplete="username" required autofocus>
+    </label>
+    <label>Palavra-passe
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+    <button class="primary" type="submit">Entrar</button>
+  </form>
+</section>
+{% endblock %}

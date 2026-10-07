@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Exportar escala · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow"><a href="{{ app_path('/') }}">Rota</a></p>
+    <h1>Exportar escala</h1>
+    <p class="muted">Escolhe uma escala e as datas. O PDF é descarregado numa única folha A4, com os dias e as equipas agrupados por mês.</p>
+  </div>
+</div>
+<section class="panel">
+  {% include "_schedule_export_form.html" %}
+</section>
+{% endblock %}

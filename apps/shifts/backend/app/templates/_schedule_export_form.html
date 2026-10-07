@@ -1,0 +1,20 @@
+{% if error %}<div class="flash error" role="alert">{{ error }}</div>{% endif %}
+<form class="stack" method="get" action="{{ app_path('/export/schedule.pdf') }}">
+  <label>Escala
+    <select name="schedule_id" required>
+      {% for item in schedules %}
+      <option value="{{ item.id }}" {% if item.id == selected_schedule_id %}selected{% endif %}>{{ item.name }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <div class="form-grid">
+    <label>Data inicial
+      <input type="date" name="start_date" value="{{ start }}" min="2000-01-01" max="2100-12-31" required>
+    </label>
+    <label>Data final
+      <input type="date" name="end_date" value="{{ end }}" min="2000-01-01" max="2100-12-31" required>
+    </label>
+  </div>
+  <p class="muted">As datas inicial e final estão incluídas. Máximo de 12 meses; o tamanho do texto adapta-se ao intervalo.</p>
+  <div class="row end"><button class="primary" type="submit">Descarregar PDF</button></div>
+</form>

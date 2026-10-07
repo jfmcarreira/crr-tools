@@ -1,0 +1,142 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/auth/login"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout"
+  },
+  {
+    "method": "GET",
+    "path": "/api/auth/session"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/settings"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/settings"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/display"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/display"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/groups"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/groups"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/groups/:id"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/groups/:id"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/teams"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/teams/randomize"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/teams"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/teams/:id"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/teams/:id"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/teams/:teamId/players"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/players/:id"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/players/:id"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/calendar"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/calendar/generate-preview"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/calendar/generate"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/calendar"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/matches/:id/result"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/matches/:id/result"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/rounds/:round/standings"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/final-stage"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/final-stage/config"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/final-stage/config"
+  },
+  {
+    "method": "POST",
+    "path": "/api/admin/final-stage/auto-seed-preview"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/final-stage/seeds"
+  },
+  {
+    "method": "PUT",
+    "path": "/api/admin/final-stage/matches/:round/:match/result"
+  },
+  {
+    "method": "DELETE",
+    "path": "/api/admin/final-stage/matches/:round/:match/result"
+  },
+  {
+    "method": "GET",
+    "path": "/api/public/state"
+  },
+  {
+    "method": "GET",
+    "path": "/api/public/events"
+  }
+]

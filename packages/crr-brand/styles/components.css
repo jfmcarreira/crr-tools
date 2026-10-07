@@ -1,0 +1,37 @@
+.button {
+  border: 1px solid var(--crr-primary);
+  border-radius: var(--crr-radius-control);
+  background: var(--crr-primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+.primary { background: var(--crr-primary); color: #fff; }
+.button:where(:not(.danger)):hover:not(:disabled), .primary:hover:not(:disabled) {
+  border-color: var(--crr-primary-hover);
+  background: var(--crr-primary-hover);
+}
+
+.button--quiet, .secondary {
+  border-color: var(--crr-control-border);
+  background: transparent;
+  color: var(--crr-quiet-text);
+}
+
+.button--quiet:hover:not(:disabled), .secondary:hover:not(:disabled) {
+  border-color: var(--crr-quiet-hover-border);
+  background: var(--crr-quiet-hover);
+  color: var(--crr-text);
+}
+
+.panel {
+  border: 1px solid var(--crr-border);
+  border-radius: var(--crr-radius-panel);
+  background: var(--crr-surface);
+}
+
+.notice--error, .flash.error {
+  border-color: var(--crr-danger-border);
+  background: var(--crr-danger-soft);
+  color: var(--crr-danger-dark);
+}

@@ -1,0 +1,37 @@
+services:
+  tournament:
+    build:
+      context: .
+      dockerfile: apps/tournament/Dockerfile
+      args:
+        VITE_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/jogo/}
+    image: crr-tournament
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: apps/tournament/.env
+        required: false
+    environment:
+      APP_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/jogo/}
+      DATABASE_PATH: /data/tournament.sqlite
+    volumes:
+      - tournament-data:/data
+
+  shifts:
+    build:
+      context: .
+      dockerfile: apps/shifts/Dockerfile
+    image: crr-shifts
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: apps/shifts/backend/.env
+        required: false
+    environment:
+      DATABASE_URL: sqlite:////data/bar_rota.db
+    volumes:
+      - shifts-data:/data
+
+volumes:
+  tournament-data:
+  shifts-data:

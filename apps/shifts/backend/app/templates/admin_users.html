@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Utilizadores · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Utilizadores</h1>
+    <p class="muted">Cada utilizador tem utilizador e palavra-passe e pode entrar em várias equipas. Quem entra vê e controla os turnos de todas elas, e a administração é do utilizador, não da equipa.</p>
+  </div>
+</div>
+<section class="panel">
+  <div class="row between wrap gap">
+    <h2>Adicionar utilizador</h2>
+    <button class="primary" type="submit" form="add-user">Adicionar utilizador</button>
+  </div>
+  <form id="add-user" method="post" action="{{ app_path('/admin/users') }}" class="form-grid">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="form-col">
+      <label>Nome <span class="muted">(ex.: Equipa de sábado)</span><input name="name" required></label>
+      <label>Utilizador<input name="username" pattern="[A-Za-z0-9._-]+" required></label>
+      <label>Palavra-passe<input type="password" name="password" minlength="4" required></label>
+    </div>
+    <fieldset class="form-col">
+      <legend>Equipas <span class="muted">(pode escolher várias)</span></legend>
+      {% for team in teams %}
+      <label class="check"><input type="checkbox" name="team_ids" value="{{ team.id }}"> {{ team.name }}</label>
+      {% else %}
+      <p class="muted">Ainda não há equipas. Crie-as em <a href="{{ app_path('/admin/teams') }}">Equipas</a>.</p>
+      {% endfor %}
+    </fieldset>
+    <label class="check"><input type="checkbox" name="is_admin"> Administrador</label>
+  </form>
+</section>
+<div class="stack gap-lg top-space">
+{% for account in users %}
+<details class="panel">
+  <summary><strong>@{{ account.username }}</strong> <span class="muted">{{ account.name }}{% if account.is_admin %} · administrador{% endif %}{% if not account.is_active %} · inativo{% endif %} · {{ account.teams|length }} equipa(s)</span></summary>
+  <form method="post" action="{{ app_path('/admin/users/' ~  account.id  ~ '/update') }}" class="form-grid top-space">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="form-col">
+      <label>Nome<input name="name" value="{{ account.name }}" required></label>
+      <label>Utilizador<input name="username" pattern="[A-Za-z0-9._-]+" value="{{ account.username }}" required></label>
+      <label>Nova palavra-passe <span class="muted">(vazio mantém a atual)</span><input type="password" name="password" minlength="4"></label>
+    </div>
+    <fieldset class="form-col">
+      <legend>Equipas que entra</legend>
+      {% for team in teams %}
+      <label class="check"><input type="checkbox" name="team_ids" value="{{ team.id }}" {% if team.user and team.user.id == account.id %}checked{% endif %}> {{ team.name }}</label>
+      {% endfor %}
+    </fieldset>
+    <label class="check"><input type="checkbox" name="is_admin" {% if account.is_admin %}checked{% endif %}> Administrador</label>
+    <label class="check"><input type="checkbox" name="is_active" {% if account.is_active %}checked{% endif %}> Ativo</label>
+    <div><button class="primary" type="submit">Guardar</button></div>
+    {% if account.id in removable_ids %}
+    <div><button class="danger" type="submit" formaction="{{ app_path('/admin/users/' ~  account.id  ~ '/delete') }}">Remover utilizador</button></div>
+    {% endif %}
+  </form>
+  {% if account.teams %}
+  <p class="muted">Equipas: {% for team in account.teams %}{{ team.name }}{% if not team.is_active %} (inativa){% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+  {% else %}
+  <p class="muted">Ainda sem equipas atribuídas.</p>
+  {% endif %}
+</details>
+{% endfor %}
+</div>
+{% endblock %}

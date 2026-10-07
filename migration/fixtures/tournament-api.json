@@ -1,0 +1,2118 @@
+[
+  {
+    "request": {
+      "method": "GET",
+      "url": "/api/auth/session",
+      "authorized": false
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "authenticated": false
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "/api/admin/teams",
+      "authorized": false
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "É necessário iniciar sessão para aceder à administração."
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/auth/login",
+      "payload": {
+        "password": "wrong"
+      },
+      "authorized": false
+    },
+    "response": {
+      "status": 401,
+      "body": {
+        "error": "A palavra-passe está incorreta."
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/auth/login",
+      "payload": {
+        "password": "migration-fixture-password"
+      },
+      "authorized": false
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "authenticated": true
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/settings",
+      "payload": {
+        "name": "Torneio de referência CRR",
+        "classificationMode": "standard"
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "name": "Torneio de referência CRR",
+        "classificationMode": "standard",
+        "finalRoundCount": null,
+        "thirdPlaceEnabled": false
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams",
+      "payload": {
+        "number": 1,
+        "name": "Equipa 1",
+        "groupId": 1
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 1,
+        "number": 1,
+        "name": "Equipa 1",
+        "group": {
+          "id": 1,
+          "name": "Grupo A",
+          "sortOrder": 0
+        },
+        "players": []
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams/1/players",
+      "payload": {
+        "name": "Jogador 1"
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 1,
+        "teamId": 1,
+        "name": "Jogador 1",
+        "sortOrder": 0
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams",
+      "payload": {
+        "number": 2,
+        "name": "Equipa 2",
+        "groupId": 1
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 2,
+        "number": 2,
+        "name": "Equipa 2",
+        "group": {
+          "id": 1,
+          "name": "Grupo A",
+          "sortOrder": 0
+        },
+        "players": []
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams/2/players",
+      "payload": {
+        "name": "Jogador 2"
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 2,
+        "teamId": 2,
+        "name": "Jogador 2",
+        "sortOrder": 0
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams",
+      "payload": {
+        "number": 3,
+        "name": "Equipa 3",
+        "groupId": 1
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 3,
+        "number": 3,
+        "name": "Equipa 3",
+        "group": {
+          "id": 1,
+          "name": "Grupo A",
+          "sortOrder": 0
+        },
+        "players": []
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams/3/players",
+      "payload": {
+        "name": "Jogador 3"
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 3,
+        "teamId": 3,
+        "name": "Jogador 3",
+        "sortOrder": 0
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams",
+      "payload": {
+        "number": 4,
+        "name": "Equipa 4",
+        "groupId": 1
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 4,
+        "number": 4,
+        "name": "Equipa 4",
+        "group": {
+          "id": 1,
+          "name": "Grupo A",
+          "sortOrder": 0
+        },
+        "players": []
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams/4/players",
+      "payload": {
+        "name": "Jogador 4"
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 201,
+      "body": {
+        "id": 4,
+        "teamId": 4,
+        "name": "Jogador 4",
+        "sortOrder": 0
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/teams",
+      "payload": {
+        "number": 1,
+        "name": "Duplicada",
+        "groupId": 1
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "Já existe uma equipa com esse número."
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "POST",
+      "url": "/api/admin/calendar/generate",
+      "payload": {
+        "generation": {
+          "legs": 1,
+          "teamOrder": [
+            {
+              "teamId": 1,
+              "groupId": 1
+            },
+            {
+              "teamId": 2,
+              "groupId": 1
+            },
+            {
+              "teamId": 3,
+              "groupId": 1
+            },
+            {
+              "teamId": 4,
+              "groupId": 1
+            }
+          ]
+        }
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "matches": [
+          {
+            "id": 1,
+            "gameNumber": 1,
+            "roundNumber": 1,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 1,
+              "number": 1,
+              "name": "Equipa 1",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 4,
+              "number": 4,
+              "name": "Equipa 4",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 2,
+            "gameNumber": 2,
+            "roundNumber": 1,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 3,
+            "gameNumber": 3,
+            "roundNumber": 2,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 1,
+              "number": 1,
+              "name": "Equipa 1",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 4,
+            "gameNumber": 4,
+            "roundNumber": 2,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 4,
+              "number": 4,
+              "name": "Equipa 4",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 5,
+            "gameNumber": 5,
+            "roundNumber": 3,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 1,
+              "number": 1,
+              "name": "Equipa 1",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 6,
+            "gameNumber": 6,
+            "roundNumber": 3,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 4,
+              "number": 4,
+              "name": "Equipa 4",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          }
+        ],
+        "matchCount": 6,
+        "roundCount": 3
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/matches/1/result",
+      "payload": {
+        "scoreA": 3,
+        "scoreB": 1
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "id": 1,
+        "gameNumber": 1,
+        "roundNumber": 1,
+        "countsTowardStandings": false,
+        "group": {
+          "id": 1,
+          "name": "Grupo A",
+          "sortOrder": 0
+        },
+        "teamA": {
+          "id": 1,
+          "number": 1,
+          "name": "Equipa 1",
+          "group": {
+            "id": 1,
+            "name": "Grupo A",
+            "sortOrder": 0
+          }
+        },
+        "teamB": {
+          "id": 4,
+          "number": 4,
+          "name": "Equipa 4",
+          "group": {
+            "id": 1,
+            "name": "Grupo A",
+            "sortOrder": 0
+          }
+        },
+        "scoreA": 3,
+        "scoreB": 1
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/rounds/1/standings",
+      "payload": {
+        "countsTowardStandings": true
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundNumber": 1,
+        "countsTowardStandings": true
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/final-stage/config",
+      "payload": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true,
+        "rounds": [
+          {
+            "roundIndex": 1,
+            "name": "Meias-finais",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": null,
+                  "pending": false
+                },
+                "teamB": {
+                  "team": null,
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              },
+              {
+                "matchIndex": 2,
+                "teamA": {
+                  "team": null,
+                  "pending": false
+                },
+                "teamB": {
+                  "team": null,
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          },
+          {
+            "roundIndex": 2,
+            "name": "Final",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": null,
+                  "pending": false
+                },
+                "teamB": {
+                  "team": null,
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          }
+        ],
+        "thirdPlaceMatch": {
+          "matchIndex": 2,
+          "teamA": {
+            "team": null,
+            "pending": false
+          },
+          "teamB": {
+            "team": null,
+            "pending": false
+          },
+          "scoreA": null,
+          "scoreB": null,
+          "winner": null,
+          "isBye": false
+        },
+        "champion": null
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/final-stage/seeds",
+      "payload": {
+        "seeds": [
+          {
+            "slotIndex": 1,
+            "teamId": 1
+          },
+          {
+            "slotIndex": 2,
+            "teamId": 2
+          },
+          {
+            "slotIndex": 3,
+            "teamId": 3
+          },
+          {
+            "slotIndex": 4,
+            "teamId": 4
+          }
+        ]
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true,
+        "rounds": [
+          {
+            "roundIndex": 1,
+            "name": "Meias-finais",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 2,
+                    "number": 2,
+                    "name": "Equipa 2",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              },
+              {
+                "matchIndex": 2,
+                "teamA": {
+                  "team": {
+                    "id": 3,
+                    "number": 3,
+                    "name": "Equipa 3",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          },
+          {
+            "roundIndex": 2,
+            "name": "Final",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": null,
+                  "pending": true
+                },
+                "teamB": {
+                  "team": null,
+                  "pending": true
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          }
+        ],
+        "thirdPlaceMatch": {
+          "matchIndex": 2,
+          "teamA": {
+            "team": null,
+            "pending": true
+          },
+          "teamB": {
+            "team": null,
+            "pending": true
+          },
+          "scoreA": null,
+          "scoreB": null,
+          "winner": null,
+          "isBye": false
+        },
+        "champion": null
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/final-stage/matches/1/1/result",
+      "payload": {
+        "scoreA": 2,
+        "scoreB": 0
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true,
+        "rounds": [
+          {
+            "roundIndex": 1,
+            "name": "Meias-finais",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 2,
+                    "number": 2,
+                    "name": "Equipa 2",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 2,
+                "scoreB": 0,
+                "winner": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              },
+              {
+                "matchIndex": 2,
+                "teamA": {
+                  "team": {
+                    "id": 3,
+                    "number": 3,
+                    "name": "Equipa 3",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          },
+          {
+            "roundIndex": 2,
+            "name": "Final",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": null,
+                  "pending": true
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          }
+        ],
+        "thirdPlaceMatch": {
+          "matchIndex": 2,
+          "teamA": {
+            "team": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "teamB": {
+            "team": null,
+            "pending": true
+          },
+          "scoreA": null,
+          "scoreB": null,
+          "winner": null,
+          "isBye": false
+        },
+        "champion": null
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/final-stage/matches/1/2/result",
+      "payload": {
+        "scoreA": 1,
+        "scoreB": 4
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true,
+        "rounds": [
+          {
+            "roundIndex": 1,
+            "name": "Meias-finais",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 2,
+                    "number": 2,
+                    "name": "Equipa 2",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 2,
+                "scoreB": 0,
+                "winner": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              },
+              {
+                "matchIndex": 2,
+                "teamA": {
+                  "team": {
+                    "id": 3,
+                    "number": 3,
+                    "name": "Equipa 3",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 1,
+                "scoreB": 4,
+                "winner": {
+                  "id": 4,
+                  "number": 4,
+                  "name": "Equipa 4",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              }
+            ]
+          },
+          {
+            "roundIndex": 2,
+            "name": "Final",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": null,
+                "scoreB": null,
+                "winner": null,
+                "isBye": false
+              }
+            ]
+          }
+        ],
+        "thirdPlaceMatch": {
+          "matchIndex": 2,
+          "teamA": {
+            "team": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "teamB": {
+            "team": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "scoreA": null,
+          "scoreB": null,
+          "winner": null,
+          "isBye": false
+        },
+        "champion": null
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/final-stage/matches/2/1/result",
+      "payload": {
+        "scoreA": 3,
+        "scoreB": 2
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true,
+        "rounds": [
+          {
+            "roundIndex": 1,
+            "name": "Meias-finais",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 2,
+                    "number": 2,
+                    "name": "Equipa 2",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 2,
+                "scoreB": 0,
+                "winner": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              },
+              {
+                "matchIndex": 2,
+                "teamA": {
+                  "team": {
+                    "id": 3,
+                    "number": 3,
+                    "name": "Equipa 3",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 1,
+                "scoreB": 4,
+                "winner": {
+                  "id": 4,
+                  "number": 4,
+                  "name": "Equipa 4",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              }
+            ]
+          },
+          {
+            "roundIndex": 2,
+            "name": "Final",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 3,
+                "scoreB": 2,
+                "winner": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              }
+            ]
+          }
+        ],
+        "thirdPlaceMatch": {
+          "matchIndex": 2,
+          "teamA": {
+            "team": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "teamB": {
+            "team": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "scoreA": null,
+          "scoreB": null,
+          "winner": null,
+          "isBye": false
+        },
+        "champion": {
+          "id": 1,
+          "number": 1,
+          "name": "Equipa 1",
+          "group": {
+            "id": 1,
+            "name": "Grupo A",
+            "sortOrder": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/final-stage/matches/2/2/result",
+      "payload": {
+        "scoreA": 1,
+        "scoreB": 0
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "roundCount": 2,
+        "thirdPlaceEnabled": true,
+        "rounds": [
+          {
+            "roundIndex": 1,
+            "name": "Meias-finais",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 2,
+                    "number": 2,
+                    "name": "Equipa 2",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 2,
+                "scoreB": 0,
+                "winner": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              },
+              {
+                "matchIndex": 2,
+                "teamA": {
+                  "team": {
+                    "id": 3,
+                    "number": 3,
+                    "name": "Equipa 3",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 1,
+                "scoreB": 4,
+                "winner": {
+                  "id": 4,
+                  "number": 4,
+                  "name": "Equipa 4",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              }
+            ]
+          },
+          {
+            "roundIndex": 2,
+            "name": "Final",
+            "matches": [
+              {
+                "matchIndex": 1,
+                "teamA": {
+                  "team": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "teamB": {
+                  "team": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "pending": false
+                },
+                "scoreA": 3,
+                "scoreB": 2,
+                "winner": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "isBye": false
+              }
+            ]
+          }
+        ],
+        "thirdPlaceMatch": {
+          "matchIndex": 2,
+          "teamA": {
+            "team": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "teamB": {
+            "team": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "pending": false
+          },
+          "scoreA": 1,
+          "scoreB": 0,
+          "winner": {
+            "id": 2,
+            "number": 2,
+            "name": "Equipa 2",
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            }
+          },
+          "isBye": false
+        },
+        "champion": {
+          "id": 1,
+          "number": 1,
+          "name": "Equipa 1",
+          "group": {
+            "id": 1,
+            "name": "Grupo A",
+            "sortOrder": 0
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "/api/admin/display",
+      "payload": {
+        "activePanel": "classification",
+        "zoomPercent": 110
+      },
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "activePanel": "classification",
+        "zoomPercent": 110
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "/api/public/state",
+      "authorized": true
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "tournament": {
+          "name": "Torneio de referência CRR",
+          "classificationMode": "standard",
+          "finalRoundCount": 2,
+          "thirdPlaceEnabled": true
+        },
+        "display": {
+          "activePanel": "classification",
+          "zoomPercent": 110
+        },
+        "groups": [
+          {
+            "id": 1,
+            "name": "Grupo A",
+            "sortOrder": 0
+          }
+        ],
+        "matches": [
+          {
+            "id": 1,
+            "gameNumber": 1,
+            "roundNumber": 1,
+            "countsTowardStandings": true,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 1,
+              "number": 1,
+              "name": "Equipa 1",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 4,
+              "number": 4,
+              "name": "Equipa 4",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": 3,
+            "scoreB": 1
+          },
+          {
+            "id": 2,
+            "gameNumber": 2,
+            "roundNumber": 1,
+            "countsTowardStandings": true,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 3,
+            "gameNumber": 3,
+            "roundNumber": 2,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 1,
+              "number": 1,
+              "name": "Equipa 1",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 4,
+            "gameNumber": 4,
+            "roundNumber": 2,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 4,
+              "number": 4,
+              "name": "Equipa 4",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 5,
+            "gameNumber": 5,
+            "roundNumber": 3,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 1,
+              "number": 1,
+              "name": "Equipa 1",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          },
+          {
+            "id": 6,
+            "gameNumber": 6,
+            "roundNumber": 3,
+            "countsTowardStandings": false,
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "teamA": {
+              "id": 3,
+              "number": 3,
+              "name": "Equipa 3",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "teamB": {
+              "id": 4,
+              "number": 4,
+              "name": "Equipa 4",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "scoreA": null,
+            "scoreB": null
+          }
+        ],
+        "groupStandings": [
+          {
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            },
+            "rows": [
+              {
+                "position": 1,
+                "team": {
+                  "id": 1,
+                  "number": 1,
+                  "name": "Equipa 1",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "played": 1,
+                "wins": 1,
+                "draws": 0,
+                "losses": 0,
+                "goalsFor": 3,
+                "goalsAgainst": 1,
+                "goalDifference": 2,
+                "points": 3
+              },
+              {
+                "position": 2,
+                "team": {
+                  "id": 2,
+                  "number": 2,
+                  "name": "Equipa 2",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "played": 0,
+                "wins": 0,
+                "draws": 0,
+                "losses": 0,
+                "goalsFor": 0,
+                "goalsAgainst": 0,
+                "goalDifference": 0,
+                "points": 0
+              },
+              {
+                "position": 3,
+                "team": {
+                  "id": 3,
+                  "number": 3,
+                  "name": "Equipa 3",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "played": 0,
+                "wins": 0,
+                "draws": 0,
+                "losses": 0,
+                "goalsFor": 0,
+                "goalsAgainst": 0,
+                "goalDifference": 0,
+                "points": 0
+              },
+              {
+                "position": 4,
+                "team": {
+                  "id": 4,
+                  "number": 4,
+                  "name": "Equipa 4",
+                  "group": {
+                    "id": 1,
+                    "name": "Grupo A",
+                    "sortOrder": 0
+                  }
+                },
+                "played": 1,
+                "wins": 0,
+                "draws": 0,
+                "losses": 1,
+                "goalsFor": 1,
+                "goalsAgainst": 3,
+                "goalDifference": -2,
+                "points": 0
+              }
+            ]
+          }
+        ],
+        "finalStage": {
+          "roundCount": 2,
+          "thirdPlaceEnabled": true,
+          "rounds": [
+            {
+              "roundIndex": 1,
+              "name": "Meias-finais",
+              "matches": [
+                {
+                  "matchIndex": 1,
+                  "teamA": {
+                    "team": {
+                      "id": 1,
+                      "number": 1,
+                      "name": "Equipa 1",
+                      "group": {
+                        "id": 1,
+                        "name": "Grupo A",
+                        "sortOrder": 0
+                      }
+                    },
+                    "pending": false
+                  },
+                  "teamB": {
+                    "team": {
+                      "id": 2,
+                      "number": 2,
+                      "name": "Equipa 2",
+                      "group": {
+                        "id": 1,
+                        "name": "Grupo A",
+                        "sortOrder": 0
+                      }
+                    },
+                    "pending": false
+                  },
+                  "scoreA": 2,
+                  "scoreB": 0,
+                  "winner": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "isBye": false
+                },
+                {
+                  "matchIndex": 2,
+                  "teamA": {
+                    "team": {
+                      "id": 3,
+                      "number": 3,
+                      "name": "Equipa 3",
+                      "group": {
+                        "id": 1,
+                        "name": "Grupo A",
+                        "sortOrder": 0
+                      }
+                    },
+                    "pending": false
+                  },
+                  "teamB": {
+                    "team": {
+                      "id": 4,
+                      "number": 4,
+                      "name": "Equipa 4",
+                      "group": {
+                        "id": 1,
+                        "name": "Grupo A",
+                        "sortOrder": 0
+                      }
+                    },
+                    "pending": false
+                  },
+                  "scoreA": 1,
+                  "scoreB": 4,
+                  "winner": {
+                    "id": 4,
+                    "number": 4,
+                    "name": "Equipa 4",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "isBye": false
+                }
+              ]
+            },
+            {
+              "roundIndex": 2,
+              "name": "Final",
+              "matches": [
+                {
+                  "matchIndex": 1,
+                  "teamA": {
+                    "team": {
+                      "id": 1,
+                      "number": 1,
+                      "name": "Equipa 1",
+                      "group": {
+                        "id": 1,
+                        "name": "Grupo A",
+                        "sortOrder": 0
+                      }
+                    },
+                    "pending": false
+                  },
+                  "teamB": {
+                    "team": {
+                      "id": 4,
+                      "number": 4,
+                      "name": "Equipa 4",
+                      "group": {
+                        "id": 1,
+                        "name": "Grupo A",
+                        "sortOrder": 0
+                      }
+                    },
+                    "pending": false
+                  },
+                  "scoreA": 3,
+                  "scoreB": 2,
+                  "winner": {
+                    "id": 1,
+                    "number": 1,
+                    "name": "Equipa 1",
+                    "group": {
+                      "id": 1,
+                      "name": "Grupo A",
+                      "sortOrder": 0
+                    }
+                  },
+                  "isBye": false
+                }
+              ]
+            }
+          ],
+          "thirdPlaceMatch": {
+            "matchIndex": 2,
+            "teamA": {
+              "team": {
+                "id": 2,
+                "number": 2,
+                "name": "Equipa 2",
+                "group": {
+                  "id": 1,
+                  "name": "Grupo A",
+                  "sortOrder": 0
+                }
+              },
+              "pending": false
+            },
+            "teamB": {
+              "team": {
+                "id": 3,
+                "number": 3,
+                "name": "Equipa 3",
+                "group": {
+                  "id": 1,
+                  "name": "Grupo A",
+                  "sortOrder": 0
+                }
+              },
+              "pending": false
+            },
+            "scoreA": 1,
+            "scoreB": 0,
+            "winner": {
+              "id": 2,
+              "number": 2,
+              "name": "Equipa 2",
+              "group": {
+                "id": 1,
+                "name": "Grupo A",
+                "sortOrder": 0
+              }
+            },
+            "isBye": false
+          },
+          "champion": {
+            "id": 1,
+            "number": 1,
+            "name": "Equipa 1",
+            "group": {
+              "id": 1,
+              "name": "Grupo A",
+              "sortOrder": 0
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "/api/admin/missing",
+      "authorized": true
+    },
+    "response": {
+      "status": 404,
+      "body": {
+        "error": "O recurso pedido não existe."
+      }
+    }
+  }
+]

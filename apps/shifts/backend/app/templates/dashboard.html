@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ month_name }} {{ year }}</h1>
+  </div>
+  <div class="month-nav">
+    {% if current_user %}
+    <a class="button secondary" href="{{ app_path('/calendar') }}">Calendário</a>
+    <a class="button primary" href="{{ app_path('/swaps/new?year=' ~  year  ~ '&month=' ~  month ) }}">Pedir troca</a>
+    {% endif %}
+    <a class="button secondary" href="{{ app_path('/?year=' ~  prev[0]  ~ '&month=' ~  prev[1] ) }}">← Anterior</a>
+    <a class="button secondary" href="{{ app_path('/?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
+  </div>
+</div>
+
+<div class="calendar-list">
+{% for day, assignments in month_days %}
+  <section class="day-card {% if day == today %}today{% endif %}">
+    <div class="day-label">
+      <strong>{{ day|dia_curto }}</strong>
+      <span>{{ day.day }}</span>
+    </div>
+    <div class="day-assignments">
+      {% for assignment in assignments %}
+      <article class="assignment {% if assignment.id in my_assignment_ids %}mine{% endif %}">
+        <div>
+          <div class="assignment-title">{{ assignment.schedule.name }}</div>
+          <div class="assignment-team">
+            {% if assignment.team %}{{ assignment.team.name }}{% else %}<span class="unassigned">Sem atribuição</span>{% endif %}
+          </div>
+        </div>
+        {% set admin_request = admin_requests.get(assignment.id) %}
+        {% if assignment.id in open_swap_assignment_ids or admin_request %}
+          <div class="assignment-action">
+          {% if current_user and current_user.is_admin and admin_request %}
+            <p class="muted">Pedido de {{ admin_request.requester.name }}{% if admin_request.target_assignment %} ({{ admin_request.assignment.date|dia }} por {{ admin_request.target_assignment.date|dia }}){% endif %}{% if admin_request.accepted_by %}, aceite por {{ admin_request.accepted_by.name }}{% endif %}</p>
+            <form method="post" action="{{ app_path('/swaps/' ~  admin_request.id  ~ '/approve') }}" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              {% if admin_request.accepted_by %}
+              <button class="primary small" type="submit">Aprovar ({{ admin_request.accepted_by.name }})</button>
+              {% elif admin_request.target_team %}
+              {# Approve it as requested: the named team takes the shift. #}
+              <button class="primary small" type="submit">Aprovar para {{ admin_request.target_team.name }}</button>
+              {% else %}
+              <select name="team_id" required><option value="">Aprovar e atribuir a…</option>{% for team in schedule_teams.get(assignment.schedule_id, []) %}{% if team.id != assignment.team_id %}<option value="{{ team.id }}">{{ team.name }}</option>{% endif %}{% endfor %}</select>
+              <button class="primary small" type="submit">Aprovar</button>
+              {% endif %}
+            </form>
+            <form method="post" action="{{ app_path('/swaps/' ~  admin_request.id  ~ '/admin-reject') }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button class="danger small" type="submit">Recusar</button>
+            </form>
+          {% else %}
+            <span class="badge">Troca pedida</span>
+          {% endif %}
+          </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+[
+  {
+    "type": "index",
+    "name": "idx_final_seeds_unique_team",
+    "tbl_name": "final_seeds",
+    "sql": "CREATE UNIQUE INDEX idx_final_seeds_unique_team\n  ON final_seeds(team_id)\n  WHERE team_id IS NOT NULL"
+  },
+  {
+    "type": "index",
+    "name": "idx_league_matches_order",
+    "tbl_name": "league_matches",
+    "sql": "CREATE INDEX idx_league_matches_order ON league_matches(order_index)"
+  },
+  {
+    "type": "index",
+    "name": "idx_players_team_order",
+    "tbl_name": "players",
+    "sql": "CREATE INDEX idx_players_team_order ON players(team_id, sort_order)"
+  },
+  {
+    "type": "index",
+    "name": "idx_teams_group",
+    "tbl_name": "teams",
+    "sql": "CREATE INDEX idx_teams_group ON teams(group_id)"
+  },
+  {
+    "type": "table",
+    "name": "display_settings",
+    "tbl_name": "display_settings",
+    "sql": "CREATE TABLE display_settings (\n    id INTEGER PRIMARY KEY CHECK (id = 1),\n    active_panel TEXT NOT NULL CHECK (length(trim(active_panel)) > 0),\n    zoom_percent INTEGER NOT NULL DEFAULT 100 CHECK (zoom_percent BETWEEN 50 AND 400),\n    created_at TEXT NOT NULL,\n    updated_at TEXT NOT NULL\n  )"
+  },
+  {
+    "type": "table",
+    "name": "final_match_results",
+    "tbl_name": "final_match_results",
+    "sql": "CREATE TABLE final_match_results (\n    round_index INTEGER NOT NULL CHECK (round_index >= 1),\n    match_index INTEGER NOT NULL CHECK (match_index >= 1),\n    score_a INTEGER,\n    score_b INTEGER,\n    PRIMARY KEY (round_index, match_index),\n    CHECK (\n      (score_a IS NULL AND score_b IS NULL) OR\n      (score_a IS NOT NULL AND score_b IS NOT NULL AND score_a >= 0 AND score_b >= 0)\n    )\n  )"
+  },
+  {
+    "type": "table",
+    "name": "final_seeds",
+    "tbl_name": "final_seeds",
+    "sql": "CREATE TABLE final_seeds (\n    slot_index INTEGER PRIMARY KEY CHECK (slot_index >= 1),\n    team_id INTEGER,\n    FOREIGN KEY (team_id) REFERENCES teams(id)\n  )"
+  },
+  {
+    "type": "table",
+    "name": "league_groups",
+    "tbl_name": "league_groups",
+    "sql": "CREATE TABLE league_groups (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT NOT NULL COLLATE NOCASE UNIQUE CHECK (length(trim(name)) > 0),\n    sort_order INTEGER NOT NULL UNIQUE CHECK (sort_order >= 0),\n    created_at TEXT NOT NULL,\n    updated_at TEXT NOT NULL\n  )"
+  },
+  {
+    "type": "table",
+    "name": "league_matches",
+    "tbl_name": "league_matches",
+    "sql": "CREATE TABLE league_matches (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    order_index INTEGER NOT NULL UNIQUE CHECK (order_index >= 1),\n    round_index INTEGER NOT NULL CHECK (round_index >= 1),\n    team_a_id INTEGER NOT NULL,\n    team_b_id INTEGER NOT NULL,\n    score_a INTEGER,\n    score_b INTEGER,\n    CHECK (team_a_id <> team_b_id),\n    CHECK (\n      (score_a IS NULL AND score_b IS NULL) OR\n      (score_a IS NOT NULL AND score_b IS NOT NULL AND score_a >= 0 AND score_b >= 0)\n    ),\n    FOREIGN KEY (team_a_id) REFERENCES teams(id),\n    FOREIGN KEY (team_b_id) REFERENCES teams(id)\n  )"
+  },
+  {
+    "type": "table",
+    "name": "league_rounds",
+    "tbl_name": "league_rounds",
+    "sql": "CREATE TABLE league_rounds (\n    round_index INTEGER PRIMARY KEY CHECK (round_index >= 1),\n    counts_toward_standings INTEGER NOT NULL DEFAULT 0 CHECK (counts_toward_standings IN (0, 1))\n  )"
+  },
+  {
+    "type": "table",
+    "name": "players",
+    "tbl_name": "players",
+    "sql": "CREATE TABLE players (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    team_id INTEGER NOT NULL,\n    name TEXT NOT NULL CHECK (length(trim(name)) > 0),\n    sort_order INTEGER NOT NULL CHECK (sort_order >= 0),\n    FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE\n  )"
+  },
+  {
+    "type": "table",
+    "name": "teams",
+    "tbl_name": "teams",
+    "sql": "CREATE TABLE teams (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    number INTEGER NOT NULL UNIQUE CHECK (number > 0),\n    name TEXT NOT NULL CHECK (length(trim(name)) > 0),\n    group_id INTEGER NOT NULL REFERENCES league_groups(id),\n    created_at TEXT NOT NULL,\n    updated_at TEXT NOT NULL\n  )"
+  },
+  {
+    "type": "table",
+    "name": "tournament_settings",
+    "tbl_name": "tournament_settings",
+    "sql": "CREATE TABLE tournament_settings (\n    id INTEGER PRIMARY KEY CHECK (id = 1),\n    name TEXT NOT NULL CHECK (length(trim(name)) > 0),\n    final_round_count INTEGER CHECK (final_round_count IS NULL OR (final_round_count BETWEEN 1 AND 8)),\n    created_at TEXT NOT NULL,\n    updated_at TEXT NOT NULL,\n    third_place_enabled INTEGER NOT NULL DEFAULT 0 CHECK (third_place_enabled IN (0, 1)),\n    classification_mode TEXT NOT NULL DEFAULT 'standard' CHECK (classification_mode IN ('standard', 'total-points'))\n  )"
+  }
+]

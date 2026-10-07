@@ -1,0 +1,5970 @@
+{
+  "tournament-login-desktop.png": [
+    {
+      "tag": "MAIN",
+      "class": "login-page",
+      "rect": [
+        0,
+        0,
+        1440,
+        1000
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        530.594,
+        313.172,
+        80,
+        80
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        530.594,
+        437.359,
+        378.813,
+        52
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "stack-form",
+      "rect": [
+        530.594,
+        521.359,
+        378.813,
+        124.453
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        530.594,
+        543.438,
+        378.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--wide",
+      "rect": [
+        530.594,
+        602.625,
+        378.813,
+        43.188
+      ]
+    }
+  ],
+  "tournament-results-desktop.png": [
+    {
+      "tag": "MAIN",
+      "class": "public-page",
+      "rect": [
+        0,
+        0,
+        1440,
+        2593.703
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "public-hero",
+      "rect": [
+        0,
+        0,
+        1440,
+        368
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        48,
+        144,
+        80,
+        80
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        185.594,
+        150.891,
+        1042.109,
+        86.406
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        65,
+        514.859,
+        352,
+        43.188
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        48,
+        666.625,
+        1344,
+        51.594
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        49,
+        754.406,
+        433.203,
+        48.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        65,
+        839.281,
+        159,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        307.188,
+        839.281,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        65,
+        915.875,
+        159,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        307.188,
+        915.875,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        503.391,
+        754.406,
+        433.203,
+        48.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        519.391,
+        839.281,
+        159,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        761.578,
+        839.281,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        519.391,
+        915.875,
+        159,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        761.578,
+        915.875,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        957.781,
+        754.406,
+        433.219,
+        48.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        973.781,
+        839.281,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        1215.984,
+        839.281,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        973.781,
+        915.875,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        1215.984,
+        915.875,
+        159.016,
+        21
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        48,
+        1121.156,
+        1344,
+        51.594
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        49,
+        1208.938,
+        1342,
+        46.781
+      ]
+    },
+    {
+      "tag": "TABLE",
+      "class": "classification-table",
+      "rect": [
+        49,
+        1255.719,
+        1342,
+        200.188
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        49,
+        1255.719,
+        1342,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        49,
+        1255.719,
+        123.469,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        172.469,
+        1255.719,
+        570.734,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        743.203,
+        1255.719,
+        66.703,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        809.906,
+        1255.719,
+        66.703,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        876.609,
+        1255.719,
+        66.703,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        943.313,
+        1255.719,
+        66.703,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        1010.016,
+        1255.719,
+        94.094,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        1104.109,
+        1255.719,
+        87.109,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        1191.219,
+        1255.719,
+        92.766,
+        33.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        1283.984,
+        1255.719,
+        107.016,
+        33.188
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        49,
+        1288.906,
+        1342,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        49,
+        1288.906,
+        123.469,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        172.469,
+        1288.906,
+        570.734,
+        42.25
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        179.656,
+        1300.781,
+        65.859,
+        19
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        743.203,
+        1288.906,
+        66.703,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        809.906,
+        1288.906,
+        66.703,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        876.609,
+        1288.906,
+        66.703,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        943.313,
+        1288.906,
+        66.703,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1010.016,
+        1288.906,
+        94.094,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1104.109,
+        1288.906,
+        87.109,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1191.219,
+        1288.906,
+        92.766,
+        42.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        1283.984,
+        1288.906,
+        107.016,
+        42.25
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        49,
+        1331.156,
+        1342,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        49,
+        1331.156,
+        123.469,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        172.469,
+        1331.156,
+        570.734,
+        41.75
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        179.656,
+        1342.531,
+        67.984,
+        19
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        743.203,
+        1331.156,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        809.906,
+        1331.156,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        876.609,
+        1331.156,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        943.313,
+        1331.156,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1010.016,
+        1331.156,
+        94.094,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1104.109,
+        1331.156,
+        87.109,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1191.219,
+        1331.156,
+        92.766,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        1283.984,
+        1331.156,
+        107.016,
+        41.75
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        49,
+        1372.906,
+        1342,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        49,
+        1372.906,
+        123.469,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        172.469,
+        1372.906,
+        570.734,
+        41.75
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        179.656,
+        1384.281,
+        68.406,
+        19
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        743.203,
+        1372.906,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        809.906,
+        1372.906,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        876.609,
+        1372.906,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        943.313,
+        1372.906,
+        66.703,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1010.016,
+        1372.906,
+        94.094,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1104.109,
+        1372.906,
+        87.109,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1191.219,
+        1372.906,
+        92.766,
+        41.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        1283.984,
+        1372.906,
+        107.016,
+        41.75
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        49,
+        1414.656,
+        1342,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        49,
+        1414.656,
+        123.469,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        172.469,
+        1414.656,
+        570.734,
+        41.25
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        179.656,
+        1426.031,
+        68.703,
+        19
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        743.203,
+        1414.656,
+        66.703,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        809.906,
+        1414.656,
+        66.703,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        876.609,
+        1414.656,
+        66.703,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        943.313,
+        1414.656,
+        66.703,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1010.016,
+        1414.656,
+        94.094,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1104.109,
+        1414.656,
+        87.109,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        1191.219,
+        1414.656,
+        92.766,
+        41.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        1283.984,
+        1414.656,
+        107.016,
+        41.25
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        48,
+        1622.094,
+        1344,
+        51.594
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        81,
+        1741.875,
+        320,
+        23
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        473,
+        1741.875,
+        320,
+        23
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "third-place-match__title",
+      "rect": [
+        561.797,
+        2077.719,
+        316.406,
+        16
+      ]
+    }
+  ],
+  "tournament-teams-desktop.png": [
+    {
+      "tag": "HEADER",
+      "class": "admin-header",
+      "rect": [
+        0,
+        0,
+        1440,
+        73.594
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        57.594,
+        18.703,
+        35.188,
+        35.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "logout-button",
+      "rect": [
+        1272.813,
+        20.297,
+        109.594,
+        32
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "admin-main",
+      "rect": [
+        112,
+        73.594,
+        1216,
+        1307.328
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        112,
+        151.375,
+        584.234,
+        52
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet",
+      "rect": [
+        1183.188,
+        192.188,
+        144.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel groups-panel",
+      "rect": [
+        112,
+        259.375,
+        1216,
+        268.563
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        139.391,
+        286.766,
+        1161.219,
+        24.172
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "inline-form",
+      "rect": [
+        139.391,
+        373.328,
+        1161.219,
+        65.266
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        139.391,
+        395.406,
+        1003.344,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button",
+      "rect": [
+        1155.531,
+        395.406,
+        145.078,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        221.047,
+        466.781,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        272.672,
+        466.781,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel team-create-panel",
+      "rect": [
+        112,
+        551.938,
+        1216,
+        206.609
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        139.391,
+        579.328,
+        1161.219,
+        24.172
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "inline-form",
+      "rect": [
+        139.391,
+        665.891,
+        1161.219,
+        65.266
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        139.391,
+        687.969,
+        856.531,
+        43.188
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        1008.719,
+        687.969,
+        128,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button",
+      "rect": [
+        1149.516,
+        687.969,
+        151.094,
+        43.188
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        112,
+        782.547,
+        394.656,
+        259.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        374.547,
+        802.734,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        426.172,
+        802.734,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        132.188,
+        825.109,
+        354.281,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        132.188,
+        906.469,
+        354.281,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        374.547,
+        940.516,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        424.578,
+        940.516,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        132.188,
+        980.953,
+        135.906,
+        34.391
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        522.656,
+        782.547,
+        394.672,
+        259.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        785.219,
+        802.734,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        836.844,
+        802.734,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        542.844,
+        825.109,
+        354.297,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        542.844,
+        906.469,
+        354.297,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        785.219,
+        940.516,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        835.25,
+        940.516,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        542.844,
+        980.953,
+        135.906,
+        34.391
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        933.328,
+        782.547,
+        394.656,
+        259.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        1195.875,
+        802.734,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        1247.5,
+        802.734,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        953.516,
+        825.109,
+        354.281,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        953.516,
+        906.469,
+        354.281,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        1195.875,
+        940.516,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        1245.906,
+        940.516,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        953.516,
+        980.953,
+        135.906,
+        34.391
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        112,
+        1057.734,
+        394.656,
+        259.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        374.547,
+        1077.922,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        426.172,
+        1077.922,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        132.188,
+        1100.297,
+        354.281,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        132.188,
+        1181.656,
+        354.281,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        374.547,
+        1215.703,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        424.578,
+        1215.703,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        132.188,
+        1256.141,
+        135.906,
+        34.391
+      ]
+    }
+  ],
+  "tournament-match-cards-print-desktop.png": [
+    {
+      "tag": "HEADER",
+      "class": "admin-header",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "logout-button",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "admin-main",
+      "rect": [
+        0,
+        0,
+        1440,
+        1043.094
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel match-card-controls",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "match-card-template-option match-card-template-option--active",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "match-card-template-option",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "match-card-template-option",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel match-card-preview",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        0,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        8.188,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        0,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        8.188,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        211.641,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        219.828,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        211.641,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        219.828,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        423.281,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        431.469,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        423.281,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        431.469,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        634.922,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        643.109,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        634.922,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        643.109,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        846.563,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        854.75,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        846.563,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        854.75,
+        325.484,
+        35
+      ]
+    }
+  ],
+  "shifts-login-desktop.png": [
+    {
+      "tag": "HEADER",
+      "class": "topbar",
+      "rect": [
+        0,
+        0,
+        1440,
+        73
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "brand-logo",
+      "rect": [
+        170,
+        17.5,
+        46,
+        41
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "container",
+      "rect": [
+        170,
+        129,
+        1100,
+        502.781
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "auth-card",
+      "rect": [
+        505,
+        129,
+        430,
+        502.781
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        657,
+        156,
+        126,
+        111.172
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        534,
+        285.172,
+        372,
+        34.547
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "stack",
+      "rect": [
+        534,
+        398.094,
+        372,
+        204.688
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        534,
+        423.969,
+        372,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        534,
+        504.719,
+        372,
+        40.875
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        534,
+        559.594,
+        372,
+        43.188
+      ]
+    }
+  ],
+  "shifts-dashboard-desktop.png": [
+    {
+      "tag": "HEADER",
+      "class": "topbar",
+      "rect": [
+        0,
+        0,
+        1440,
+        73
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "brand-logo",
+      "rect": [
+        170,
+        17.5,
+        46,
+        41
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "",
+      "rect": [
+        1244.563,
+        27.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "link-button",
+      "rect": [
+        1244.563,
+        27.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "container",
+      "rect": [
+        170,
+        101,
+        1100,
+        3518.219
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        170,
+        103.641,
+        191.25,
+        34.547
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        164.188,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        261.328,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        358.469,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        501.906,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        645.344,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        742.484,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card today",
+      "rect": [
+        170,
+        839.625,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        936.766,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1033.906,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1131.047,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1274.484,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1417.922,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1515.063,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1612.203,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1709.344,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1806.484,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        1903.625,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2047.063,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2190.5,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2287.641,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2384.781,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2481.922,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2579.063,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2676.203,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2819.641,
+        1100,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        2963.078,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        3060.219,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        3157.359,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        3254.5,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        3351.641,
+        1100,
+        89.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        170,
+        3448.781,
+        1100,
+        135.438
+      ]
+    }
+  ],
+  "shifts-teams-desktop.png": [
+    {
+      "tag": "HEADER",
+      "class": "topbar",
+      "rect": [
+        0,
+        0,
+        1440,
+        73
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "brand-logo",
+      "rect": [
+        170,
+        17.5,
+        46,
+        41
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "",
+      "rect": [
+        1244.563,
+        27.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "link-button",
+      "rect": [
+        1244.563,
+        27.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "container",
+      "rect": [
+        170,
+        101,
+        1100,
+        857.172
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        170,
+        101,
+        1100,
+        34.547
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel",
+      "rect": [
+        170,
+        233.922,
+        1100,
+        344.313
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        189,
+        259.469,
+        147.406,
+        22.078
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        1097.906,
+        252.922,
+        153.094,
+        43.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid",
+      "rect": [
+        189,
+        296.109,
+        1062,
+        263.125
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        321.984,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        402.734,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        483.484,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        742,
+        354.859,
+        494,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        193,
+        542.297,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        170,
+        596.234,
+        1100,
+        61.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        189,
+        656.422,
+        1062,
+        320.313
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        682.297,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        763.047,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        843.797,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        742,
+        715.172,
+        494,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        193,
+        902.609,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        731,
+        902.609,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        189,
+        933.547,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        170,
+        671.422,
+        1100,
+        61.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        189,
+        731.609,
+        1062,
+        320.313
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        757.484,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        838.234,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        918.984,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        742,
+        790.359,
+        494,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        193,
+        977.797,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        731,
+        977.797,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        189,
+        1008.734,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        170,
+        746.609,
+        1100,
+        61.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        189,
+        806.797,
+        1062,
+        320.313
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        832.672,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        913.422,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        994.172,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        742,
+        865.547,
+        494,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        193,
+        1052.984,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        731,
+        1052.984,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        189,
+        1083.922,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        170,
+        821.797,
+        1100,
+        61.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        189,
+        881.984,
+        1062,
+        320.313
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        907.859,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        988.609,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        1069.359,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        742,
+        940.734,
+        494,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        193,
+        1128.172,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        731,
+        1128.172,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        189,
+        1159.109,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        170,
+        896.984,
+        1100,
+        61.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        189,
+        957.172,
+        1062,
+        320.313
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        983.047,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        1063.797,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        189,
+        1144.547,
+        524,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        742,
+        1015.922,
+        494,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        193,
+        1203.359,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        731,
+        1203.359,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        189,
+        1234.297,
+        87.547,
+        43.188
+      ]
+    }
+  ],
+  "tournament-login-mobile.png": [
+    {
+      "tag": "MAIN",
+      "class": "login-page",
+      "rect": [
+        0,
+        0,
+        390,
+        844
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        45,
+        245.172,
+        80,
+        80
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        45,
+        369.359,
+        300,
+        32
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "stack-form",
+      "rect": [
+        45,
+        433.359,
+        300,
+        124.453
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        45,
+        455.438,
+        300,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--wide",
+      "rect": [
+        45,
+        514.625,
+        300,
+        43.188
+      ]
+    }
+  ],
+  "tournament-results-mobile.png": [
+    {
+      "tag": "MAIN",
+      "class": "public-page",
+      "rect": [
+        0,
+        0,
+        390,
+        2271.266
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "public-hero",
+      "rect": [
+        0,
+        0,
+        390,
+        272
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        20,
+        60.406,
+        60.797,
+        60.797
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        96.797,
+        65.688,
+        273.203,
+        70.406
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        27,
+        364.469,
+        336,
+        43.188
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        10,
+        476.234,
+        370,
+        32.25
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        11,
+        528.672,
+        368,
+        48.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        23,
+        605.953,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        232.594,
+        605.953,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        23,
+        667.359,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        232.594,
+        667.359,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        11,
+        720.047,
+        368,
+        48.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        23,
+        797.328,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        232.594,
+        797.328,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        23,
+        858.734,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        232.594,
+        858.734,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        11,
+        911.422,
+        368,
+        48.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        23,
+        988.703,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        232.594,
+        988.703,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-team-link",
+      "rect": [
+        23,
+        1050.109,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "public-match__team public-match__team--away public-team-link",
+      "rect": [
+        232.594,
+        1050.109,
+        134.406,
+        17
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        10,
+        1167.797,
+        370,
+        32.25
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        11,
+        1220.234,
+        368,
+        46.781
+      ]
+    },
+    {
+      "tag": "TABLE",
+      "class": "classification-table",
+      "rect": [
+        11,
+        1267.016,
+        672,
+        186.188
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        11,
+        1267.016,
+        672,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        11,
+        1267.016,
+        58.375,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        69.375,
+        1267.016,
+        299.031,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        368.406,
+        1267.016,
+        32.953,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        401.359,
+        1267.016,
+        32.953,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        434.313,
+        1267.016,
+        32.953,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        467.266,
+        1267.016,
+        32.953,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        500.219,
+        1267.016,
+        45.094,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        545.313,
+        1267.016,
+        42.016,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        587.328,
+        1267.016,
+        44.703,
+        31.188
+      ]
+    },
+    {
+      "tag": "TH",
+      "class": "",
+      "rect": [
+        632.031,
+        1267.016,
+        50.969,
+        31.188
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        11,
+        1298.203,
+        672,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        11,
+        1298.203,
+        58.375,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        69.375,
+        1298.203,
+        299.031,
+        39.25
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        76.563,
+        1310.078,
+        56.828,
+        16
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        368.406,
+        1298.203,
+        32.953,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        401.359,
+        1298.203,
+        32.953,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        434.313,
+        1298.203,
+        32.953,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        467.266,
+        1298.203,
+        32.953,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        500.219,
+        1298.203,
+        45.094,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        545.313,
+        1298.203,
+        42.016,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        587.328,
+        1298.203,
+        44.703,
+        39.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        632.031,
+        1298.203,
+        50.969,
+        39.25
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        11,
+        1337.453,
+        672,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        11,
+        1337.453,
+        58.375,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        69.375,
+        1337.453,
+        299.031,
+        38.75
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        76.563,
+        1348.828,
+        58.625,
+        16
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        368.406,
+        1337.453,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        401.359,
+        1337.453,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        434.313,
+        1337.453,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        467.266,
+        1337.453,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        500.219,
+        1337.453,
+        45.094,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        545.313,
+        1337.453,
+        42.016,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        587.328,
+        1337.453,
+        44.703,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        632.031,
+        1337.453,
+        50.969,
+        38.75
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        11,
+        1376.203,
+        672,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        11,
+        1376.203,
+        58.375,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        69.375,
+        1376.203,
+        299.031,
+        38.75
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        76.563,
+        1387.578,
+        58.984,
+        16
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        368.406,
+        1376.203,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        401.359,
+        1376.203,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        434.313,
+        1376.203,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        467.266,
+        1376.203,
+        32.953,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        500.219,
+        1376.203,
+        45.094,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        545.313,
+        1376.203,
+        42.016,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        587.328,
+        1376.203,
+        44.703,
+        38.75
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        632.031,
+        1376.203,
+        50.969,
+        38.75
+      ]
+    },
+    {
+      "tag": "TR",
+      "class": "",
+      "rect": [
+        11,
+        1414.953,
+        672,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__position",
+      "rect": [
+        11,
+        1414.953,
+        58.375,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__team",
+      "rect": [
+        69.375,
+        1414.953,
+        299.031,
+        38.25
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "classification-table__team-button",
+      "rect": [
+        76.563,
+        1426.328,
+        59.234,
+        16
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        368.406,
+        1414.953,
+        32.953,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        401.359,
+        1414.953,
+        32.953,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        434.313,
+        1414.953,
+        32.953,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        467.266,
+        1414.953,
+        32.953,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        500.219,
+        1414.953,
+        45.094,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        545.313,
+        1414.953,
+        42.016,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "",
+      "rect": [
+        587.328,
+        1414.953,
+        44.703,
+        38.25
+      ]
+    },
+    {
+      "tag": "TD",
+      "class": "classification-table__points",
+      "rect": [
+        632.031,
+        1414.953,
+        50.969,
+        38.25
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        10,
+        1539.391,
+        370,
+        32.25
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        27,
+        1607.828,
+        272,
+        23
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        350.188,
+        1607.828,
+        272,
+        23
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "third-place-match__title",
+      "rect": [
+        36.797,
+        1927.672,
+        316.406,
+        16
+      ]
+    }
+  ],
+  "tournament-teams-mobile.png": [
+    {
+      "tag": "HEADER",
+      "class": "admin-header",
+      "rect": [
+        0,
+        0,
+        390,
+        73.594
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        16,
+        18.703,
+        35.188,
+        35.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "logout-button",
+      "rect": [
+        347.672,
+        20.297,
+        26.328,
+        32
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "admin-main",
+      "rect": [
+        10,
+        73.594,
+        370,
+        2179.828
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        10,
+        120.969,
+        266.609,
+        32
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet",
+      "rect": [
+        292.609,
+        179.375,
+        87.391,
+        53.594
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel groups-panel",
+      "rect": [
+        10,
+        256.969,
+        370,
+        378.953
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        28.594,
+        275.563,
+        332.813,
+        24.172
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "inline-form",
+      "rect": [
+        28.594,
+        434.125,
+        332.813,
+        121.25
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        28.594,
+        456.203,
+        332.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button",
+      "rect": [
+        28.594,
+        512.188,
+        332.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        110.25,
+        583.563,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        161.875,
+        583.563,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel team-create-panel",
+      "rect": [
+        10,
+        659.922,
+        370,
+        371.063
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        28.594,
+        678.516,
+        332.813,
+        24.172
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "inline-form",
+      "rect": [
+        28.594,
+        813.078,
+        332.813,
+        199.313
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        28.594,
+        835.156,
+        332.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        28.594,
+        913.219,
+        332.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button",
+      "rect": [
+        28.594,
+        969.203,
+        332.813,
+        43.188
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        10,
+        1054.984,
+        370,
+        271.609
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        251.078,
+        1071.984,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        302.703,
+        1071.984,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        27,
+        1094.359,
+        336,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        27,
+        1175.719,
+        336,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        25.406,
+        1234.766,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        75.438,
+        1234.766,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        27,
+        1275.203,
+        135.906,
+        34.391
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        10,
+        1342.594,
+        370,
+        271.609
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        251.078,
+        1359.594,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        302.703,
+        1359.594,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        27,
+        1381.969,
+        336,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        27,
+        1463.328,
+        336,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        25.406,
+        1522.375,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        75.438,
+        1522.375,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        27,
+        1562.813,
+        135.906,
+        34.391
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        10,
+        1630.203,
+        370,
+        271.609
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        251.078,
+        1647.203,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        302.703,
+        1647.203,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        27,
+        1669.578,
+        336,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        27,
+        1750.938,
+        336,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        25.406,
+        1809.984,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        75.438,
+        1809.984,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        27,
+        1850.422,
+        135.906,
+        34.391
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "team-card",
+      "rect": [
+        10,
+        1917.813,
+        370,
+        271.609
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        251.078,
+        1934.813,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        302.703,
+        1934.813,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        27,
+        1957.188,
+        336,
+        25.984
+      ]
+    },
+    {
+      "tag": "H3",
+      "class": "",
+      "rect": [
+        27,
+        2038.547,
+        336,
+        21.594
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button",
+      "rect": [
+        25.406,
+        2097.594,
+        46.031,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "text-button text-button--danger",
+      "rect": [
+        75.438,
+        2097.594,
+        60.297,
+        22.375
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button button--quiet button--small",
+      "rect": [
+        27,
+        2138.031,
+        135.906,
+        34.391
+      ]
+    }
+  ],
+  "tournament-match-cards-print-mobile.png": [
+    {
+      "tag": "HEADER",
+      "class": "admin-header",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "logout-button",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "admin-main",
+      "rect": [
+        0,
+        0,
+        370,
+        1043.094
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel match-card-controls",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "match-card-template-option match-card-template-option--active",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "match-card-template-option",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "match-card-template-option",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "button",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel match-card-preview",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        0,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        8.188,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        0,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        8.188,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        211.641,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        219.828,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        211.641,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        219.828,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        423.281,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        431.469,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        423.281,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        431.469,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        634.922,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        643.109,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        634.922,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        643.109,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        0,
+        846.563,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        13,
+        854.75,
+        325.484,
+        35
+      ]
+    },
+    {
+      "tag": "ARTICLE",
+      "class": "match-result-card",
+      "rect": [
+        366.594,
+        846.563,
+        351.484,
+        196.531
+      ]
+    },
+    {
+      "tag": "HEADER",
+      "class": "match-result-card__header",
+      "rect": [
+        379.594,
+        854.75,
+        325.484,
+        35
+      ]
+    }
+  ],
+  "shifts-login-mobile.png": [
+    {
+      "tag": "HEADER",
+      "class": "topbar",
+      "rect": [
+        0,
+        0,
+        390,
+        73
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "brand-logo",
+      "rect": [
+        14,
+        20,
+        40,
+        36
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "container",
+      "rect": [
+        14,
+        109,
+        362,
+        490.781
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "auth-card",
+      "rect": [
+        14,
+        109,
+        362,
+        490.781
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "",
+      "rect": [
+        132,
+        130,
+        126,
+        111.172
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        37,
+        259.172,
+        316,
+        34.547
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "stack",
+      "rect": [
+        37,
+        372.094,
+        316,
+        204.688
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        37,
+        397.969,
+        316,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        37,
+        478.719,
+        316,
+        40.875
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        37,
+        533.594,
+        316,
+        43.188
+      ]
+    }
+  ],
+  "shifts-dashboard-mobile.png": [
+    {
+      "tag": "HEADER",
+      "class": "topbar",
+      "rect": [
+        0,
+        0,
+        390,
+        141.375
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "brand-logo",
+      "rect": [
+        14,
+        12,
+        40,
+        36
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "",
+      "rect": [
+        350.563,
+        19.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "link-button",
+      "rect": [
+        350.563,
+        19.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "container",
+      "rect": [
+        14,
+        169.375,
+        362,
+        3453.953
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        14,
+        169.375,
+        191.25,
+        34.547
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        344.297,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        433.438,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        522.578,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        666.016,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        809.453,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        898.594,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card today",
+      "rect": [
+        14,
+        987.734,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1076.875,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1166.016,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1255.156,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1398.594,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1542.031,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1631.172,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1720.313,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1809.453,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1898.594,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        1987.734,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2131.172,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2274.609,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2363.75,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2452.891,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2542.031,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2631.172,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2720.313,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        2863.75,
+        362,
+        135.438
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        3007.188,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        3096.328,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        3185.469,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        3274.609,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        3363.75,
+        362,
+        81.141
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "day-card ",
+      "rect": [
+        14,
+        3452.891,
+        362,
+        135.438
+      ]
+    }
+  ],
+  "shifts-teams-mobile.png": [
+    {
+      "tag": "HEADER",
+      "class": "topbar",
+      "rect": [
+        0,
+        0,
+        390,
+        141.375
+      ]
+    },
+    {
+      "tag": "IMG",
+      "class": "brand-logo",
+      "rect": [
+        14,
+        12,
+        40,
+        36
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "",
+      "rect": [
+        350.563,
+        19.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "link-button",
+      "rect": [
+        350.563,
+        19.563,
+        25.438,
+        20.875
+      ]
+    },
+    {
+      "tag": "MAIN",
+      "class": "container",
+      "rect": [
+        14,
+        169.375,
+        362,
+        1005.484
+      ]
+    },
+    {
+      "tag": "H1",
+      "class": "",
+      "rect": [
+        14,
+        169.375,
+        362,
+        34.547
+      ]
+    },
+    {
+      "tag": "SECTION",
+      "class": "panel",
+      "rect": [
+        14,
+        371.859,
+        362,
+        463.063
+      ]
+    },
+    {
+      "tag": "H2",
+      "class": "",
+      "rect": [
+        29,
+        393.406,
+        147.406,
+        22.078
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        207.906,
+        386.859,
+        153.094,
+        43.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid",
+      "rect": [
+        29,
+        430.047,
+        332,
+        389.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        455.922,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        536.672,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        617.422,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        44,
+        731.047,
+        302,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        802.984,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        14,
+        852.922,
+        362,
+        53.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        29,
+        909.109,
+        332,
+        597.5
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        934.984,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1015.734,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1096.484,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        44,
+        1210.109,
+        302,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1397.609,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1432.484,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        29,
+        1463.422,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        14,
+        920.109,
+        362,
+        53.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        29,
+        976.297,
+        332,
+        597.5
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1002.172,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1082.922,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1163.672,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        44,
+        1277.297,
+        302,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1464.797,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1499.672,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        29,
+        1530.609,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        14,
+        987.297,
+        362,
+        53.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        29,
+        1043.484,
+        332,
+        597.5
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1069.359,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1150.109,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1230.859,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        44,
+        1344.484,
+        302,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1531.984,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1566.859,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        29,
+        1597.797,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        14,
+        1054.484,
+        362,
+        53.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        29,
+        1110.672,
+        332,
+        597.5
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1136.547,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1217.297,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1298.047,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        44,
+        1411.672,
+        302,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1599.172,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1634.047,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        29,
+        1664.984,
+        87.547,
+        43.188
+      ]
+    },
+    {
+      "tag": "DETAILS",
+      "class": "panel",
+      "rect": [
+        14,
+        1121.672,
+        362,
+        53.188
+      ]
+    },
+    {
+      "tag": "FORM",
+      "class": "form-grid top-space",
+      "rect": [
+        29,
+        1177.859,
+        332,
+        597.5
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1203.734,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1284.484,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        29,
+        1365.234,
+        332,
+        40.875
+      ]
+    },
+    {
+      "tag": "SELECT",
+      "class": "",
+      "rect": [
+        44,
+        1478.859,
+        302,
+        39
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1666.359,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "INPUT",
+      "class": "",
+      "rect": [
+        33,
+        1701.234,
+        13,
+        13
+      ]
+    },
+    {
+      "tag": "BUTTON",
+      "class": "primary",
+      "rect": [
+        29,
+        1732.172,
+        87.547,
+        43.188
+      ]
+    }
+  ]
+}

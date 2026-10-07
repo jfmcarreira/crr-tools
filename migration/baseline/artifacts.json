@@ -1,0 +1,28 @@
+{
+  "fixtures": {
+    "tournament-api.json": "cb6f1745a5c4158359326080d92958af08163d491476cadbee4af567bb404fc8",
+    "tournament-cookie.json": "7f2797f7330acc4fae4dda40fc6c9d1ec500c0616d8777361b25a9439cc40afe",
+    "tournament-routes.json": "79b605e2cb3e3845d0e1ec43a48d163b649e878d3c2089730f18c4b1291b94e7",
+    "tournament-rows.json": "139a91d291571eeff49ffc44f1f793d5a098e6728bc3fbc4a9097662fc1ed574",
+    "tournament-schema.json": "f870e415dffa31ac0b5d85990a06def5342ebd983d88c3f8da116bfc4796adb5",
+    "tournament-state.json": "fe4161eea7859c93535b1ec4364eed1dce8fcb57c77a2c675f6675c31333ba11",
+    "tournament.sqlite": "29a934415b8e158b2d40899d0e060d0bd63fc252edf8692ab7da8da7357f7d3a"
+  },
+  "screenshots": {
+    "manifest.json": "2c8389c13cdd7576bf79a5b4414ba651b326220600048b1477b7ce920536f90f",
+    "shifts-dashboard-desktop.png": "3d3509d51141cb8b193db23cbc1ed49f16d900f7e842a72519f13568a957d2a8",
+    "shifts-dashboard-mobile.png": "469635ca4237cdb927d837bee4efdfb17ad4c7729d5be636d22bfa0c9260c128",
+    "shifts-login-desktop.png": "0820a46898d63623228d4ff968a9cb1d2e711511b56938aae010f6262fb98173",
+    "shifts-login-mobile.png": "0b3c5594b3a6c4b135f8f9c083145ceb0d0847cbd1a643bcc50767faac1b3bc2",
+    "shifts-teams-desktop.png": "f32362be5e3081704450d59baa9eb538419b0a0e3187ae11ef3aa029d8ba45e2",
+    "shifts-teams-mobile.png": "9b182e57540fa520b090a749e878a7c60f2728a9af014860c90cea9f77886c9f",
+    "tournament-login-desktop.png": "806d30b3bf6f7d446eb093f4995f3ee524b531d40a9a86ed2db23539c7fafdf0",
+    "tournament-login-mobile.png": "760efafad09046bd4e64d012fdd79c8b78b6a51f75bda9c2602899a09e2bc934",
+    "tournament-match-cards-print-desktop.png": "763d9ddbad413d1798e0192e69394a3065ada912498eb2d60de20945b0db9dc1",
+    "tournament-match-cards-print-mobile.png": "c3d6b94e73cab499516a02b07b2f47046e86a49561679607842c324708ad5ec3",
+    "tournament-results-desktop.png": "7167ea009925c416cdc07f3fa876c405fb1b85484b61703471284a6220bc69f0",
+    "tournament-results-mobile.png": "832961595e2d5442fdcde57763e4f817d40e8d06cddf7191d4e541a31fac0243",
+    "tournament-teams-desktop.png": "e028f3028d02f2d21903a79b9eb17a95c0845fe24ecba545466f42f385d92759",
+    "tournament-teams-mobile.png": "c92aa6509a3afeb159d87920947a52624ada6d7d83d19286956245db51adc4a4"
+  }
+}

@@ -1,0 +1,75 @@
+name: App checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      tournament: ${{ steps.filter.outputs.tournament }}
+      shifts: ${{ steps.filter.outputs.shifts }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            tournament:
+              - 'apps/tournament/**'
+              - 'packages/crr-brand/**'
+              - 'packages/crr-python/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'Makefile'
+              - '.dockerignore'
+              - 'compose.yaml'
+              - '.github/workflows/**'
+            shifts:
+              - 'apps/shifts/**'
+              - 'packages/crr-brand/**'
+              - 'packages/crr-python/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - '.python-version'
+              - 'Makefile'
+              - '.dockerignore'
+              - 'compose.yaml'
+              - '.github/workflows/**'
+
+  tournament:
+    needs: changes
+    if: needs.changes.outputs.tournament == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/tournament/package-lock.json
+      - run: make tournament-install tournament-test tournament-build
+      - run: docker compose config --quiet
+      - run: docker build -f apps/tournament/Dockerfile -t crr-tournament .
+
+  shifts:
+    needs: changes
+    if: needs.changes.outputs.shifts == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.31'
+          enable-cache: true
+      - run: make shifts-test
+      - run: docker compose config --quiet
+      - run: make shifts-build

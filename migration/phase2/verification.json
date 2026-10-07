@@ -1,0 +1,38 @@
+{
+  "captures": 14,
+  "legacy_geometry_preserved": true,
+  "print_captures_byte_identical": 2,
+  "primary_token": "#ed1c24",
+  "element_counts": {
+    "tournament-login-desktop.png": 6,
+    "tournament-results-desktop.png": 87,
+    "tournament-teams-desktop.png": 51,
+    "tournament-match-cards-print-desktop.png": 37,
+    "shifts-login-desktop.png": 11,
+    "shifts-dashboard-desktop.png": 38,
+    "shifts-teams-desktop.png": 67,
+    "tournament-login-mobile.png": 6,
+    "tournament-results-mobile.png": 87,
+    "tournament-teams-mobile.png": 51,
+    "tournament-match-cards-print-mobile.png": 37,
+    "shifts-login-mobile.png": 11,
+    "shifts-dashboard-mobile.png": 38,
+    "shifts-teams-mobile.png": 67
+  },
+  "screenshot_sha256": {
+    "tournament-login-desktop.png": "806d30b3bf6f7d446eb093f4995f3ee524b531d40a9a86ed2db23539c7fafdf0",
+    "tournament-results-desktop.png": "7167ea009925c416cdc07f3fa876c405fb1b85484b61703471284a6220bc69f0",
+    "tournament-teams-desktop.png": "c6ace213e8a478df3d2f99e4789abe6c743df4659d9e0d3606fb77ae9ad40d04",
+    "tournament-match-cards-print-desktop.png": "763d9ddbad413d1798e0192e69394a3065ada912498eb2d60de20945b0db9dc1",
+    "shifts-login-desktop.png": "05eded55169cc27b425373fe1d3d08ce9d3d33d75a3698f494fdce2b556f9472",
+    "shifts-dashboard-desktop.png": "40fb5d149347d743fedc60c87df83ecc85f5f840e3bc69d0431f8588c3c20688",
+    "shifts-teams-desktop.png": "e3c5bb09c7eadefde2c29f8c195db66036df2c8f5ec4e63a8dabb62dba99e9c1",
+    "tournament-login-mobile.png": "760efafad09046bd4e64d012fdd79c8b78b6a51f75bda9c2602899a09e2bc934",
+    "tournament-results-mobile.png": "832961595e2d5442fdcde57763e4f817d40e8d06cddf7191d4e541a31fac0243",
+    "tournament-teams-mobile.png": "fea2d900eb41da2de2d3f71496f5cb18d4673db9adefc28a28ca8c8f01493cd7",
+    "tournament-match-cards-print-mobile.png": "c3d6b94e73cab499516a02b07b2f47046e86a49561679607842c324708ad5ec3",
+    "shifts-login-mobile.png": "663fc53f3e05344c6a7933ecb94a98725034eab2e966e08fec30d5177d2e10f1",
+    "shifts-dashboard-mobile.png": "7b5bc19fd34b85d1ff16df94e85c7693718c78677092b3bb802188740cf5a622",
+    "shifts-teams-mobile.png": "4ef9893f4369ff7665c239cdf163d65e21b9e889ddea0876cae7a4d8f741a0dd"
+  }
+}

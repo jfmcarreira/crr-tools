@@ -1,0 +1,7 @@
+{
+  "include": ["apps/shifts/backend/app", "apps/shifts/backend/tests"],
+  "exclude": ["originals", ".migration", "**/node_modules", "**/__pycache__"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.13"
+}

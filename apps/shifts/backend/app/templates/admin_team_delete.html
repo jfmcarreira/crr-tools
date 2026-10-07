@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Remover {{ team.name }} · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow"><a href="{{ app_path('/admin/teams') }}">Equipas</a></p>
+    <h1>Remover equipa</h1>
+    <p class="muted">Isto é definitivo e não pode ser desfeito.</p>
+  </div>
+</div>
+<section class="panel">
+  <h2>{{ team.name }}</h2>
+  <p>{% if team.user %}@{{ team.user.username }} · {{ team.user.name }}{% if team.user.teams|length > 1 %} (partilhada com {{ team.user.teams|length - 1 }} equipa(s)){% endif %}{% else %}Sem utilizador, apenas aparece na escala.{% endif %}</p>
+  <p class="muted">Só é possível remover quem ainda não tem turnos atribuídos. Primeiro transfira os turnos desta equipa para outras; assim o registo de quem trabalhou cada data mantém-se.</p>
+  <p class="muted">Ao remover, acontece o seguinte:</p>
+  <ul class="link-list">
+    <li>{{ impact.rotation }} posição(ões) saem das rotações.</li>
+    {% if impact.pattern_days %}<li>{{ impact.pattern_days }} dia(s) do padrão de noites ficam por definir.</li>{% endif %}
+    {% if impact.requests %}<li>{{ impact.requests }} pedido(s) de troca em aberto são encerrados.</li>{% endif %}
+    <li>O histórico de e-mails é mantido, sem ligação a esta equipa.</li>
+  </ul>
+  <p class="muted">Se só quiser que esta equipa deixe de receber turnos, desative-a em vez de a remover.</p>
+  <div class="actions">
+    <form method="post" action="{{ app_path('/admin/teams/' ~  team.id  ~ '/delete') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="danger" type="submit">Remover definitivamente</button>
+    </form>
+    <a class="button secondary" href="{{ app_path('/admin/teams') }}">Cancelar</a>
+  </div>
+</section>
+{% endblock %}

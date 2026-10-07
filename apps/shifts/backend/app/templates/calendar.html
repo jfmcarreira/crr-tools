@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Calendário · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <p class="eyebrow"><a href="{{ app_path('/') }}">Rota</a></p>
+    <h1>Calendário</h1>
+    <p class="muted">Os teus turnos na app de calendário do telemóvel. Subscreve uma vez: as alterações à rota aparecem automaticamente, quando a app atualizar o calendário.</p>
+  </div>
+</div>
+
+<div class="stack gap-lg">
+{% for feed in feeds %}
+  <section class="panel calendar-feed">
+    <h2>{{ feed.title }}</h2>
+    <div class="calendar-subscribe-actions" aria-label="Adicionar {{ feed.title }}">
+      <a class="button primary" href="{{ feed.webcal_url }}">iPhone / Apple Calendar</a>
+      <a class="button secondary" href="{{ feed.google_url }}" target="_blank" rel="noopener noreferrer">Google Calendar / Android</a>
+      <a class="button secondary" href="{{ feed.outlook_url }}" target="_blank" rel="noopener noreferrer">Outlook</a>
+    </div>
+    <p class="muted">No iPhone, confirma a subscrição na app Calendário. No Google e Outlook, adiciona pelo navegador à conta que usas no telemóvel. <a href="#calendar-help">Ver os passos</a>.</p>
+    <label for="calendar-url-{{ loop.index }}">Endereço para subscrever noutra app</label>
+    <div class="calendar-url-row">
+      <input id="calendar-url-{{ loop.index }}" type="text" readonly value="{{ feed.url }}" inputmode="url" autocapitalize="off" spellcheck="false">
+      <button class="secondary" type="button" data-copy="{{ feed.url }}">Copiar endereço</button>
+    </div>
+    <p class="calendar-copy-status muted" role="status" data-copy-status></p>
+  </section>
+{% else %}
+  <div class="empty">Ainda não tens uma equipa ativa com calendário.</div>
+{% endfor %}
+</div>
+
+<section class="panel calendar-help top-space" id="calendar-help">
+  <h2>Como adicionar no telemóvel</h2>
+  <details>
+    <summary>iPhone / iPad — Apple Calendar</summary>
+    <ol>
+      <li>Toca em <strong>iPhone / Apple Calendar</strong> no calendário que queres adicionar.</li>
+      <li>Permite abrir a app Calendário e confirma <strong>Subscrever</strong>.</li>
+      <li>Se o botão não abrir a app, copia o endereço. Na app Calendário, abre <strong>Calendários → Adicionar calendário → Adicionar calendário de assinatura</strong> e cola-o.</li>
+    </ol>
+  </details>
+  <details>
+    <summary>Android / Google Calendar</summary>
+    <ol>
+      <li>Toca em <strong>Google Calendar / Android</strong> e entra na conta Google que usas no telemóvel.</li>
+      <li>O Google exige a versão para computador para adicionar subscrições. No navegador do telemóvel, ativa <strong>Site para computador</strong>; se não conseguires, abre esta página num computador.</li>
+      <li>Confirma a adição. Se não aparecer essa opção, copia o endereço e, no Google Calendar, escolhe <strong>Outros calendários → + → A partir de URL</strong>, cola-o e adiciona o calendário.</li>
+      <li>Na app Google Calendar, abre o menu e ativa o novo calendário. Se não aparecer, verifica as definições de sincronização.</li>
+    </ol>
+  </details>
+  <details>
+    <summary>Outlook</summary>
+    <ol>
+      <li>Toca em <strong>Outlook</strong> e entra na conta que usas na app.</li>
+      <li>Confirma a subscrição no Outlook na Web. Se necessário, usa <strong>Adicionar calendário → Subscrever a partir da Web</strong> e cola o endereço copiado.</li>
+      <li>Na app Outlook, seleciona o novo calendário nessa conta. Se a versão móvel não mostrar a opção de subscrever, usa o navegador em modo computador.</li>
+    </ol>
+  </details>
+  <p class="muted">Escolhe uma subscrição por endereço, em vez de importar um ficheiro .ics, para receber futuras alterações. A atualização depende da app e pode demorar algumas horas. Para Google e Outlook, o endereço tem de estar acessível pela Internet.</p>
+</section>
+
+<script>
+  // Clipboard permissions can fail even on HTTPS; keep a mobile-friendly fallback.
+  document.querySelectorAll("[data-copy]").forEach(function (button) {
+    button.addEventListener("click", async function () {
+      var url = button.dataset.copy;
+      var field = button.parentElement.querySelector("input");
+      var status = button.closest(".calendar-feed").querySelector("[data-copy-status]");
+      var copied = false;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(url);
+          copied = true;
+        } catch (error) {
+          // Fall through to selection/copy when clipboard access is denied.
+        }
+      }
+      if (!copied) {
+        field.focus();
+        field.select();
+        field.setSelectionRange(0, field.value.length);
+        try {
+          copied = document.execCommand("copy");
+        } catch (error) {
+          // The selected field still supports the phone's native Copy action.
+        }
+      }
+      if (copied) {
+        button.textContent = "Copiado";
+        status.textContent = "Endereço copiado. Cola-o na tua app de calendário.";
+        setTimeout(function () { button.textContent = "Copiar endereço"; }, 2000);
+      } else {
+        status.textContent = "Endereço selecionado. Toque no campo e escolha «Copiar».";
+      }
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,1 @@
+"""Bar Rota application package."""

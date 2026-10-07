@@ -1,0 +1,128 @@
+[
+  {
+    "file": "tournament-login-desktop.png",
+    "path": "/admin/login",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-results-desktop.png",
+    "path": "/results",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-teams-desktop.png",
+    "path": "/admin/teams",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-match-cards-print-desktop.png",
+    "path": "/admin/match-cards",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "print"
+  },
+  {
+    "file": "shifts-login-desktop.png",
+    "path": "/login",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "screen"
+  },
+  {
+    "file": "shifts-dashboard-desktop.png",
+    "path": "/",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "screen"
+  },
+  {
+    "file": "shifts-teams-desktop.png",
+    "path": "/admin/teams",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-login-mobile.png",
+    "path": "/admin/login",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-results-mobile.png",
+    "path": "/results",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-teams-mobile.png",
+    "path": "/admin/teams",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "screen"
+  },
+  {
+    "file": "tournament-match-cards-print-mobile.png",
+    "path": "/admin/match-cards",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "print"
+  },
+  {
+    "file": "shifts-login-mobile.png",
+    "path": "/login",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "screen"
+  },
+  {
+    "file": "shifts-dashboard-mobile.png",
+    "path": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "screen"
+  },
+  {
+    "file": "shifts-teams-mobile.png",
+    "path": "/admin/teams",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "media": "screen"
+  }
+]
