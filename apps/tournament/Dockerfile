@@ -1,22 +1,26 @@
-# Phase 1 retains the legacy Node runtime until the FastAPI compatibility exit.
-FROM node:22-alpine AS build
+FROM node:22-alpine AS frontend
 WORKDIR /workspace/apps/tournament
-RUN apk add --no-cache python3 make g++
 COPY apps/tournament/package.json apps/tournament/package-lock.json ./
 RUN npm ci
 COPY apps/tournament/ ./
 COPY packages/crr-brand/ /workspace/packages/crr-brand/
 ARG VITE_BASE_PATH=/jogo/
 ENV VITE_BASE_PATH=${VITE_BASE_PATH}
-RUN npm run build && npm prune --omit=dev
+RUN npm run build
 
-FROM node:22-alpine AS runtime
-ENV NODE_ENV=production DATABASE_PATH=/data/tournament.sqlite CLIENT_DIST_PATH=/app/dist/client APP_BASE_PATH=/jogo/
-WORKDIR /app
-COPY --from=build --chown=node:node /workspace/apps/tournament/package.json ./
-COPY --from=build --chown=node:node /workspace/apps/tournament/node_modules ./node_modules
-COPY --from=build --chown=node:node /workspace/apps/tournament/dist ./dist
-RUN mkdir /data && chown node:node /data
-USER node
+FROM ghcr.io/astral-sh/uv:0.11.31 AS uv
+FROM python:3.13-slim AS runtime
+COPY --from=uv /uv /uvx /bin/
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_PROJECT_ENVIRONMENT=/opt/venv PATH="/opt/venv/bin:$PATH" DATABASE_PATH=/data/tournament.sqlite APP_BASE_PATH=/jogo/
+WORKDIR /workspace
+COPY pyproject.toml uv.lock ./
+COPY apps/tournament/backend/pyproject.toml apps/tournament/backend/pyproject.toml
+COPY apps/shifts/backend/pyproject.toml apps/shifts/backend/pyproject.toml
+RUN uv sync --frozen --package crr-tournament --no-dev --no-editable
+COPY apps/tournament/backend/ apps/tournament/backend/
+COPY --from=frontend /workspace/apps/tournament/dist/client apps/tournament/dist/client/
+RUN groupadd --gid 1000 tournament && useradd --uid 1000 --gid 1000 --no-create-home tournament && mkdir /data && chown tournament /data
+WORKDIR /workspace/apps/tournament/backend
+USER tournament
 EXPOSE 8080
-CMD ["node", "dist/server/main.js"]
+CMD ["uvicorn", "app.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8080", "--no-proxy-headers"]

@@ -2,6 +2,7 @@
 
 import json
 from html.parser import HTMLParser
+from pathlib import Path
 import subprocess
 import time
 from urllib.request import urlopen
@@ -22,13 +23,18 @@ class PageResources(HTMLParser):
             self.urls.append(attributes.get("href") or "")
 
 
-def check(image: str, port: int, environment: dict[str, str], routes: list[str], proxy_prefix: str = "") -> None:
+def check(image: str, port: int, environment: dict[str, str], routes: list[str], proxy_prefix: str = "",
+          legacy_fixture: Path | None = None, expected_state: dict | None = None) -> None:
     name = f"crr-migration-{uuid4().hex[:12]}"
     command = ["docker", "run", "--rm", "--detach", "--name", name,
                "--tmpfs", "/data:mode=1777", "--publish", f"127.0.0.1::{port}"]
     for key, value in environment.items():
         command.extend(["--env", f"{key}={value}"])
+    if legacy_fixture is not None:
+        command.extend(["--mount", f"type=bind,source={legacy_fixture},target=/legacy.sqlite,readonly"])
     command.append(image)
+    if legacy_fixture is not None:
+        command.extend(["sh", "-c", "cp /legacy.sqlite /data/tournament.sqlite && exec uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8080 --no-proxy-headers"])
     subprocess.run(command, check=True, capture_output=True, text=True)
     try:
         binding = subprocess.check_output(["docker", "port", name, str(port)], text=True).strip()
@@ -48,7 +54,10 @@ def check(image: str, port: int, environment: dict[str, str], routes: list[str],
                 assert response.status == 200, route
                 body = response.read()
                 if route == "/api/public/state":
-                    assert json.loads(body)["tournament"]["name"] == "Torneio"
+                    if expected_state is not None:
+                        assert json.loads(body) == expected_state
+                    else:
+                        assert json.loads(body)["tournament"]["name"] == "Torneio"
                 elif route in {"/results", "/login"}:
                     assert b"<html" in body.lower(), route
                     resources = PageResources()
@@ -73,6 +82,13 @@ if __name__ == "__main__":
         "ADMIN_PASSWORD": "migration-smoke-only-password",
         "SESSION_SECRET": "migration-smoke-only-secret",
     }, ["/api/public/state", "/results"], proxy_prefix="/jogo")
+    fixtures = Path(__file__).resolve().parents[1] / "migration/fixtures"
+    check("crr-tournament", 8080, {
+        "ADMIN_PASSWORD": "migration-smoke-only-password",
+        "SESSION_SECRET": "migration-smoke-only-secret",
+    }, ["/api/public/state", "/results"], proxy_prefix="/jogo",
+          legacy_fixture=fixtures / "tournament.sqlite",
+          expected_state=json.loads((fixtures / "tournament-state.json").read_text()))
     check("crr-shifts", 8000, {
         "DATABASE_URL": "sqlite:////data/smoke.db",
         "SECRET_KEY": "migration-smoke-only-secret",

@@ -2,7 +2,7 @@
 
 Two independently runnable applications migrating into one monorepo:
 
-- [Tournament](apps/tournament/README.md): Vue 3 and the temporary legacy Node backend.
+- [Tournament](apps/tournament/README.md): Vue 3 and FastAPI on Python 3.13.
 - [Shifts](apps/shifts/README.md): FastAPI, Jinja, SQLAlchemy and Alembic on Python 3.13.
 - [CRR brand](packages/crr-brand/README.md): shared logo, favicon and CSS primitives.
 
@@ -20,8 +20,9 @@ make shifts-test
 make test
 ```
 
-`uv` resolves Shifts dependencies using the single root `uv.lock` and creates the
-root `.venv`. Tournament joins that workspace when the FastAPI backend is ported.
+`uv` resolves both backend projects using the single root `uv.lock` and creates
+the root `.venv`. Each backend runs from its own directory and owns its database,
+models, authentication and migration history.
 Run `make tournament-backend-dev` and `make tournament-frontend-dev` in separate
 terminals, or `make shifts-dev` for Shifts. App-specific environment setup is
 documented in each application's README.

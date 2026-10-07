@@ -53,6 +53,10 @@ def main(migrated: bool = False, branding: bool = False, reference: Path | None 
         "INITIAL_ADMIN_PASSWORD": "migration-fixture-password",
         "SMTP_HOST": "", "ROOT_PATH": "", "SESSION_HTTPS_ONLY": "false",
         "PYTHONDONTWRITEBYTECODE": "1",
+        "ADMIN_PASSWORD": "migration-fixture-password",
+        "SESSION_SECRET": "migration-fixture-secret-not-for-production",
+        "APP_BASE_PATH": "/", "DATABASE_PATH": str(tournament_db),
+        "CLIENT_DIST_PATH": str(tournament_source / "dist/client"),
     }
     python = str(ROOT / ".venv/bin/python" if migrated else WORK / "shifts/.venv/bin/python")
     subprocess.run([python, "-m", "app.cli", "seed-demo"], cwd=shifts_source, env=env, check=True)
@@ -60,8 +64,10 @@ def main(migrated: bool = False, branding: bool = False, reference: Path | None 
     logs = []
     try:
         for name, command, cwd in [
-            ("tournament", ["node", "--import", str(tournament_source / "node_modules/tsx/dist/loader.mjs"),
-                            "migration/capture_tournament.mjs", "--serve"], ROOT),
+            ("tournament", [python, "-m", "uvicorn", "app.main:create_app", "--factory", "--host", "127.0.0.1",
+                            "--port", "18080", "--no-proxy-headers"] if migrated else
+             ["node", "--import", str(tournament_source / "node_modules/tsx/dist/loader.mjs"),
+              "migration/capture_tournament.mjs", "--serve"], ROOT / "apps/tournament/backend" if migrated else ROOT),
             ("shifts", [python, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1",
                         "--port", "18081"], shifts_source),
         ]:

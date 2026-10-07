@@ -166,12 +166,74 @@ reference. Both require the Phase 0 staging/Playwright setup described above.
 Container smoke checks emulate the existing Tournament proxy's `/jogo` prefix
 stripping when fetching its built asset URLs. Remote CI remains unverified.
 
+## Phase 3 — Tournament FastAPI replacement: locally verified complete
+
+- Added the independent `crr-tournament` Python 3.13 workspace member, version
+  1.0.0, with FastAPI, SQLAlchemy 2, Alembic and Pydantic Settings.
+- Modeled the nine existing SQLite tables with typed `Mapped` columns. The frozen
+  Alembic baseline creates the exact Node schema and defaults. Existing databases
+  are validated before stamping, including column types/nullability, defaults,
+  primary/unique keys, checks, indexes, foreign keys, autoincrement and group
+  collation. Validation/stamping/upgrades use an explicit SQLite transaction;
+  failed upgrades roll back schema creation. Foreign keys/WAL/5000 ms timeout
+  apply to every connection.
+- Ported calendar generation, standard/total-points standings and head-to-head
+  tie breakers, brackets/byes/third-place advancement, seeding and state assembly.
+- Added domain-grouped request/response schemas and separate auth/public/admin
+  routers. CamelCase payloads, status/error shapes, Portuguese messages, HTTP
+  methods and confirmation rules are preserved. Request validation also covers
+  JavaScript-style ID coercion, name trimming and UTF-16 length limits.
+- Reproduced the Node HMAC-SHA256/base64url session format and cookie semantics;
+  verified a token produced by the actual Node implementation. Preserved the
+  five-failure/15-minute login window and successful-login reset. Synchronization
+  preserves serial numbering and atomic login limiting under ASGI concurrency.
+- Ported notification-only SSE with retry 3000, 25-second heartbeat, exact
+  state-change frames and subscriber cleanup. FastAPI serves the existing Vue
+  build, including the legacy sub-path proxy deployment behavior.
+- Switched development and production runtime to Uvicorn/Python. The image builds
+  Vue with Node 22 and preserves UID/GID 1000 for existing SQLite volumes. Removed
+  Fastify, better-sqlite3, Zod, tsx and backend-only type packages/scripts from
+  the frontend dependency graph after compatibility checks passed.
+- Updated Makefile/CI to check both Python and frontend code. Preserved all 44
+  legacy HTTP/service assertions under `contracts/` and execute them unchanged
+  using migration-only Python transports. This compatibility command uses owned
+  contracts and app tooling; CI never reads/builds/runs `originals/`.
+
+| Check | Result |
+| --- | --- |
+| Backend pytest | 28 passed |
+| Preserved legacy assertions against Python | 44 passed: 19 HTTP/SSE, 25 deterministic services |
+| Frontend/shared tests | 13 passed |
+| Vue typecheck and build | Passed |
+| Fresh database schema/defaults vs Node | Exact normalized SQLite DDL match |
+| Python startup with populated Node fixture | All nine table contents and public state preserved |
+| Incompatible schemas / migration failure | Refused without stamping; failed DDL rolled back |
+| Token compatibility / cookies / limiter | Node-produced token and HTTPS/proxy/window/reset/concurrency checks passed |
+| `make migration-visual-check` | All 14 screenshots match Phase 2 byte-for-byte |
+| Both Docker builds | Passed |
+| Container smoke checks | Fresh Tournament, adopted Node fixture and Shifts passed; referenced resources served |
+| Shifts regression suite | 16 passed |
+
+`phase3/compatibility.json` preserves passing legacy test names and contract
+checksums; raw test reports remain in `.migration/port-compat/`. Database tests
+copy the Node fixture before adoption; container adoption checks likewise use a
+read-only fixture mount copied into tmpfs. No production database was used.
+
+The TypeScript server source/config files are retired reference material pending
+Phase 6 cleanup; production images contain only the Python backend and built
+Vue assets. The Vue source directory move is also deferred to that cleanup.
+Compatibility transport scaffolding remains until the corresponding cleanup
+exit criteria are verified. Remote GitHub Actions execution is still unverified.
+
+On this machine, the pyenv override described above also applies to Tournament
+Makefile commands; uv still executes the applications on Python 3.13.
+
 ## Next work
 
 1. Verify the new CI jobs on Node 22/Python 3.13 after publishing the changes.
-2. Phase 3: Tournament SQLAlchemy/Alembic adoption of the saved SQLite fixture,
-   then deterministic services, state, auth, routers and SSE compatibility.
+2. Phase 4: Shifts service/model/security extraction and router split, preserving
+   routes, templates, forms, authentication, SQLite data and migration history.
 
-Phases 3–6 are not complete. No shared Python package has been extracted yet.
+Phases 4–6 are not complete. No shared Python package has been extracted yet.
 Independent tag-triggered release workflows and final dependency cleanup belong
 to later phases.

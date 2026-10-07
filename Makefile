@@ -2,7 +2,7 @@ UV ?= uv
 PYTHON ?= python3
 .DEFAULT_GOAL := test
 
-.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-build shifts-dev shifts-test shifts-build test
+.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-compat-test tournament-build shifts-dev shifts-test shifts-build test
 
 baseline-test:
 	$(PYTHON) tools/migration_baseline.py all
@@ -32,14 +32,20 @@ tournament-install:
 	npm --prefix apps/tournament ci
 
 tournament-backend-dev:
-	npm --prefix apps/tournament run dev:server
+	DATABASE_PATH=$(abspath apps/tournament/tournament.sqlite) $(UV) run --directory apps/tournament/backend --package crr-tournament --locked uvicorn app.main:create_app --factory --reload --host 127.0.0.1 --port 8080 --no-proxy-headers
 
 tournament-frontend-dev:
 	npm --prefix apps/tournament run dev:client
 
 tournament-test:
+	$(UV) run --directory apps/tournament/backend --package crr-tournament --locked pytest
 	npm --prefix apps/tournament test
 	npm --prefix apps/tournament run typecheck
+	$(PYTHON) tools/check_tournament_compat.py
+
+tournament-compat-test:
+	$(UV) sync --package crr-tournament --locked
+	$(PYTHON) tools/check_tournament_compat.py
 
 tournament-build:
 	npm --prefix apps/tournament run build

@@ -5,6 +5,7 @@ requires-python = "==3.13.*"
 [manifest]
 members = [
     "crr-shifts",
+    "crr-tournament",
 ]
 
 [[package]]
@@ -167,6 +168,39 @@ requires-dist = [
 dev = [
     { name = "httpx", specifier = ">=0.27,<1" },
     { name = "pypdf", specifier = ">=5,<7" },
+    { name = "pytest", specifier = ">=8,<9" },
+]
+
+[[package]]
+name = "crr-tournament"
+version = "1.0.0"
+source = { virtual = "apps/tournament/backend" }
+dependencies = [
+    { name = "alembic" },
+    { name = "fastapi" },
+    { name = "pydantic-settings" },
+    { name = "sqlalchemy" },
+    { name = "uvicorn", extra = ["standard"] },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "httpx" },
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "alembic", specifier = ">=1.13,<2" },
+    { name = "fastapi", specifier = ">=0.115,<1" },
+    { name = "pydantic-settings", specifier = ">=2.5,<3" },
+    { name = "sqlalchemy", specifier = ">=2.0,<3" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.30,<1" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "httpx", specifier = ">=0.27,<1" },
     { name = "pytest", specifier = ">=8,<9" },
 ]
 

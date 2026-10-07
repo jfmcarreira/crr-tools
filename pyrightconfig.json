@@ -1,5 +1,9 @@
 {
-  "include": ["apps/shifts/backend/app", "apps/shifts/backend/tests"],
+  "include": ["apps/shifts/backend/app", "apps/shifts/backend/tests", "apps/tournament/backend/app", "apps/tournament/backend/tests"],
+  "executionEnvironments": [
+    {"root": "apps/shifts/backend"},
+    {"root": "apps/tournament/backend"}
+  ],
   "exclude": ["originals", ".migration", "**/node_modules", "**/__pycache__"],
   "venvPath": ".",
   "venv": ".venv",
