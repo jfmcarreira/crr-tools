@@ -11,6 +11,4 @@
   `routers/dependencies.py`; password and token primitives belong in `security/`.
 - Preserve manual/swapped assignments, atomic swaps, and commit-before-email rules.
 - Run `make shifts-test` from the repository root after relevant changes.
-- This includes the preserved Phase 4 schema/ORM/OpenAPI and 96-request workflow
-  comparison. Use `make shifts-compat-test` to run that check separately.
 - Version and release this application independently using `shifts-v...` tags.

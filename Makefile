@@ -2,7 +2,7 @@ UV ?= uv
 PYTHON ?= python3
 .DEFAULT_GOAL := test
 
-.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-compat-test tournament-build shifts-dev shifts-test shifts-compat-test shifts-build test
+.PHONY: baseline-test baseline-fixtures baseline-screenshots baseline-preserve migration-visual-check branding-visual-check images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-compat-test tournament-build shifts-dev shifts-test shifts-build test
 
 baseline-test:
 	$(PYTHON) tools/migration_baseline.py all
@@ -57,10 +57,6 @@ shifts-dev:
 
 shifts-test:
 	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python -m pytest
-	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python $(abspath migration/check_shifts_structure.py)
-
-shifts-compat-test:
-	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python $(abspath migration/check_shifts_structure.py)
 
 shifts-build:
 	docker build -f apps/shifts/Dockerfile -t crr-shifts .

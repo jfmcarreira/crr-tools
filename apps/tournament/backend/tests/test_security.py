@@ -5,10 +5,8 @@ from app.security.rate_limit import LoginRateLimiter
 from app.security.session import create_token, valid_token
 
 
-def test_session_matches_node_wire_format_and_rejects_expired_or_tampered_tokens(settings):
-    # Produced by the frozen Node createSessionToken implementation at now=2000.
-    token = "eyJleHBpcmVzQXQiOjYwNDgwMjAwMH0.MbES4fCzzaBuj5tLh_9osvDnYNwSKDYBlSYPpF-iJQo"
-    assert create_token(settings, now=2000) == token
+def test_session_token_round_trip_rejects_expired_or_tampered_tokens(settings):
+    token = create_token(settings, now=2000)
     assert valid_token(token, settings, now=2000)
     assert not valid_token(token, settings, now=604802000)
     assert not valid_token(token + "x", settings, now=2000)

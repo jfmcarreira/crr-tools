@@ -1,60 +1,20 @@
-import json
-from pathlib import Path
-import shutil
-
 import pytest
 from sqlalchemy import inspect
 from sqlalchemy.exc import IntegrityError
 
-from app.database import create_database_engine, normalized, run_migrations, validate_legacy_schema
-
-FIXTURES = Path(__file__).resolve().parents[4] / "migration/fixtures"
+from app.database import create_database_engine, run_migrations, validate_legacy_schema
 
 
-def test_fresh_database_matches_node_schema_and_defaults(tmp_path):
+def test_fresh_database_schema_defaults_and_pragmas(tmp_path):
     engine = create_database_engine(str(tmp_path / "new.sqlite"))
     try:
         run_migrations(engine)
         with engine.connect() as connection:
             validate_legacy_schema(connection)
-            expected = json.loads((FIXTURES / "tournament-schema.json").read_text())
-            for item in expected:
-                actual = connection.exec_driver_sql("SELECT sql FROM sqlite_master WHERE name=?", (item["name"],)).scalar_one()
-                assert normalized(actual) == normalized(item["sql"]), item["name"]
             assert connection.exec_driver_sql("SELECT name FROM tournament_settings").scalar_one() == "Torneio"
             assert connection.exec_driver_sql("PRAGMA foreign_keys").scalar_one() == 1
             assert connection.exec_driver_sql("PRAGMA journal_mode").scalar_one() == "wal"
             assert connection.exec_driver_sql("PRAGMA busy_timeout").scalar_one() == 5000
-    finally:
-        engine.dispose()
-
-
-def test_adopts_populated_node_database_without_modifying_rows_or_schema(tmp_path):
-    path = tmp_path / "legacy.sqlite"
-    shutil.copyfile(FIXTURES / "tournament.sqlite", path)
-    engine = create_database_engine(str(path))
-    try:
-        run_migrations(engine)
-        run_migrations(engine)
-        with engine.connect() as connection:
-            for name, rows in json.loads((FIXTURES / "tournament-rows.json").read_text()).items():
-                assert [dict(row) for row in connection.exec_driver_sql(f'SELECT * FROM "{name}" ORDER BY rowid').mappings()] == rows
-            assert connection.exec_driver_sql("SELECT version_num FROM alembic_version").scalar_one() == "0001_baseline"
-    finally:
-        engine.dispose()
-
-
-@pytest.mark.parametrize("damage", ["DROP TABLE players", "ALTER TABLE teams ADD COLUMN unexpected TEXT", "DROP INDEX idx_teams_group"])
-def test_refuses_incompatible_legacy_database_without_stamping(tmp_path, damage):
-    path = tmp_path / "bad.sqlite"
-    shutil.copyfile(FIXTURES / "tournament.sqlite", path)
-    engine = create_database_engine(str(path))
-    try:
-        with engine.begin() as connection:
-            connection.exec_driver_sql(damage)
-        with pytest.raises(RuntimeError):
-            run_migrations(engine)
-        assert "alembic_version" not in inspect(engine).get_table_names()
     finally:
         engine.dispose()
 

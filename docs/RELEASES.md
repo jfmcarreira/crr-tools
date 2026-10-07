@@ -46,8 +46,9 @@ registry. Tokens are passed to `docker/login-action`; they are not stored in sou
 Workflows use GitHub-hosted `ubuntu-latest` runners with Docker. They install
 Node 22 where needed and pinned uv, which provisions Python 3.13. Enable Actions
 in the repository and push the workflow changes; CI can also be run manually
-from the Actions tab. Local checks and release planning are verified; execution
-of these changes on GitHub and authenticated image publication remain unverified.
+from the Actions tab. Local checks, release planning and GitHub Actions CI runs
+are verified; no tagged release has been executed yet and image publication is
+deferred until a release is cut.
 
 ## Deploy a selected version
 

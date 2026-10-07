@@ -46,13 +46,9 @@ uv run --directory apps/shifts/backend --package crr-shifts --locked python -m a
 uv run --directory apps/shifts/backend --package crr-shifts --locked python -m app.cli seed-demo
 ```
 
-The requirements files are retained during migration until CI verifies the
-lockfile workflow. Tests use isolated synthetic SQLite data and disabled SMTP.
-`make shifts-test` runs pytest and the Phase 4 compatibility check: ORM/schema
-definitions and relationships, OpenAPI, migration history, existing data at
-startup and 96 requests across `/` and `/crr`. `make shifts-compat-test` runs the
-compatibility check alone. The synthetic fixture is under `migration/fixtures/`
-and the expected contract under `migration/phase4/`.
+Tests use isolated synthetic SQLite data and disabled SMTP. `make shifts-test`
+runs the backend pytest suite; production dependencies come from
+`pyproject.toml`/`uv.lock` via uv.
 
 See `docs/DOMAIN.md` for domain rules and `docs/ARCHITECTURE.md` for the current
 module layout, application lifecycle and deployment commands.

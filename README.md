@@ -51,8 +51,9 @@ live under `.github/workflows/`. CI runs on pushes to `main`, pull requests, and
 manual dispatch, using git-based change detection to select affected apps; shared
 changes test both consumers. Independent app-tag releases publish images to
 GitHub Container Registry (`ghcr.io`) using the workflow's `GITHUB_TOKEN`.
-`make tooling-test` verifies selection/version logic. Remote execution and
-authenticated registry publication remain pending verification for these changes.
+`make tooling-test` verifies selection/version logic. GitHub Actions runs have
+passed on the current configuration; tagged image publication is deferred until
+a release is cut.
 
 ## Baselines
 

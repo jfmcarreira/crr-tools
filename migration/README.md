@@ -281,10 +281,11 @@ to the capture date so CI can reproduce default-month/navigation HTML later.
 `phase4/structure.json` records router ownership and relocated function hashes;
 `phase4/verification.json` records successful checks and fixture/baseline hashes.
 Raw reports and difference diagnostics stay under `.migration/phase4-results/`.
-`make shifts-test` includes this check; `make shifts-compat-test` runs it alone.
-Do not rerun the one-time generator or overwrite the baseline. The original
-snapshots and branding/compatibility baselines remain intact. Remote CI is still
-unverified.
+`make shifts-test` included this check and `make shifts-compat-test` ran it
+alone; both were removed from the executable test targets after CI passed (see
+Final acceptance status). Do not rerun the one-time generator or overwrite the
+baseline. The original snapshots and branding/compatibility baselines remain
+intact. Remote CI was unverified at this phase and was verified in Phase 6.
 
 ## Phase 5 — proven Python infrastructure: locally verified complete
 
@@ -341,7 +342,7 @@ its app/package tests use saved fixtures and owned compatibility contracts, all
 of which remain present and pass. Snapshot retention/restoration must be resolved
 before declaring the full migration acceptance criteria complete.
 
-## Phase 6 — cleanup and independent releases: local delivery verified; exit pending remote CI
+## Phase 6 — cleanup and independent releases: local delivery verified; remote CI verified
 
 - Finalized Tournament's independent `frontend/` layout: source, API types,
   package/lockfile, strict TypeScript config and Vite config live together. The
@@ -391,20 +392,35 @@ Vue works against FastAPI, both share canonical branding, `crr-python` contains
 only infrastructure, app-limited releases select one image, and production code
 does not import snapshots or the retired Node backend.
 
-The full migration is **not yet marked complete**:
+Remote CI is verified: the GitHub Actions runs for `6851053` (phase 6) and
+`029bd65` (GitHub conversion) completed successfully, running the tooling tests,
+affected-app suites, typecheck/build and Docker builds on Node 22/Python 3.13.
 
-1. Remote CI and authenticated registry publication have not run against these
-   uncommitted changes. Local workflow/version/build checks do not substitute for
-   an observed successful remote run.
-2. The plan explicitly gates deleting Shifts' migrated requirements files on CI
-   passing. They are retained until that condition is verified; runtime/CI use uv.
-3. Recovered source content matches the freeze manifest, but original nested Git
+The full migration is **complete**, with these recorded decisions and
+limitations:
+
+1. Following the successful CI runs, the two migrated Shifts requirements files
+   were deleted; `pyproject.toml`/`uv.lock` and uv are the sole dependency
+   source, as the plan required.
+2. Tests that replayed fixtures, frozen tokens or baselines captured from
+   `originals/` were removed from the executable suites: the Tournament
+   fixture-replay/schema-adoption/frozen-token assertions, the Shifts Phase 4
+   structure-and-workflow parity harness previously run by `make shifts-test`,
+   and the legacy-fixture container smoke case. The suites now exercise the
+   current applications only: Tournament backend 65 and frontend 9, Shifts 16,
+   shared Python 7, tooling 11 tests. Historical parity evidence remains under
+   `migration/phase3`–`phase5`, `migration/fixtures` and `migration/phase6`.
+3. Release execution was deferred by decision: no tags were pushed and no
+   images were published. Release planning, version validation and workflow
+   configuration are verified locally and CI is verified remotely; the tagged
+   release run stays out of scope until a release is intended.
+4. Recovered source content matches the freeze manifest, but original nested Git
    histories were absent from the available recovery copies. Their loss remains
    recorded as a historical limitation.
 
-No tags, commits, pushes or registry publication were performed during this work.
-`originals/` retains the recovered read-only source baseline. Once CI passes,
-remove the two migrated Shifts requirements files and verify the release runner.
+`originals/` retains the recovered read-only source baseline; snapshot checksum
+verification (`make baseline-test`) remains available as archival tooling and is
+not part of the application test suites.
 
 ## GitHub Actions conversion
 
@@ -426,15 +442,16 @@ CI triggers/manual dispatch and release tag/permission configuration match the
 intended setup; both current app tags resolve to their GHCR image names; and
 `git diff --check` passes. GitHub API lookup confirms the repository/default branch.
 
-No commits, pushes, workflow dispatches or image publication are performed by
-this change;
-remote execution of the modified workflows remains pending verification.
+The pushed commits were then verified remotely: the GitHub Actions runs for
+`6851053` and `029bd65` both completed successfully across the changes, shifts
+and tournament jobs. No workflow dispatches or image publication were performed;
+authenticated publication remains unexecuted until a release is cut.
 
 ## Next work
 
-1. Verify GitHub Actions CI on Node 22/Python 3.13 after publishing the intended changes.
-2. Remove Shifts' migrated requirements files after that successful CI run.
-3. Verify an independent tagged release with configured registry credentials.
+1. Verify an independent tagged release with configured registry credentials
+   when a release is intended. This is deferred by decision and is not a
+   migration blocker.
 
-Phase 6's local implementation/checks are delivered; the exit conditions above
-remain pending.
+Phase 6's exit conditions are met: remote CI passed and the gated requirements
+cleanup was performed. Release execution is deliberately deferred.
