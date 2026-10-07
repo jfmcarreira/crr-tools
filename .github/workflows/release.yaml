@@ -16,10 +16,9 @@ jobs:
       - id: plan
         env:
           TAG: ${{ github.ref_name }}
-          SERVER: ${{ github.server_url }}
           OWNER: ${{ github.repository_owner }}
           REGISTRY: ${{ vars.CONTAINER_REGISTRY }}
-        run: uv run --no-project --python 3.13 python tools/release.py "$TAG" --server "$SERVER" --owner "$OWNER" --registry "$REGISTRY" --output "$GITHUB_OUTPUT"
+        run: uv run --no-project --python 3.13 python tools/release.py "$TAG" --owner "$OWNER" --registry "$REGISTRY" --output "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         if: steps.plan.outputs.app == 'tournament'
         with:

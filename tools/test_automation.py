@@ -9,12 +9,6 @@ from preserve_baseline import portable_argument
 
 
 class ChangedPaths(unittest.TestCase):
-    def test_gitea_and_github_workflows_stay_identical(self):
-        root = Path(__file__).resolve().parents[1]
-        for name in ("ci.yaml", "release.yaml"):
-            self.assertEqual((root / ".gitea/workflows" / name).read_bytes(),
-                             (root / ".github/workflows" / name).read_bytes())
-
     def test_historical_paths_stay_portable_after_relocation(self):
         self.assertEqual(portable_argument("/old/workspace/.migration/shifts/.venv/bin/python"), ".migration/shifts/.venv/bin/python")
         self.assertEqual(portable_argument("--junitxml=/old/workspace/migration/results/shifts/tests.xml"), "--junitxml=migration/results/shifts/tests.xml")
@@ -24,7 +18,7 @@ class ChangedPaths(unittest.TestCase):
         self.assertEqual(affected(["apps/shifts/backend/app/routers/auth.py"]), {"tournament": False, "shifts": True})
 
     def test_common_changes_select_both(self):
-        for path in ["packages/crr-brand/styles/tokens.css", "packages/crr-python/src/crr_common/database.py", "uv.lock", "Makefile", ".gitea/workflows/ci.yaml"]:
+        for path in ["packages/crr-brand/styles/tokens.css", "packages/crr-python/src/crr_common/database.py", "uv.lock", "Makefile", ".github/workflows/ci.yaml"]:
             self.assertEqual(affected([path]), {"tournament": True, "shifts": True})
 
     def test_originals_and_documentation_do_not_build_apps(self):
@@ -49,11 +43,15 @@ class ReleaseTags(unittest.TestCase):
         (folder / "package.json").write_text(json.dumps({"version": "1.0.0"}))
 
     def test_tag_selects_one_image_and_registry(self):
-        selected = release_plan("shifts-v0.1.0", self.root, server="https://git.example.test", owner="Owner")
-        self.assertEqual(selected["image"], "git.example.test/owner/crr-shifts")
+        selected = release_plan("shifts-v0.1.0", self.root, owner="Owner")
+        self.assertEqual(selected["image"], "ghcr.io/owner/crr-shifts")
         self.assertEqual(selected["dockerfile"], "apps/shifts/Dockerfile")
         self.assertEqual(selected["publish_latest"], "true")
-        self.assertEqual(release_plan("tournament-v1.0.0", self.root, server="https://github.com", owner="Owner")["registry"], "ghcr.io")
+        self.assertEqual(release_plan("tournament-v1.0.0", self.root, owner="Owner")["registry"], "ghcr.io")
+
+    def test_explicit_registry_override(self):
+        selected = release_plan("shifts-v0.1.0", self.root, owner="Owner", registry="registry.example.test:5000")
+        self.assertEqual(selected["image"], "registry.example.test:5000/owner/crr-shifts")
 
     def test_shifts_release_does_not_read_tournament_metadata(self):
         (self.root / "apps/tournament/frontend/package.json").unlink()

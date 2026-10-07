@@ -359,9 +359,9 @@ before declaring the full migration acceptance criteria complete.
   refused any existing destination. `phase6/snapshot-recovery.json` records this.
   Nested Git repositories/history were not available and have not been fabricated.
   Source checksum verification is operational again.
-- Added host-independent, git-based affected-app selection and independent tag
-  planning/version checks. The actual remote is Gitea, so `.gitea/workflows/`
-  contains CI/releases; identical `.github/workflows/` mirrors support GitHub.
+- Added git-based affected-app selection and independent tag planning/version
+  checks, initially delivered for Gitea with GitHub mirrors. The subsequent
+  GitHub conversion below supersedes that hosting setup.
   App-specific tags select/test/build/publish only that app's image. Stable tags
   also publish its `latest`; prerelease tags do not. Registry/runner details are
   documented in `docs/RELEASES.md`.
@@ -406,9 +406,33 @@ No tags, commits, pushes or registry publication were performed during this work
 `originals/` retains the recovered read-only source baseline. Once CI passes,
 remove the two migrated Shifts requirements files and verify the release runner.
 
+## GitHub Actions conversion
+
+The primary remote is now `https://github.com/jfmcarreira/crr-tools.git`, with
+default branch `main` confirmed through the GitHub API. `.github/workflows/`
+is the active CI/release configuration; obsolete Gitea workflow mirrors were
+removed. CI supports main pushes, pull requests and manual dispatch, retains
+affected-app selection, and runs the automation-tooling checks before selection.
+
+Independent release tags retain app-specific version validation and select one
+image. The default registry is now always GHCR; release jobs authenticate with
+the built-in `GITHUB_TOKEN` and `packages: write`. Current images are
+`ghcr.io/jfmcarreira/crr-tournament` and `ghcr.io/jfmcarreira/crr-shifts`.
+Explicit registry overrides remain supported. GitHub runners supply Docker;
+the workflows provision Node 22 and Python 3.13 with pinned uv.
+
+Verified locally: all 11 automation tests pass; both workflow YAML files parse,
+CI triggers/manual dispatch and release tag/permission configuration match the
+intended setup; both current app tags resolve to their GHCR image names; and
+`git diff --check` passes. GitHub API lookup confirms the repository/default branch.
+
+No commits, pushes, workflow dispatches or image publication are performed by
+this change;
+remote execution of the modified workflows remains pending verification.
+
 ## Next work
 
-1. Verify Gitea CI on Node 22/Python 3.13 after publishing the intended changes.
+1. Verify GitHub Actions CI on Node 22/Python 3.13 after publishing the intended changes.
 2. Remove Shifts' migrated requirements files after that successful CI run.
 3. Verify an independent tagged release with configured registry credentials.
 

@@ -46,11 +46,13 @@ validate each app's version and publish only its image. See
 
 ## CI and releases
 
-The configured remote uses Gitea. `.gitea/workflows/` contains path-aware CI and
-independent tag-release workflows; `.github/workflows/` mirrors them for GitHub.
-They use compatible contexts and git-based change detection, with shared changes
-testing both consumers. `make tooling-test` verifies selection/version logic.
-Remote runner execution and registry publication are pending verification.
+GitHub Actions for [jfmcarreira/crr-tools](https://github.com/jfmcarreira/crr-tools)
+live under `.github/workflows/`. CI runs on pushes to `main`, pull requests, and
+manual dispatch, using git-based change detection to select affected apps; shared
+changes test both consumers. Independent app-tag releases publish images to
+GitHub Container Registry (`ghcr.io`) using the workflow's `GITHUB_TOKEN`.
+`make tooling-test` verifies selection/version logic. Remote execution and
+authenticated registry publication remain pending verification for these changes.
 
 ## Baselines
 

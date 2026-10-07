@@ -1,4 +1,4 @@
-"""Host-independent affected-app selection for GitHub and Gitea Actions."""
+"""Git-based affected-app selection for GitHub Actions."""
 
 import argparse
 from pathlib import Path
@@ -11,7 +11,7 @@ ROOT_FILES = {"pyproject.toml", "uv.lock", ".python-version", "Makefile", ".dock
 def affected(paths: list[str]) -> dict[str, bool]:
     result = {"tournament": False, "shifts": False}
     for path in paths:
-        if path in ROOT_FILES or path.startswith((".github/workflows/", ".gitea/workflows/", "packages/", "tools/ci_changes.py", "tools/release.py", "tools/test_automation.py")):
+        if path in ROOT_FILES or path.startswith((".github/workflows/", "packages/", "tools/ci_changes.py", "tools/release.py", "tools/test_automation.py")):
             result = {key: True for key in result}
         elif path.startswith("apps/tournament/") or path.startswith("migration/fixtures/tournament"):
             result["tournament"] = True

@@ -27,25 +27,27 @@ root-context Dockerfile, and publishes only `crr-tournament` or `crr-shifts`.
 
 ## Hosting and registry
 
-The current remote is Gitea; use `.gitea/workflows/ci.yaml` and `release.yaml`.
-Identical GitHub mirrors are under `.github/workflows/`. Gitea supports the
-`github` context aliases used by these portable workflows.
+The primary repository is [jfmcarreira/crr-tools](https://github.com/jfmcarreira/crr-tools).
+GitHub Actions CI and independent releases are defined in
+`.github/workflows/ci.yaml` and `.github/workflows/release.yaml`.
 
-The default registry is the Gitea server hostname. For GitHub it is `ghcr.io`.
-Images are named `<registry>/<repository-owner>/crr-<app>:<version>`, with a
-lowercase owner. Set the repository variable `CONTAINER_REGISTRY` to override
-the registry hostname (optionally including a port).
+The default registry is GitHub Container Registry (`ghcr.io`). Images are named
+`ghcr.io/jfmcarreira/crr-tournament:<version>` and
+`ghcr.io/jfmcarreira/crr-shifts:<version>`. Owners are normalized to lowercase.
+Set the repository variable `CONTAINER_REGISTRY` to override the registry
+hostname (optionally including a port).
 
-Authentication uses `REGISTRY_USERNAME`/`REGISTRY_TOKEN` secrets when configured,
-otherwise the actor/job token. Gitea deployments whose job token cannot publish
-packages should configure a package-write token and matching registry username.
-Tokens are passed to `docker/login-action`; they are not stored in source.
+GHCR authentication uses the GitHub actor and built-in `GITHUB_TOKEN`, with
+`packages: write` permission granted to the release workflow. No extra registry
+secret is required for the default configuration. Optional
+`REGISTRY_USERNAME`/`REGISTRY_TOKEN` secrets supply credentials for an override
+registry. Tokens are passed to `docker/login-action`; they are not stored in source.
 
-Enable repository Actions and provide an `ubuntu-latest` runner with Docker
-build/push capability and access to the registry/action download hosts. The
-workflows install Node 22 where needed and pinned uv, which provisions Python
-3.13. Local builds/tests and release planning are verified; remote execution and
-authenticated image publication have not been performed.
+Workflows use GitHub-hosted `ubuntu-latest` runners with Docker. They install
+Node 22 where needed and pinned uv, which provisions Python 3.13. Enable Actions
+in the repository and push the workflow changes; CI can also be run manually
+from the Actions tab. Local checks and release planning are verified; execution
+of these changes on GitHub and authenticated image publication remain unverified.
 
 ## Deploy a selected version
 
