@@ -118,19 +118,11 @@ label { display: grid; gap: .38rem; color: #35383c; font-size: .86rem; font-weig
 
 .admin-layout { min-height: 100vh; }
 
-.admin-header { width: 100%; min-height: 4.6rem; display: flex; align-items: center; gap: 1.7rem; border-bottom: 1px solid var(--color-line); background: rgb(255 255 255 / 94%); padding: .65rem clamp(1rem, 4vw, 4rem); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(14px); }
+.admin-header { margin-bottom: 0; }
 
-.admin-brand { display: inline-flex; flex: 0 0 auto; text-decoration: none; }
+.admin-nav a.router-link-active { color: var(--crr-primary-dark); }
 
-.admin-nav { display: flex; min-width: 0; align-self: stretch; align-items: stretch; gap: .2rem; }
-
-.admin-nav a { display: inline-flex; align-items: center; border-bottom: 3px solid transparent; color: #686d74; font-size: .9rem; font-weight: 730; padding: .1rem .72rem; text-decoration: none; white-space: nowrap; }
-
-.admin-nav a.router-link-active { border-bottom-color: var(--color-primary); color: var(--color-ink); }
-
-.logout-button { margin-left: auto; border: 0; background: transparent; color: #565c63; font-size: .84rem; font-weight: 720; padding: .5rem 0; white-space: nowrap; }
-
-.logout-button:hover { color: var(--color-primary); }
+.logout-button:disabled { opacity: .62; }
 
 .admin-main { width: min(100% - 2rem, 76rem); margin: 0 auto; padding: clamp(1.7rem, 4vw, 3.8rem) 0 4rem; }
 
@@ -615,12 +607,6 @@ label { display: grid; gap: .38rem; color: #35383c; font-size: .86rem; font-weig
 }
 
 @media (max-width: 760px) {
-  .admin-header { gap: .7rem; padding: .6rem 1rem; }
-  .admin-brand .app-logo__text { display: none; }
-  .admin-nav { flex: 1; overflow-x: auto; }
-  .admin-nav a { padding: .1rem .45rem; }
-  .logout-button { font-size: 0; }
-  .logout-button::after { content: "Sair"; font-size: .84rem; }
   .inline-form { align-items: stretch; flex-direction: column; }
   .inline-form > label { min-width: 0; }
   .inline-form__grow { flex-basis: auto; }

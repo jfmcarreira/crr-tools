@@ -12,13 +12,13 @@
   <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a class="brand" href="{{ app_path('/') }}" aria-label="{{ settings.app_name }} — início">
-        <img class="brand-logo" src="{{ url_for('brand', path='assets/logo.png') }}" alt="CRR">
-        <span class="brand-name">{{ settings.app_name }}</span>
+  <header class="crr-topbar topbar">
+    <div class="crr-topbar__inner topbar-inner">
+      <a class="crr-topbar__brand brand" href="{{ app_path('/') }}" aria-label="{{ settings.app_name }} — início">
+        <img class="crr-topbar__logo brand-logo" src="{{ url_for('brand', path='assets/logo.png') }}" alt="CRR">
+        <span class="crr-topbar__name brand-name">{{ settings.app_name }}</span>
       </a>
-      <nav class="nav" aria-label="Navegação principal">
+      <nav class="crr-topbar__nav nav" aria-label="Navegação principal">
         {% if current_user %}
           <a href="{{ app_path('/swaps') }}">Trocas</a>
           {% if not current_user.is_admin %}<a href="{{ app_path('/export/schedule') }}">Exportar PDF</a>{% endif %}
@@ -31,18 +31,18 @@
         {% endif %}
       </nav>
       {% if current_user %}
-      <div class="account">
+      <div class="crr-topbar__account account">
         <a class="account-link" href="{{ app_path('/account') }}" title="A minha conta">
           <span class="name-text">{{ current_user.name or current_user.username }}</span>
           <span class="muted">@{{ current_user.username }}</span>
         </a>
         <form method="post" action="{{ app_path('/logout') }}">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-          <button class="link-button" type="submit">Sair</button>
+          <button class="crr-topbar__action link-button" type="submit">Sair</button>
         </form>
       </div>
       {% else %}
-      <div class="account"><a href="{{ app_path('/login') }}">Entrar</a></div>
+      <div class="crr-topbar__account account"><a class="crr-topbar__action" href="{{ app_path('/login') }}">Entrar</a></div>
       {% endif %}
     </div>
   </header>
