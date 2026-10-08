@@ -17,5 +17,8 @@
     </label>
     <button class="primary" type="submit">Entrar</button>
   </form>
+  {% if settings.registration_enabled %}
+  <p class="muted">Não tem conta? <a href="{{ app_path('/register') }}">Criar conta</a></p>
+  {% endif %}
 </section>
 {% endblock %}

@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     app_name: str = "Contínuos CRR"
+    registration_enabled: bool = False
     # HMAC key of the signed session cookie: required, and long enough that a
     # captured cookie cannot be forged. There is deliberately no development
     # default — a known key would let anyone mint an admin session.

@@ -53,6 +53,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title=settings.app_name, lifespan=lifespan, root_path=settings.root_path)
 # In-process counter of failed logins; see security/rate_limit.py for the limits.
 app.state.limiter = LoginRateLimiter()
+app.state.registration_limiter = LoginRateLimiter(maximum_failures=5, window_seconds=300)
 # Behind a reverse proxy, uvicorn runs with --proxy-headers so X-Forwarded-Proto/Host
 # set the public scheme and host; ROOT_PATH adds the prefix the proxy serves us under.
 app.add_middleware(

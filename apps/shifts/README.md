@@ -1,5 +1,14 @@
 # Contínuos CRR — Shifts
 
+Public registration is disabled by default. Set `REGISTRATION_ENABLED=true` to
+show the sign-up link. Users must enter an existing active, unassigned team's
+name (case-insensitive); registration claims that team and signs them in.
+Assigned teams cannot be claimed again. All registration attempts count toward
+a limit of five per client IP per five minutes, including successful attempts.
+The limiter is process-local; use one worker or enforce a shared limit at the
+reverse proxy, and configure trusted proxy addresses correctly. A team name is
+not a secret: enable this only when name-based claiming is appropriate.
+
 The server-rendered FastAPI application lives in `backend/`. Its models,
 services, security primitives and domain routers are organized separately, with
 the established Jinja/form contracts and `0001_initial` Alembic history. Python

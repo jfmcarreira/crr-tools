@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Registar · {{ settings.app_name }}{% endblock %}
+{% block content %}
+<section class="auth-card">
+  <div class="auth-brand" aria-hidden="true">
+    <img src="{{ url_for('brand', path='assets/logo.png') }}" alt="">
+  </div>
+  <h1>Criar conta</h1>
+  {% if step == 'team' %}
+  <p class="muted">Indique o nome da sua equipa, previamente criada pela administração.</p>
+  <form method="post" action="{{ app_path('/register') }}" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="step" value="team">
+    <label>Equipa<input name="team_name" maxlength="120" required autofocus value="{{ team_name or '' }}"></label>
+    <button class="primary" type="submit">Continuar</button>
+  </form>
+  {% elif step == 'user' %}
+  <p class="muted">Equipa: {{ team_name }}</p>
+  <form method="post" action="{{ app_path('/register') }}" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="step" value="user">
+    <input type="hidden" name="team_name" value="{{ team_name }}">
+    <label>Utilizador<input name="username" maxlength="80" pattern="[A-Za-z0-9._-]+" autocomplete="username" required autofocus></label>
+    <label>Palavra-passe<input type="password" name="password" minlength="4" autocomplete="new-password" required></label>
+    <button class="primary" type="submit">Registar</button>
+  </form>
+  {% endif %}
+  <p class="muted">Já tem conta? <a href="{{ app_path('/login') }}">Inicie sessão</a></p>
+</section>
+{% endblock %}

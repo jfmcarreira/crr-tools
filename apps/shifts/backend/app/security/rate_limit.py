@@ -41,3 +41,12 @@ class LoginRateLimiter:
     def clear(self, key: str) -> None:
         with self.lock:
             self.attempts.pop(key, None)
+
+    def consume(self, key: str) -> bool:
+        """Atomically count an attempt, returning False when the bucket is full."""
+        with self.lock:
+            now = self._now()
+            if self.limited(key, now):
+                return False
+            self.failure(key, now)
+            return True
