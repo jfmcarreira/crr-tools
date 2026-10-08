@@ -21,7 +21,6 @@
       <nav class="crr-topbar__nav nav" aria-label="Navegação principal">
         {% if current_user %}
           <a href="{{ app_path('/swaps') }}">Trocas</a>
-          {% if not current_user.is_admin %}<a href="{{ app_path('/export/schedule') }}">Exportar PDF</a>{% endif %}
         {% if current_user.is_admin %}
           <a href="{{ app_path('/admin/schedules') }}">Gerir escalas</a>
           <a href="{{ app_path('/admin/teams') }}">Equipas</a>

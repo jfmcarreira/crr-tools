@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import Assignment
 from ..services.pdf import build_schedule_pdf
-from ..services.scheduling import ensure_month_assignments, month_bounds
-from .dependencies import _context, _redirect, _require_user
+from ..services.scheduling import ensure_month_assignments
+from .dependencies import _redirect, _require_admin
 from .schedule_helpers import _active_schedules, _get_schedule, _render_admin_schedules
 
 router = APIRouter()
@@ -20,7 +20,7 @@ def export_schedule(
     db: Session = Depends(get_db),
 ):
     """Choose a schedule and exact dates before downloading its PDF."""
-    user = _require_user(request, db)
+    _require_admin(request, db)
     schedules = _active_schedules(db)
     if not schedules:
         raise HTTPException(status_code=404, detail="Não há escalas ativas")
@@ -31,23 +31,7 @@ def export_schedule(
         if not schedule.is_active:
             raise HTTPException(status_code=404, detail="Escala não encontrada")
 
-    if user.is_admin:
-        return _redirect(f"/admin/schedules?schedule_id={schedule.id}#export-pdf")
-
-    today = date.today()
-    start, end = month_bounds(today.year, today.month)
-    return request.app.state.templates.TemplateResponse(
-        request=request,
-        name="export_schedule.html",
-        context=_context(
-            request,
-            db,
-            schedules=schedules,
-            selected_schedule_id=schedule.id,
-            start=start.isoformat(),
-            end=end.isoformat(),
-        ),
-    )
+    return _redirect(f"/admin/schedules?schedule_id={schedule.id}#export-pdf")
 
 
 @router.get("/export/schedule.pdf")
@@ -58,7 +42,7 @@ def download_schedule_pdf(
     end_date: date,
     db: Session = Depends(get_db),
 ):
-    user = _require_user(request, db)
+    _require_admin(request, db)
     schedule = _get_schedule(db, schedule_id)
     if not schedule.is_active:
         raise HTTPException(status_code=404, detail="Escala não encontrada")
@@ -70,23 +54,8 @@ def download_schedule_pdf(
     elif (end_date.year - start_date.year) * 12 + end_date.month - start_date.month >= 12:
         error = "Escolhe um intervalo de no máximo 12 meses."
     if error:
-        if user.is_admin:
-            return _render_admin_schedules(
-                request, db, schedule.id, start_date, end_date, error, status_code=400,
-            )
-        return request.app.state.templates.TemplateResponse(
-            request=request,
-            name="export_schedule.html",
-            status_code=400,
-            context=_context(
-                request,
-                db,
-                schedules=_active_schedules(db),
-                selected_schedule_id=schedule.id,
-                start=start_date.isoformat(),
-                end=end_date.isoformat(),
-                error=error,
-            ),
+        return _render_admin_schedules(
+            request, db, schedule.id, start_date, end_date, error, status_code=400,
         )
 
     # Generate chronologically, keeping existing manual and swapped assignments.

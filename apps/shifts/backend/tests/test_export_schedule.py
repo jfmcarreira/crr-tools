@@ -36,15 +36,17 @@ def test_old_admin_export_link_redirects_to_integrated_controls(logged_in, sched
     assert response.headers["location"] == f"/admin/schedules?schedule_id={schedule.id}#export-pdf"
 
 
-def test_member_export_does_not_grant_administration_access(logged_in, db, admin, schedule):
+def test_member_cannot_export_pdf(logged_in, db, admin, schedule):
     admin.is_admin = False
     db.commit()
     assert logged_in.get("/admin/schedules").status_code == 403
     response = logged_in.get("/export/schedule", params={"schedule_id": schedule.id})
+    assert response.status_code == 403
+    assert download(logged_in, schedule).status_code == 403
+    response = logged_in.get("/")
     assert response.status_code == 200
-    assert 'type="date" name="start_date"' in response.text
-    assert f'value="{schedule.id}" selected' in response.text
-    assert download(logged_in, schedule).headers["content-type"] == "application/pdf"
+    assert "Exportar PDF" not in response.text
+    assert 'href="/export/schedule"' not in response.text
 
 
 def test_both_export_routes_require_login(client, schedule):
