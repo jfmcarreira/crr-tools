@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
+// PWA plugin removed for CI parity
 
 const brandRoot = fileURLToPath(new URL('../../../packages/crr-brand', import.meta.url));
 
