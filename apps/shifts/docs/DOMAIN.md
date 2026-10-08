@@ -72,9 +72,9 @@ Every assignment on a lunch schedule page has a **Regenerate** button. An admini
 
 - A **team** (`teams`) is who works a shift: one person, or the people who cover it together. Every rota row, rotation position, pattern day and change request names a team.
 - A **user** (`users`) is a login: a username, a password, a label, the administrator flag, the e-mail every notification is sent to and the per-user opt-in for them. A team points at one user through `teams.user_id`, and a team without one is rota-only: nobody signs in for it.
-- `phone` belongs to the team; `email` and the e-mail opt-in belong to the user. A rota-only team has nobody to write to.
+- `email` and the e-mail opt-in belong to the user; the team itself carries no contacts. A rota-only team has nobody to write to.
 - The two are created on separate pages, and neither page creates the other:
-  - `/admin/teams` adds and edits teams (name, phone, active) and only *selects* which user signs in for each one. There are no usernames, passwords or e-mails on this page.
+  - `/admin/teams` adds and edits teams (name, active) and only *selects* which user signs in for each one. There are no usernames, passwords or e-mails on this page.
   - `/admin/users` creates and edits users (name, username, password, e-mail, notifications opt-in, administrator, active) and assigns each of them to the teams it signs in for. There are no team names or contacts on this page.
 - One user can be assigned to several teams, which is how a team shares a single login, and the same username can never belong to two users. Ticking a team on `/admin/users` assigns it to that user and takes it away from whoever had it; the teams page is where a team is simply pointed at one user.
 - Administration is a property of the **user**, so a team covered by an administrator user is administrated by whoever signs in with it.

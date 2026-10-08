@@ -11,15 +11,14 @@ if TYPE_CHECKING:
 
 class Team(Base):
     """Who works a shift: one person, or the people who cover it together. Every rota
-    row, rotation position, pattern day and change request names a team. Contacts and
-    notifications belong to the user who signs in for it, not to the team itself."""
+    row, rotation position, pattern day and change request names a team. Notifications
+    and the address they go to belong to the user who signs in for it, not to the team."""
 
     __tablename__ = "teams"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
-    phone: Mapped[str | None] = mapped_column(String(40), nullable=True)
     calendar_token: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)

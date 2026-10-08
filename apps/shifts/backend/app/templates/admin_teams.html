@@ -16,7 +16,6 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="form-col">
       <label>Nome<input name="name" required></label>
-      <label>Telefone<input name="phone"></label>
       <p class="muted">O e-mail e as notificações por e-mail ficam no utilizador que entra, em <a href="{{ app_path('/admin/users') }}">Utilizadores</a>.</p>
     </div>
     <fieldset class="form-col">
@@ -38,7 +37,6 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="form-col">
       <label>Nome<input name="name" value="{{ team.name }}" required></label>
-      <label>Telefone<input name="phone" value="{{ team.phone or '' }}"></label>
     </div>
     <fieldset class="form-col">
       <legend>Utilizador</legend>

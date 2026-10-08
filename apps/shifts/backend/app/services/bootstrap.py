@@ -30,7 +30,6 @@ def ensure_initial_data(db: Session) -> None:
         db.add(
             Team(
                 name=settings.initial_admin_name,
-                phone=None,
                 user=User(
                     name=settings.initial_admin_name,
                     username=settings.initial_admin_username,

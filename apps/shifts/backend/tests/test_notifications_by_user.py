@@ -37,7 +37,7 @@ def _user(db: Session, username: str, email: str | None = None) -> User:
 
 
 def _team(db: Session, name: str, user: User | None = None) -> Team:
-    team = Team(name=name, user=user, phone=None, is_active=True)
+    team = Team(name=name, user=user, is_active=True)
     db.add(team)
     db.commit()
     return team
@@ -124,17 +124,15 @@ def test_admin_user_form_stores_and_refuses_email(db: Session, logged_in: TestCl
     assert db.scalar(select(User).where(User.username == "carla2")) is None
 
 
-def test_admin_team_form_ignores_email_and_keeps_phone(
-    db: Session, logged_in: TestClient
-) -> None:
-    """The team form no longer carries e-mail settings; a stray field is harmless."""
+def test_admin_team_form_ignores_contact_fields(db: Session, logged_in: TestClient) -> None:
+    """The team form carries no contacts: stray e-mail and phone fields are harmless."""
     page = logged_in.get("/admin/teams")
     token = page.text.split('name="csrf_token" value="')[1].split('"')[0]
 
     response = logged_in.post(
         "/admin/teams",
         data={
-            "name": "Equipa Sem Correio",
+            "name": "Equipa Sem Contactos",
             "phone": "912345678",
             "email": "orphan@example.com",
             "notify_email": "on",
@@ -143,10 +141,10 @@ def test_admin_team_form_ignores_email_and_keeps_phone(
         follow_redirects=False,
     )
     assert response.status_code == 303
-    team = db.scalar(select(Team).where(Team.name == "Equipa Sem Correio"))
+    team = db.scalar(select(Team).where(Team.name == "Equipa Sem Contactos"))
     assert team is not None
-    assert team.phone == "912345678"
     assert not hasattr(team, "email") and not hasattr(team, "notify_email")
+    assert not hasattr(team, "phone")
 
 
 def test_account_page_is_the_self_service_for_the_address(
@@ -215,6 +213,7 @@ def test_0002_moves_addresses_from_teams_to_users(monkeypatch) -> None:
         assert {"email", "notify_email"} <= columns
         teams_columns = {row[1] for row in conn.execute("PRAGMA table_info(teams)")}
         assert "email" not in teams_columns and "notify_email" not in teams_columns
+        assert "phone" not in teams_columns
 
         rows = conn.execute("SELECT username, email, notify_email FROM users ORDER BY id").fetchall()
         assert rows == [
@@ -230,6 +229,7 @@ def test_0002_moves_addresses_from_teams_to_users(monkeypatch) -> None:
         command.downgrade(cfg, "0001_initial")
         teams_columns = {row[1] for row in conn.execute("PRAGMA table_info(teams)")}
         assert "email" in teams_columns and "notify_email" in teams_columns
+        assert "phone" in teams_columns
         users_columns = {row[1] for row in conn.execute("PRAGMA table_info(users)")}
         assert "email" not in users_columns and "notify_email" not in users_columns
         restored = conn.execute(

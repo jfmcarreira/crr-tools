@@ -77,7 +77,6 @@ def seed_demo() -> None:
                 Team(
                     name=name,
                     user=user,
-                    phone=None,
                     is_active=True,
                 )
             )

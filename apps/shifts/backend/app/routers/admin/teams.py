@@ -42,7 +42,6 @@ def _users_by_id(db: Session) -> dict[int, User]:
 def admin_create_team(
     request: Request,
     name: str = Form(...),
-    phone: str = Form(""),
     assigned_user_id: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
@@ -54,7 +53,6 @@ def admin_create_team(
         Team(
             name=name.strip(),
             user=_chosen_user(db, assigned_user_id),
-            phone=phone.strip() or None,
             is_active=True,
         )
     )
@@ -79,7 +77,6 @@ def admin_update_team(
     team_id: int,
     request: Request,
     name: str = Form(...),
-    phone: str = Form(""),
     assigned_user_id: str = Form(""),
     is_active: str = Form(""),
     csrf_token: str = Form(...),
@@ -100,7 +97,6 @@ def admin_update_team(
 
     team.name = name.strip()
     team.user = chosen
-    team.phone = phone.strip() or None
     team.is_active = stays_active
     db.commit()
     _flash(request, "Equipa atualizada.")
