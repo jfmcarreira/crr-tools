@@ -7,11 +7,21 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from starlette.datastructures import FormData
 from ..config import settings
+from ..i18n import day_numeric_long
 from ..models import Team, User
 from ..security import new_csrf_token
+from ..services.scheduling import scheduling_horizon
 
 def _redirect(path: str, status_code: int = 303) -> RedirectResponse:
     return RedirectResponse(settings.url(path), status_code=status_code)
+
+
+def _beyond_horizon_message() -> str:
+    """Refusal shared by every write path: the date sits after the scheduling window."""
+    return (
+        f"Só é possível agendar turnos nos próximos "
+        f"{settings.scheduling_horizon_months} meses (até {day_numeric_long(scheduling_horizon())})."
+    )
 
 
 def _current_user(request: Request, db: Session) -> User | None:

@@ -10,9 +10,9 @@ from ..database import get_db
 from ..models import Assignment, SwapRequest, Team
 from ..i18n import day_numeric_long, day_short, month_name
 from ..services.notifications import send_email_notification, send_many
-from ..services.scheduling import ensure_month_assignments
+from ..services.scheduling import ensure_month_assignments, in_scheduling_window, scheduling_horizon
 from .admin.user_helpers import _admin_teams
-from .dependencies import _check_csrf, _context, _flash, _month_nav, _parse_month, _redirect, _require_admin, _require_user, _safe_back, _user_label, _user_team_ids
+from .dependencies import _beyond_horizon_message, _check_csrf, _context, _flash, _month_nav, _parse_month, _redirect, _require_admin, _require_user, _safe_back, _user_label, _user_team_ids
 from .schedule_helpers import _active_schedules, _schedule_teams_map
 from .swap_helpers import _accepting_team, _active_request, _complete_swap, _reject_swap, _rejectable, _swap_ownership_holds, _swap_partner, _swap_side
 
@@ -78,6 +78,7 @@ def new_swap_page(
     # One team can work several days, so the shift to offer is chosen here,
     # and each schedule only offers the teams who work that same schedule.
     names = {t.id: t.name for t in db.scalars(select(Team)).all()}
+    horizon = scheduling_horizon()
     groups: list[dict] = []
     for schedule in _active_schedules(db):
         mine = [
@@ -86,6 +87,7 @@ def new_swap_page(
             and a.team_id
             and (a.team_id in my_ids or user.is_admin)
             and a.date >= date.today()
+            and a.date <= horizon
             and a.id not in taken
         ]
         theirs = [
@@ -94,6 +96,7 @@ def new_swap_page(
             and a.team_id
             and a.team_id not in my_ids
             and a.date >= date.today()
+            and a.date <= horizon
             and a.id not in taken
         ]
         if not mine or not theirs:
@@ -115,6 +118,11 @@ def new_swap_page(
             }
         )
     prev, nxt = _month_nav(year, month)
+    today = date.today()
+    if (prev[0], prev[1]) < (today.year, today.month):
+        prev = (today.year, today.month)
+    if (nxt[0], nxt[1]) > (horizon.year, horizon.month):
+        nxt = (horizon.year, horizon.month)
     return request.app.state.templates.TemplateResponse(
         request=request,
         name="swap_new.html",
@@ -177,6 +185,8 @@ def _create_swap(
     owner = db.get(Team, owner_id)
     if assignment.date < date.today():
         raise HTTPException(status_code=400, detail="Turnos passados não podem ser alterados")
+    if assignment.date > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     if _active_request(db, assignment.id):
         _flash(request, "Já existe um pedido de troca ativo para este turno.", "error")
         return _redirect("/swaps")
@@ -432,6 +442,16 @@ def revert_swap(
         )
 
     incoming = swap.target_assignment
+    for side in (swap.assignment, incoming):
+        if side is not None and not in_scheduling_window(side.date):
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "Turnos passados não podem ser alterados"
+                    if side.date < date.today()
+                    else _beyond_horizon_message()
+                ),
+            )
     note = f"Revertida a troca #{swap.id} por {_user_label(admin)}"
     swap.assignment.team_id = swap.requester_id
     swap.assignment.source = "manual"

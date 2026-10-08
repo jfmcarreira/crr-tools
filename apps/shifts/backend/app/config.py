@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     smtp_from: str = "bar-rota@example.com"
     smtp_starttls: bool = True
     reminder_days_ahead: int = 1
+    # How far ahead the rota may be scheduled, in whole months from the current one:
+    # booking windows span today up to the end of the 6th month ahead (included).
+    scheduling_horizon_months: int = 6
     # Secure by default; set false only for plain-HTTP development.
     session_https_only: bool = True
 

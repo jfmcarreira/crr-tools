@@ -11,9 +11,9 @@ from ...database import get_db
 from ...models import Assignment, SwapRequest, Team
 from ...i18n import day_numeric_long, day_short, month_name
 from ...services.notifications import send_many
-from ...services.scheduling import ensure_month_assignments, month_bounds
+from ...services.scheduling import ensure_month_assignments, month_bounds, scheduling_horizon
 from ..assignment_helpers import _apply_pattern_forward, _apply_rotation_to_rows, _clear_assignments_from, _default_team, _generate_rotation_range, _month_assignments, _notify_assignment_changes, _save_assignments, _set_assignee
-from ..dependencies import _check_csrf, _context, _flash, _parse_month, _raw_form, _redirect, _require_admin, _user_label
+from ..dependencies import _beyond_horizon_message, _check_csrf, _context, _flash, _parse_month, _raw_form, _redirect, _require_admin, _user_label
 from ..schedule_helpers import _active_schedules, _get_schedule
 from ..swap_helpers import _complete_swap, _swap_ownership_holds, _swap_partner
 
@@ -35,6 +35,8 @@ def admin_apply_pattern(
         raise HTTPException(status_code=400, detail="Esta escala não usa um padrão mensal")
     year, month = _parse_month(year, month)
     first = date(year, month, 1)
+    if first > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     touched = _apply_pattern_forward(db, schedule, first)
     _flash(
         request,
@@ -60,6 +62,8 @@ def admin_clear_from(
         raise HTTPException(status_code=400, detail="Esta escala não usa rotação")
     year, month = _parse_month(year, month)
     first = date(year, month, 1)
+    if first > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     cleared = _clear_assignments_from(db, schedule, first)
     _flash(
         request,
@@ -151,6 +155,11 @@ def admin_schedule_assignments(
     schedule = _get_schedule(db, schedule_id)
     year = int(str(form.get("year", date.today().year)))
     month = int(str(form.get("month", date.today().month)))
+    first, last = month_bounds(year, month)
+    if last < date.today():
+        raise HTTPException(status_code=400, detail="Turnos passados não podem ser alterados")
+    if first > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     assignments = [row for row in _month_assignments(db, year, month) if row.schedule_id == schedule.id]
     changed = _save_assignments(db, assignments, form)
     _flash(request, f"Foram guardadas {changed} alteração(ões) de turno.")
@@ -172,6 +181,11 @@ def admin_apply_rotation(
     if schedule.schedule_type != "rotation":
         raise HTTPException(status_code=400, detail="Esta escala não usa rotação")
     year, month = _parse_month(year, month)
+    first, last = month_bounds(year, month)
+    if last < date.today():
+        raise HTTPException(status_code=400, detail="Turnos passados não podem ser alterados")
+    if first > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     created, changed = _generate_rotation_range(db, schedule, *month_bounds(year, month))
     _flash(request, f"Rotação aplicada em {month_name(month)} de {year}: "
            f"{created} turno(s) criado(s), {changed} turno(s) atualizado(s). "
@@ -196,6 +210,10 @@ def admin_assignment_regenerate(
     assignment = db.get(Assignment, assignment_id)
     if assignment is None or assignment.schedule_id != schedule.id:
         raise HTTPException(status_code=404, detail="Turno não encontrado")
+    if assignment.date < date.today():
+        raise HTTPException(status_code=400, detail="Turnos passados não podem ser alterados")
+    if assignment.date > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     if assignment.date.weekday() not in schedule.weekday_set:
         raise HTTPException(status_code=400, detail="Esta data não corresponde à escala")
     _apply_rotation_to_rows(db, schedule, [assignment])
@@ -215,6 +233,7 @@ def admin_assign_day(
     """
     _require_admin(request, db)
     today = date.today()
+    horizon = scheduling_horizon()
     chosen = today
     if on:
         try:
@@ -235,8 +254,8 @@ def admin_assign_day(
         for schedule in _active_schedules(db)
         if schedule.id in rows
     ]
-    prev_day = chosen - timedelta(days=1)
-    next_day = chosen + timedelta(days=1)
+    prev_day = chosen - timedelta(days=1) if chosen > today else chosen
+    next_day = chosen + timedelta(days=1) if chosen < horizon else chosen
     return request.app.state.templates.TemplateResponse(
         request=request,
         name="admin_assign.html",
@@ -251,6 +270,8 @@ def admin_assign_day(
             prev_day=prev_day,
             next_day=next_day,
             today=today,
+            horizon=horizon,
+            editable=today <= chosen <= horizon,
         ),
     )
 
@@ -272,6 +293,10 @@ def admin_assign_team(
     )
     if not assignment:
         raise HTTPException(status_code=404, detail="Turno não encontrado")
+    if assignment.date < date.today():
+        raise HTTPException(status_code=400, detail="Turnos passados não podem ser alterados")
+    if assignment.date > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     if assignment.date.weekday() not in assignment.schedule.weekday_set:
         raise HTTPException(status_code=400, detail="Esta data não corresponde à escala")
 

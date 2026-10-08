@@ -68,7 +68,7 @@ def test_admin_save_assignments_endpoint(
     ensure_month_assignments(db, today.year, today.month)
     assignment = db.scalar(
         select(Assignment)
-        .where(Assignment.schedule_id == schedule.id)
+        .where(Assignment.schedule_id == schedule.id, Assignment.date >= today)
         .order_by(Assignment.date)
     )
     assert assignment is not None

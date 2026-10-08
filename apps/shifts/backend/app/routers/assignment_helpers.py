@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import calendar
 from collections.abc import Sequence
 from datetime import date, timedelta
 from sqlalchemy import select
@@ -9,7 +8,7 @@ from ..config import settings
 from ..models import Assignment, Schedule, SwapRequest, Team
 from ..i18n import day_numeric_long, day_short
 from ..services.notifications import send_email_notification
-from ..services.scheduling import month_bounds, pattern_teams, rotation_team_for_date
+from ..services.scheduling import in_scheduling_window, month_bounds, pattern_teams, rotation_team_for_date, scheduling_horizon
 from .schedule_helpers import _pattern_map
 
 def _apply_pattern_to_open_rows(db: Session, schedule: Schedule) -> int:
@@ -18,15 +17,13 @@ def _apply_pattern_to_open_rows(db: Session, schedule: Schedule) -> int:
     if not patterns:
         return 0
     today = date.today()
-    last_month = (today.month % 12) + 1
-    last_year = today.year + (1 if today.month == 12 else 0)
     rows = db.scalars(
         select(Assignment).where(
             Assignment.schedule_id == schedule.id,
             Assignment.team_id.is_(None),
             Assignment.source == "generated",
-            Assignment.date >= today.replace(day=1),
-            Assignment.date <= date(last_year, last_month, calendar.monthrange(last_year, last_month)[1]),
+            Assignment.date >= today,
+            Assignment.date <= scheduling_horizon(),
         )
     ).all()
     touched = 0
@@ -50,11 +47,13 @@ def _apply_pattern_forward(db: Session, schedule: Schedule, first: date) -> int:
     patterns = pattern_teams(db, schedule)
     if not patterns:
         return 0
+    first = max(first, date.today())
     rows = db.scalars(
         select(Assignment)
         .where(
             Assignment.schedule_id == schedule.id,
             Assignment.date >= first,
+            Assignment.date <= scheduling_horizon(),
             Assignment.source == "generated",
         )
         .options(selectinload(Assignment.team), selectinload(Assignment.schedule))
@@ -96,7 +95,8 @@ def _clear_assignments_from(db: Session, schedule: Schedule, first: date) -> int
         select(Assignment)
         .where(
             Assignment.schedule_id == schedule.id,
-            Assignment.date >= first,
+            Assignment.date >= max(first, date.today()),
+            Assignment.date <= scheduling_horizon(),
             Assignment.source == "generated",
             Assignment.team_id.is_not(None),
         )
@@ -126,6 +126,8 @@ def _save_assignments(db: Session, assignments: Sequence[Assignment], form) -> i
     teams_by_id = {t.id: t for t in db.scalars(select(Team).where(Team.is_active.is_(True))).all()}
     changed: list[tuple[Assignment, Team | None, Team | None]] = []
     for assignment in assignments:
+        if not in_scheduling_window(assignment.date):
+            continue  # past and beyond-horizon days are read-only
         raw = str(form.get(f"assignment_{assignment.id}", "")).strip()
         new_team_id = int(raw) if raw else None
         if new_team_id is not None and new_team_id not in teams_by_id:
@@ -243,6 +245,10 @@ def _apply_rotation_to_rows(db: Session, schedule: Schedule, assignments: Sequen
 
 
 def _generate_rotation_range(db: Session, schedule: Schedule, first: date, last: date) -> tuple[int, int]:
+    if first > last:
+        return 0, 0
+    first = max(first, date.today())
+    last = min(last, scheduling_horizon())
     rows = {row.date: row for row in db.scalars(
         select(Assignment)
         .where(Assignment.schedule_id == schedule.id, Assignment.date >= first, Assignment.date <= last)

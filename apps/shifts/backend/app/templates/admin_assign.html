@@ -8,20 +8,24 @@
     <p class="muted">Escolha o dia e a equipa que fica com cada turno. É uma atribuição direta, não uma troca.</p>
   </div>
   <form method="get" action="{{ app_path('/admin/assign') }}" class="inline-form">
-    <label>Dia<input type="date" name="on" value="{{ day.isoformat() }}" min="1999-12-31" max="2100-12-30" required onchange="this.form.submit()"></label>
+    <label>Dia<input type="date" name="on" value="{{ day.isoformat() }}" min="{{ today.isoformat() }}" max="{{ horizon.isoformat() }}" required onchange="this.form.submit()"></label>
   </form>
 </div>
 
 <div class="month-nav">
-  <a class="button secondary" href="{{ app_path('/admin/assign?on=' ~  prev_day.isoformat() ) }}">← Dia anterior</a>
+  {% if prev_day != day %}<a class="button secondary" href="{{ app_path('/admin/assign?on=' ~  prev_day.isoformat() ) }}">← Dia anterior</a>{% endif %}
   <a class="button secondary {% if day == today %}primary{% endif %}" href="{{ app_path('/admin/assign?on=' ~  today.isoformat() ) }}">Hoje</a>
-  <a class="button secondary" href="{{ app_path('/admin/assign?on=' ~  next_day.isoformat() ) }}">Dia seguinte →</a>
+  {% if next_day != day %}<a class="button secondary" href="{{ app_path('/admin/assign?on=' ~  next_day.isoformat() ) }}">Dia seguinte →</a>{% endif %}
 </div>
 
 <div class="stack gap-lg top-space">
   <section class="panel">
     <h2>{{ day|dia_longo }}</h2>
+    {% if not editable %}
+      <p class="muted">Data fora da janela de agendamento: só é possível atribuir turnos a partir de hoje até {{ horizon|data_longa }}.</p>
+    {% endif %}
     {% for row in shifts %}
+      {% if editable %}
       <form method="post" action="{{ app_path('/admin/assign') }}" class="row between wrap gap top-space">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <input type="hidden" name="assignment_id" value="{{ row.assignment.id }}">
@@ -47,6 +51,22 @@
           <button class="secondary small" type="submit">Atribuir</button>
         </div>
       </form>
+      {% else %}
+      <div class="row between wrap gap top-space">
+        <div>
+          <strong>{{ row.schedule.name }}</strong>
+          <span class="muted"> · {{ row.schedule|horario }}</span>
+          <div class="muted">
+            {% if row.assignment.team %}
+              Agora: {{ row.assignment.team.name }} ({{ row.assignment.source|origem }})
+            {% else %}
+              Agora: sem atribuição
+            {% endif %}
+          </div>
+        </div>
+        <span class="muted">Sem edição</span>
+      </div>
+      {% endif %}
     {% else %}
       <div class="empty">Este dia não tem turnos.</div>
     {% endfor %}

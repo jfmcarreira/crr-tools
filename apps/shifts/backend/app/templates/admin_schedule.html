@@ -26,21 +26,23 @@
         <a class="button secondary" href="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
       </div>
     </div>
+    {% if month_editable %}
     <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/apply-rotation') }}" class="inline-form">
       <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <input type="hidden" name="year" value="{{ year }}"><input type="hidden" name="month" value="{{ month }}">
       <button class="secondary" type="submit">Aplicar rotação em {{ month_name }}</button>
     </form>
-    <p class="muted">Deixa sem atribuição os turnos <strong>automáticos</strong> do mês e ano escolhidos e de todos os seguintes. Nenhum turno é apagado e as atribuições manuais e as trocas concluídas são mantidas. Use Limpar turnos antes de Aplicar rotação, para recalcular tudo a partir de um ponto.</p>
+    {% endif %}
+    <p class="muted">Deixa sem atribuição os turnos <strong>automáticos</strong> do mês e ano escolhidos e de todos os seguintes, dentro da janela de agendamento. Nenhum turno é apagado e as atribuições manuais e as trocas concluídas são mantidas. Use Limpar turnos antes de Aplicar rotação, para recalcular tudo a partir de um ponto.</p>
     <form method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/assignments') }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <input type="hidden" name="year" value="{{ year }}"><input type="hidden" name="month" value="{{ month }}">
       <div class="table-wrap"><table><thead><tr><th>Data</th><th>Equipa</th><th>Origem</th><th>Ação</th></tr></thead><tbody>
       {% for assignment in assignments %}
-        <tr><td>{{ assignment.date|dia }}</td><td><select name="assignment_{{ assignment.id }}"><option value="">Sem atribuição</option>{% for team in teams %}<option value="{{ team.id }}" {% if assignment.team_id == team.id %}selected{% endif %}>{{ team.name }}</option>{% endfor %}</select></td><td><span class="badge">{{ assignment.source|origem }}</span></td><td><button class="secondary small" type="submit" form="regenerate-{{ assignment.id }}" aria-label="Recalcular o turno de {{ assignment.date|dia }}">Recalcular</button></td></tr>
+        <tr><td>{{ assignment.date|dia }}</td><td>{% if assignment.date >= window_start and assignment.date <= window_end %}<select name="assignment_{{ assignment.id }}"><option value="">Sem atribuição</option>{% for team in teams %}<option value="{{ team.id }}" {% if assignment.team_id == team.id %}selected{% endif %}>{{ team.name }}</option>{% endfor %}</select>{% else %}{{ assignment.team.name if assignment.team else 'Sem atribuição' }}{% endif %}</td><td><span class="badge">{{ assignment.source|origem }}</span></td><td>{% if assignment.date >= window_start and assignment.date <= window_end %}<button class="secondary small" type="submit" form="regenerate-{{ assignment.id }}" aria-label="Recalcular o turno de {{ assignment.date|dia }}">Recalcular</button>{% else %}—{% endif %}</td></tr>
       {% endfor %}
       </tbody></table></div>
-      <div class="sticky-actions"><button class="primary" type="submit">Guardar {{ month_name }}</button></div>
+      {% if month_editable %}<div class="sticky-actions"><button class="primary" type="submit">Guardar {{ month_name }}</button></div>{% else %}<p class="muted">Mês fora da janela de agendamento: só é possível agendar turnos a partir de hoje até {{ window_end|data_longa }}.</p>{% endif %}
     </form>
     {% for assignment in assignments %}
     <form id="regenerate-{{ assignment.id }}" method="post" action="{{ app_path('/admin/schedules/' ~  schedule.id  ~ '/assignments/' ~  assignment.id  ~ '/regenerate') }}">

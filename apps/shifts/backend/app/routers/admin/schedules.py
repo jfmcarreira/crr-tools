@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import time
+from datetime import date, time
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy import func, select
@@ -9,7 +9,7 @@ from starlette.datastructures import FormData
 from ...database import get_db
 from ...models import Assignment, MonthlyPattern, RotationMember, Schedule, SwapRequest, Team
 from ...i18n import MONTHS, month_name
-from ...services.scheduling import ensure_month_assignments
+from ...services.scheduling import ensure_month_assignments, month_bounds, scheduling_horizon
 from ..assignment_helpers import _apply_pattern_to_open_rows
 from ..dependencies import _check_csrf, _context, _flash, _month_nav, _parse_month, _raw_form, _redirect, _require_admin
 from ..schedule_helpers import _all_schedules, _get_schedule, _pattern_map, _render_admin_schedules, _schedule_card, _schedule_groups, _schedule_teams
@@ -45,6 +45,11 @@ def admin_schedule(
     schedule = _get_schedule(db, schedule_id)
     teams = db.scalars(select(Team).where(Team.is_active.is_(True)).order_by(Team.name)).all()
     year, month = _parse_month(year, month)
+    today = date.today()
+    horizon = scheduling_horizon()
+    first, last = month_bounds(year, month)
+    # No edits outside the booking window; historical months stay visible.
+    month_editable = first <= horizon and last >= today
     assignments: list[Assignment] = []
     prev = nxt = (year, month)
     if schedule.schedule_type == "rotation":
@@ -52,6 +57,8 @@ def admin_schedule(
             row for row in ensure_month_assignments(db, year, month) if row.schedule_id == schedule.id
         ]
         prev, nxt = _month_nav(year, month)
+        if (nxt[0], nxt[1]) > (horizon.year, horizon.month):
+            nxt = (horizon.year, horizon.month)
     return request.app.state.templates.TemplateResponse(
         request=request,
         name="admin_schedule.html",
@@ -72,6 +79,9 @@ def admin_schedule(
             month_name=month_name(month),
             prev=prev,
             nxt=nxt,
+            month_editable=month_editable,
+            window_start=today,
+            window_end=horizon,
         ),
     )
 
@@ -140,7 +150,7 @@ def admin_schedule_pattern(
     _flash(
         request,
         f"Padrão de noites guardado ({saved} alteração(ões)). "
-        f"Foram atualizados {touched} turno(s) sem atribuição neste mês e no próximo; "
+        f"Foram atualizados {touched} turno(s) sem atribuição a partir de hoje; "
         f"as noites já atribuídas foram mantidas.",
     )
     return _redirect(f"/admin/schedules/{schedule.id}")

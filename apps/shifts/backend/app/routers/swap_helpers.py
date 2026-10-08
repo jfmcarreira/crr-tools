@@ -5,7 +5,8 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from ..models import Assignment, Schedule, SwapRequest, Team, User
-from .dependencies import _user_teams
+from ..services.scheduling import in_scheduling_window, scheduling_horizon
+from .dependencies import _beyond_horizon_message, _user_teams
 from .schedule_helpers import _schedule_team_ids
 
 def _active_request(db: Session, assignment_id: int) -> int | None:
@@ -30,6 +31,8 @@ def _swap_side(
         raise HTTPException(status_code=400, detail="Escolha o turno de outra equipa")
     if assignment.date < date.today():
         raise HTTPException(status_code=400, detail="Turnos passados não podem ser alterados")
+    if assignment.date > scheduling_horizon():
+        raise HTTPException(status_code=400, detail=_beyond_horizon_message())
     if _active_request(db, assignment.id):
         raise HTTPException(status_code=400, detail="Esse turno já tem um pedido de troca")
     return assignment
@@ -75,6 +78,16 @@ def _swap_ownership_holds(db: Session, swap: SwapRequest) -> bool:
 
 def _complete_swap(db: Session, swap: SwapRequest, new_team: Team) -> None:
     """Exchange both shifts and close the request. Ownership must be checked by the caller."""
+    for side in (swap.assignment, swap.target_assignment):
+        if side is not None and not in_scheduling_window(side.date):
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "Turnos passados não podem ser alterados"
+                    if side.date < date.today()
+                    else _beyond_horizon_message()
+                ),
+            )
     swap.assignment.team_id = new_team.id
     swap.assignment.source = "swap"
     incoming = swap.target_assignment

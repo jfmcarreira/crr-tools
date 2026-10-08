@@ -68,6 +68,33 @@ Every assignment on a lunch schedule page has a **Regenerate** button. An admini
 
 **Limpar turnos** empties the `generated` shifts of a lunch schedule from the first day of a chosen month and year onwards, in that month and every later one, so they read as unassigned. No shift is deleted: rows keep their IDs, notes, source and completed request history, and stay `generated`, so **Aplicar rotação** fills them again. Manual assignments and completed swaps are never emptied. Open and pending change requests on an emptied shift are cancelled and the previous team is notified. Use it to force a recalculation from a known point instead of relying on the shifts that already exist.
 
+## Scheduling window
+
+Only the next six months can be scheduled. The window runs from today through the
+last day of the sixth month ahead (inclusive): with the current month counted as
+month one, October 2026 allows scheduling until 30 April 2027
+(`SCHEDULING_HORIZON_MONTHS=6`, `scheduling_horizon()`).
+
+- Every action that changes who works a shift is confined to the window: saving
+  the monthly grid, applying the pattern, clearing or applying the rotation,
+  regenerating one shift, the day-by-day `/admin/assign` picker, and opening,
+  completing or reverting change requests (both the offered shift and the one
+  wanted in return). The rotation/clear/pattern actions only touch days from
+  today on, so a month that started in the past is partially editable within the
+  current month; saving a night pattern only fills open nights from today on.
+- Dates outside it are read-only: months before today and after the horizon still
+  render their rota (historical reference, PDF export, calendar feeds), but every
+  write endpoint refuses them with a Portuguese message ("Turnos passados não
+  podem ser alterados" or "Só é possível agendar turnos nos próximos 6 meses…").
+- Month and day navigation stops at the limits: **Seguinte →** clamps to the
+  horizon month on the schedule and swap pages, `/admin/assign` hides **Dia
+  seguinte** at the horizon and **Dia anterior** before today, and the week count
+  in notifications keeps reminding only a few days ahead. Navigating further ahead
+  by hand still shows the future rota as a read-only preview.
+- Auto-fill is not a write action: `ensure_month_assignments` still fills any
+  viewed month (previews and PDFs), but the rows it creates outside the window
+  cannot be edited there.
+
 ## Teams and users
 
 - A **team** (`teams`) is who works a shift: one person, or the people who cover it together. Every rota row, rotation position, pattern day and change request names a team.

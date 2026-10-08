@@ -7,7 +7,21 @@ from datetime import date, timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
+from ..config import settings
 from ..models import Assignment, MonthlyPattern, RotationMember, Schedule, Team
+
+
+def scheduling_horizon() -> date:
+    """The last day that may be scheduled: today's month plus the configured months."""
+    today = date.today()
+    index = today.year * 12 + today.month - 1 + settings.scheduling_horizon_months
+    year, month = divmod(index, 12)
+    return date(year, month + 1, calendar.monthrange(year, month + 1)[1])
+
+
+def in_scheduling_window(day: date) -> bool:
+    """Whether `day` may be scheduled: from today through the horizon, both included."""
+    return date.today() <= day <= scheduling_horizon()
 
 
 def month_bounds(year: int, month: int) -> tuple[date, date]:

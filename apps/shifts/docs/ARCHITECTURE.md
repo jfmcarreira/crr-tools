@@ -31,6 +31,11 @@ on startup, as they do in production.
   generator. HTTP/session orchestration stays in routers.
 - `services/notifications.py`: synchronous SMTP adapter + durable send log, with
   one recipient per user (not per team).
+- `services/scheduling.py`: the monthly generator plus the scheduling-window
+  policy. `scheduling_horizon()` and `in_scheduling_window()` define the only
+  editable dates (today through the end of the 6th month ahead); every router
+  that writes assignments or swaps checks them, and the shared
+  `_beyond_horizon_message()` in `routers/dependencies.py` produces the refusal.
 - `services/pdf.py`: ReportLab-rendered A4 schedule lists, with embedded Unicode fonts and
   adaptive layout to keep the selected range on one page.
 - `backend/app/cli.py`: maintenance commands that can be run manually or by cron.
