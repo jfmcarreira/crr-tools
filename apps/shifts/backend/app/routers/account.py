@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from ..database import get_db
+from ..models import User
 from ..security import hash_password, verify_password
 from .dependencies import _check_csrf, _context, _flash, _redirect, _require_user, _safe_back
 
@@ -41,3 +43,25 @@ def account_password(
     db.commit()
     _flash(request, "Palavra-passe alterada.")
     return _redirect(_safe_back(request, "/"))
+
+
+@router.post("/account/email")
+def account_email(
+    request: Request,
+    email: str = Form(""),
+    notify_email: str = Form(""),
+    csrf_token: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    """The address every notification for this user is sent to, kept by its owner."""
+    _check_csrf(request, csrf_token)
+    user = _require_user(request, db)
+    value = email.strip().lower() or None
+    if value and db.scalar(select(User.id).where(User.email == value, User.id != user.id)):
+        _flash(request, "Esse endereço de e-mail já está a ser usado.", "error")
+        return _redirect("/account")
+    user.email = value
+    user.notify_email = bool(notify_email)
+    db.commit()
+    _flash(request, "Notificações por e-mail atualizadas.")
+    return _redirect("/account")

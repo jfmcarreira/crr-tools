@@ -29,7 +29,8 @@ on startup, as they do in production.
   not import feature routers, keeping the dependency graph acyclic.
 - `backend/app/security/`: the existing PBKDF2 password codec and CSRF-token
   generator. HTTP/session orchestration stays in routers.
-- `services/notifications.py`: synchronous SMTP adapter + durable send log.
+- `services/notifications.py`: synchronous SMTP adapter + durable send log, with
+  one recipient per user (not per team).
 - `services/pdf.py`: ReportLab-rendered A4 schedule lists, with embedded Unicode fonts and
   adaptive layout to keep the selected range on one page.
 - `backend/app/cli.py`: maintenance commands that can be run manually or by cron.

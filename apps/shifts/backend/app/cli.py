@@ -45,14 +45,20 @@ def init_db() -> None:
 def seed_demo() -> None:
     init_db()
     # Carla and Diogo are two teams covered by the same user, as a real team would be.
+    # E-mail belongs to the user, so the shared account has a single address.
     demo_teams = [
-        ("Alice", "alice", "alice@example.com"),
-        ("Bruno", "bruno", "bruno@example.com"),
-        ("Carla", "sabado", None),
-        ("Diogo", "sabado", "diogo@example.com"),
+        ("Alice", "alice"),
+        ("Bruno", "bruno"),
+        ("Carla", "sabado"),
+        ("Diogo", "sabado"),
     ]
+    demo_emails = {
+        "alice": "alice@example.com",
+        "bruno": "bruno@example.com",
+        "sabado": "diogo@example.com",
+    }
     with SessionLocal() as db:
-        for name, username, email in demo_teams:
+        for name, username in demo_teams:
             if db.scalar(select(Team.id).where(Team.name == name)):
                 continue  # this team is already there, whoever signs in for it
             user = db.scalar(select(User).where(User.username == username))
@@ -61,6 +67,7 @@ def seed_demo() -> None:
                     name=username.capitalize(),
                     username=username,
                     password_hash=hash_password("demo-password"),
+                    email=demo_emails.get(username),
                     is_admin=False,
                     is_active=True,
                 )
@@ -70,10 +77,8 @@ def seed_demo() -> None:
                 Team(
                     name=name,
                     user=user,
-                    email=email,
                     phone=None,
                     is_active=True,
-                    notify_email=True,
                 )
             )
         db.commit()
@@ -137,16 +142,17 @@ def send_reminders() -> None:
         assignments = db.scalars(
             select(Assignment)
             .where(Assignment.date == target, Assignment.team_id.is_not(None))
-            .options(selectinload(Assignment.team), selectinload(Assignment.schedule))
+            .options(selectinload(Assignment.team).selectinload(Team.user), selectinload(Assignment.schedule))
         ).all()
         count = 0
         for assignment in assignments:
-            if not assignment.team:
-                continue
+            if not assignment.team or not assignment.team.user:
+                continue  # a rota-only team has nobody to remind
             subject = f"Lembrete de turno: {assignment.schedule.name} a {day_numeric(assignment.date)}"
+            # One user, one reminder: two of its teams on the same schedule and day is one mail.
             already_sent = db.scalar(
                 select(NotificationLog.id).where(
-                    NotificationLog.team_id == assignment.team.id,
+                    NotificationLog.user_id == assignment.team.user_id,
                     NotificationLog.event_type == "shift_reminder",
                     NotificationLog.subject == subject,
                     NotificationLog.status == "sent",

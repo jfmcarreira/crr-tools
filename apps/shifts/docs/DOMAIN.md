@@ -71,18 +71,18 @@ Every assignment on a lunch schedule page has a **Regenerate** button. An admini
 ## Teams and users
 
 - A **team** (`teams`) is who works a shift: one person, or the people who cover it together. Every rota row, rotation position, pattern day and change request names a team.
-- A **user** (`users`) is a login: a username, a password, a label and the administrator flag. A team points at one user through `teams.user_id`, and a team without one is rota-only: nobody signs in for it.
-- `email` and `phone` are optional, and both belong to the team.
+- A **user** (`users`) is a login: a username, a password, a label, the administrator flag, the e-mail every notification is sent to and the per-user opt-in for them. A team points at one user through `teams.user_id`, and a team without one is rota-only: nobody signs in for it.
+- `phone` belongs to the team; `email` and the e-mail opt-in belong to the user. A rota-only team has nobody to write to.
 - The two are created on separate pages, and neither page creates the other:
-  - `/admin/teams` adds and edits teams (name, contacts, active) and only *selects* which user signs in for each one. There are no usernames or passwords on this page.
-  - `/admin/users` creates and edits users (name, username, password, administrator, active) and assigns each of them to the teams it signs in for. There are no team names or contacts on this page.
+  - `/admin/teams` adds and edits teams (name, phone, active) and only *selects* which user signs in for each one. There are no usernames, passwords or e-mails on this page.
+  - `/admin/users` creates and edits users (name, username, password, e-mail, notifications opt-in, administrator, active) and assigns each of them to the teams it signs in for. There are no team names or contacts on this page.
 - One user can be assigned to several teams, which is how a team shares a single login, and the same username can never belong to two users. Ticking a team on `/admin/users` assigns it to that user and takes it away from whoever had it; the teams page is where a team is simply pointed at one user.
 - Administration is a property of the **user**, so a team covered by an administrator user is administrated by whoever signs in with it.
 - Rota-only teams can be assigned by an administrator, appear in rotations, and can be named as the target of a change request, but cannot answer it; an administrator completes the transfer on the schedule's own configuration page.
 - Any password of at least four characters is accepted; there is no complexity rule.
 - The session stores the user, never a team. Everything a member sees and does is scoped to the teams assigned to it: their shifts are the "mine" ones on the rota, their change requests are the ones listed, its calendar page holds one feed per team, and it can open and answer requests for any of them. A request made by one of those teams is its own: nobody can accept it through the same user, and a swap naming a team of the same user is refused.
 - When a user accepts a request, the rota still records one team: the one the request names, or the user's first active team when the request names nobody. Ownership rules are checked against that team.
-- A signed-in user reaches its account through the top bar, which opens `/account`: a single field for the new password, with no confirmation and no retyping of the current one, so anyone holding an open session can change it. The page lists the teams the user signs in for.
+- A signed-in user reaches its account through the top bar, which opens `/account`: a single field for the new password, with no confirmation and no retyping of the current one, so anyone holding an open session can change it, and a second panel where it keeps its own notification e-mail and the opt-in. The page lists the teams the user signs in for.
 - A user cannot be deactivated, demoted or removed while it is the last one that can sign in as an administrator, and nobody can deactivate or remove the user they are signed in with.
 - A team cannot be deactivated or lose its user while it is the only team of the user you are signed in with.
 - An administrator can remove a team permanently from `/admin/teams`, after a confirmation page that lists the impact. A team that still holds any assignment, past ones included, cannot be removed: those shifts must first be handed over, so the record of who worked each date stays intact. SQLite cascades are not enforced by the application, so the removal clears the remaining references explicitly: night-pattern days lose their team, rotation positions are deleted, that team's own change requests are deleted and the ones that merely targeted or were accepted by them lose those references, and notification logs keep their history without the team.
@@ -120,11 +120,11 @@ Other terminal states: `rejected`, `cancelled`, `reverted`.
 
 - A swap is always **one shift for one shift**: it is created on `/swaps/new` (its own page, so the rota keeps showing only who works each day) and names both shifts. The team giving the first shift is the requester; the team owning the second one is the target. There are no open offers.
 - The two shifts must belong to the same schedule. The teams of a schedule are the ones in its rotation, in its monthly pattern, or already holding one of its shifts.
-- When a swap is approved or accepted, **both** assignments change hands at once: the target takes the requester's shift and the requester takes the target's shift. Both become `swap` and both teams are notified.
+- When a swap is approved or accepted, **both** assignments change hands at once: the target takes the requester's shift and the requester takes the target's shift. Both become `swap` and the users signing in for both teams are notified.
 - One team can work several days in a month, so each side of the exchange is chosen from a list of the month's future shifts, grouped by schedule: the requester picks "O turno que passo" (their own shifts) and "O turno que quero em troca" (another team's shifts of that schedule). A member only sees the shifts of the teams their user is assigned to on the first list; an administrator sees all of them.
 - A shift can only be part of one open request at a time, on either side.
 - An administrator can open a request for another team's shift. The request is still recorded against the team that owns the shift, so the ownership rule below keeps working; unassigned and past shifts cannot be requested.
-- `/admin/assign` is the day-by-day picker for administrators: pick a day, then put a team on one of its shifts with **Atribuir**. This is a direct assignment, never a change request. It sets the assignment source to `manual`, cancels any open request that involves that shift, and notifies both the new and the previous team. `Sem atribuição` clears it. The date must match one of the schedule's weekdays.
+- `/admin/assign` is the day-by-day picker for administrators: pick a day, then put a team on one of its shifts with **Atribuir**. This is a direct assignment, never a change request. It sets the assignment source to `manual`, cancels any open request that involves that shift, and notifies the users signing in for the new and the previous team. `Sem atribuição` clears it. The date must match one of the schedule's weekdays.
 - The requester cannot accept their own request. With a user covering several teams, that covers every one of them.
 - Only the team the request names can accept it or decline it, and with a user covering several teams that means the user the named team is assigned to.
 - If the schedule requires manager approval, acceptance moves to `pending_approval`.
@@ -133,11 +133,15 @@ Other terminal states: `rejected`, `cancelled`, `reverted`.
 - Approval transfers the assignment and sets its source to `swap`.
 - Only an administrator can revert an approved two-sided swap: both shifts go back to the teams that had them, their source becomes `manual` (the original source cannot be recovered) and a note records the revert. If either shift changed after the swap, the revert is refused and the day-by-day assignment must be used instead.
 - If either team no longer owns its own shift, the request must not be applied and is cancelled.
-- On a schedule's configuration page, an administrator can complete an `open` or `pending_approval` request on a team's behalf by choosing another team that works that same schedule. This is the only way a rota-only team gives up or receives a shift. The same ownership rule applies, other open requests for that assignment are cancelled, and the requester and the new team are both notified. Past dates are refused.
+- On a schedule's configuration page, an administrator can complete an `open` or `pending_approval` request on a team's behalf by choosing another team that works that same schedule. This is the only way a rota-only team gives up or receives a shift. The same ownership rule applies, other open requests for that assignment are cancelled, and the users signing in for the requester and the new team are both notified. Past dates are refused.
 
 ## Notifications
 
-Email is optional per team and per installation.
+Email is optional per user and per installation.
+
+One user covering several teams receives each notification once, addressed to its
+own e-mail, and the notification log keeps both the user and the team the event
+concerned.
 
 Events include:
 - assignment updated/removed by admin;

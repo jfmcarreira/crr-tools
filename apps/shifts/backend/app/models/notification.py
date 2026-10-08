@@ -8,12 +8,14 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .team import Team
+    from .user import User
 
 class NotificationLog(Base):
     __tablename__ = "notification_logs"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     team_id: Mapped[int | None] = mapped_column(ForeignKey("teams.id", ondelete="SET NULL"), nullable=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     event_type: Mapped[str] = mapped_column(String(60), nullable=False)
     channel: Mapped[str] = mapped_column(String(20), default="email", nullable=False)
     recipient: Mapped[str | None] = mapped_column(String(254), nullable=True)
@@ -25,3 +27,4 @@ class NotificationLog(Base):
     sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     team: Mapped[Team | None] = relationship()
+    user: Mapped[User | None] = relationship()

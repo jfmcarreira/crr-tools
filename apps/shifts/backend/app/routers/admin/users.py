@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 from ...database import get_db
-from ...models import Team, User
+from ...models import NotificationLog, Team, User
 from ...security import hash_password
 from .user_helpers import _usable_admin_users
 from ..dependencies import _check_csrf, _context, _flash, _redirect, _require_admin
@@ -52,15 +52,20 @@ def admin_create_user(
     name: str = Form(...),
     username: str = Form(...),
     password: str = Form(...),
+    email: str = Form(""),
     team_ids: list[str] = Form([]),
     is_admin: str = Form(""),
+    notify_email: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
 ):
     """A new user, assigned to the teams it will sign in for."""
     _check_csrf(request, csrf_token)
     _require_admin(request, db)
-    user, error = _new_user(db, name, username, password, is_admin=bool(is_admin))
+    user, error = _new_user(
+        db, name, username, password, email=email, is_admin=bool(is_admin),
+        notify_email=bool(notify_email),
+    )
     if error:
         _flash(request, error, "error")
         return _redirect("/admin/users")
@@ -73,7 +78,8 @@ def admin_create_user(
 
 
 def _new_user(
-    db: Session, name: str, username: str, password: str, *, is_admin: bool
+    db: Session, name: str, username: str, password: str, *, email: str = "",
+    is_admin: bool, notify_email: bool = True,
 ) -> tuple[User | None, str | None]:
     """A user with a username and a password, unsaved, or the reason it was refused."""
     value = username.strip().lower()
@@ -81,6 +87,9 @@ def _new_user(
         return None, "Defina um nome de utilizador."
     if db.scalar(select(User.id).where(User.username == value)):
         return None, "Esse nome de utilizador já existe."
+    email_value = email.strip().lower() or None
+    if email_value and db.scalar(select(User.id).where(User.email == email_value)):
+        return None, "Esse endereço de e-mail já existe."
     try:
         password_hash = hash_password(password)
     except ValueError as exc:
@@ -90,8 +99,10 @@ def _new_user(
             name=name.strip() or value,
             username=value,
             password_hash=password_hash,
+            email=email_value,
             is_admin=is_admin,
             is_active=True,
+            notify_email=notify_email,
         ),
         None,
     )
@@ -112,9 +123,11 @@ def admin_update_user(
     name: str = Form(...),
     username: str = Form(...),
     password: str = Form(""),
+    email: str = Form(""),
     team_ids: list[str] = Form([]),
     is_admin: str = Form(""),
     is_active: str = Form(""),
+    notify_email: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
 ):
@@ -132,6 +145,15 @@ def admin_update_user(
     )
     if duplicate:
         _flash(request, "Esse nome de utilizador já está a ser usado.", "error")
+        return _redirect("/admin/users")
+    email_value = email.strip().lower() or None
+    email_taken = (
+        db.scalar(select(User.id).where(User.email == email_value, User.id != user.id))
+        if email_value
+        else None
+    )
+    if email_taken:
+        _flash(request, "Esse endereço de e-mail já está a ser usado.", "error")
         return _redirect("/admin/users")
     loses_admin = user.is_admin and not is_admin
     loses_access = user.id == admin.id and not is_active
@@ -151,8 +173,10 @@ def admin_update_user(
 
     user.name = name.strip() or username_value
     user.username = username_value
+    user.email = email_value
     user.is_admin = bool(is_admin)
     user.is_active = True if user.id == admin.id else bool(is_active)
+    user.notify_email = bool(notify_email)
     db.commit()
     _assign_user_to_teams(db, user, team_ids)
     db.commit()
@@ -176,6 +200,10 @@ def admin_user_delete(
     if reason:
         _flash(request, f"Não é possível remover este utilizador: {reason}.", "error")
         return _redirect("/admin/users")
+    # SQLite cascades are not enforced by the application, exactly as on team removal:
+    # the e-mail history stays, without the user it was addressed to.
+    for log in db.scalars(select(NotificationLog).where(NotificationLog.user_id == user.id)).all():
+        log.user_id = None
     db.delete(user)
     db.commit()
     _flash(request, "Utilizador removido.")

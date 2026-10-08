@@ -20,4 +20,15 @@
     <div><button class="primary" type="submit">Alterar palavra-passe</button></div>
   </form>
 </section>
+
+<section class="panel">
+  <h2>Notificações por e-mail</h2>
+  <p class="muted">Os avisos de turnos e de trocas são enviados para este endereço. Como o e-mail é do utilizador e não da equipa, as várias equipas em que entra recebem cada aviso uma só vez.</p>
+  <form method="post" action="{{ app_path('/account/email') }}" class="form-grid">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>E-mail<input type="email" name="email" value="{{ current_user.email or '' }}" placeholder="nome@exemplo.pt"></label>
+    <label class="check"><input type="checkbox" name="notify_email" {% if current_user.notify_email %}checked{% endif %}> Receber as notificações por e-mail</label>
+    <div><button class="primary" type="submit">Guardar</button></div>
+  </form>
+</section>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Registo de e-mails · {{ settings.app_name }}{% endblock %}
 {% block content %}
-<div class="page-head"><div><h1>Registo de e-mails</h1><p class="muted">«ignorado» significa que a equipa não tem e-mail, que tem as notificações desligadas ou que o SMTP não está configurado.</p></div></div>
-<div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Evento</th><th>Equipa</th><th>Destinatário</th><th>Estado</th><th>Assunto</th></tr></thead><tbody>
-{% for log in logs %}<tr><td>{{ log.created_at|momento }}</td><td>{{ log.event_type|evento }}</td><td>{{ log.team.name if log.team else '—' }}</td><td>{{ log.recipient or '—' }}</td><td><span class="status status-{{ log.status }}">{{ log.status|estado_email }}</span></td><td>{{ log.subject }}</td></tr>{% else %}<tr><td colspan="6">Ainda não há notificações.</td></tr>{% endfor %}
+<div class="page-head"><div><h1>Registo de e-mails</h1><p class="muted">«ignorado» significa que a equipa não tem utilizador, que o utilizador não tem e-mail ou tem as notificações desligadas, ou que o SMTP não está configurado.</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Evento</th><th>Utilizador</th><th>Equipa</th><th>Destinatário</th><th>Estado</th><th>Assunto</th></tr></thead><tbody>
+{% for log in logs %}<tr><td>{{ log.created_at|momento }}</td><td>{{ log.event_type|evento }}</td><td>{{ log.user.label if log.user else '—' }}</td><td>{{ log.team.name if log.team else '—' }}</td><td>{{ log.recipient or '—' }}</td><td><span class="status status-{{ log.status }}">{{ log.status|estado_email }}</span></td><td>{{ log.subject }}</td></tr>{% else %}<tr><td colspan="7">Ainda não há notificações.</td></tr>{% endfor %}
 </tbody></table></div>
 {% endblock %}

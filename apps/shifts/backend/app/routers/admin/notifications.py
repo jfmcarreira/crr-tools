@@ -15,7 +15,7 @@ def admin_notifications(request: Request, db: Session = Depends(get_db)):
     _require_admin(request, db)
     logs = db.scalars(
         select(NotificationLog)
-        .options(selectinload(NotificationLog.team))
+        .options(selectinload(NotificationLog.team), selectinload(NotificationLog.user))
         .order_by(NotificationLog.created_at.desc())
         .limit(200)
     ).all()

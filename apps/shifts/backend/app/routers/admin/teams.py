@@ -42,28 +42,20 @@ def _users_by_id(db: Session) -> dict[int, User]:
 def admin_create_team(
     request: Request,
     name: str = Form(...),
-    email: str = Form(""),
     phone: str = Form(""),
     assigned_user_id: str = Form(""),
-    notify_email: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
 ):
     """Add a team to the rota. The user who signs in for it is chosen here or later."""
     _check_csrf(request, csrf_token)
     _require_admin(request, db)
-    email_value = email.strip().lower() or None
-    if email_value and db.scalar(select(Team.id).where(Team.email == email_value)):
-        _flash(request, "Esse endereço de e-mail já existe.", "error")
-        return _redirect("/admin/teams")
     db.add(
         Team(
             name=name.strip(),
             user=_chosen_user(db, assigned_user_id),
-            email=email_value,
             phone=phone.strip() or None,
             is_active=True,
-            notify_email=bool(notify_email),
         )
     )
     db.commit()
@@ -87,11 +79,9 @@ def admin_update_team(
     team_id: int,
     request: Request,
     name: str = Form(...),
-    email: str = Form(""),
     phone: str = Form(""),
     assigned_user_id: str = Form(""),
     is_active: str = Form(""),
-    notify_email: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
 ):
@@ -100,15 +90,6 @@ def admin_update_team(
     team = db.get(Team, team_id)
     if not team:
         raise HTTPException(status_code=404, detail="Equipa não encontrada")
-    email_value = email.strip().lower() or None
-    duplicate = (
-        db.scalar(select(Team.id).where(Team.email == email_value, Team.id != team.id))
-        if email_value
-        else None
-    )
-    if duplicate:
-        _flash(request, "Esse endereço de e-mail já está a ser usado.", "error")
-        return _redirect("/admin/teams")
 
     # Whoever is signed in must keep an active team to sign in with, not necessarily this one.
     chosen = _chosen_user(db, assigned_user_id)
@@ -119,9 +100,7 @@ def admin_update_team(
 
     team.name = name.strip()
     team.user = chosen
-    team.email = email_value
     team.phone = phone.strip() or None
-    team.notify_email = bool(notify_email)
     team.is_active = stays_active
     db.commit()
     _flash(request, "Equipa atualizada.")

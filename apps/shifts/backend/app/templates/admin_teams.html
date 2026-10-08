@@ -17,7 +17,7 @@
     <div class="form-col">
       <label>Nome<input name="name" required></label>
       <label>Telefone<input name="phone"></label>
-      <label>E-mail<input type="email" name="email"></label>
+      <p class="muted">O e-mail e as notificações por e-mail ficam no utilizador que entra, em <a href="{{ app_path('/admin/users') }}">Utilizadores</a>.</p>
     </div>
     <fieldset class="form-col">
       <legend>Utilizador <span class="muted">(opcional)</span></legend>
@@ -28,7 +28,6 @@
         </select>
       </label>
     </fieldset>
-    <label class="check"><input type="checkbox" name="notify_email" checked> Notificações por e-mail</label>
   </form>
 </section>
 <div class="stack gap-lg top-space">
@@ -40,7 +39,6 @@
     <div class="form-col">
       <label>Nome<input name="name" value="{{ team.name }}" required></label>
       <label>Telefone<input name="phone" value="{{ team.phone or '' }}"></label>
-      <label>E-mail<input type="email" name="email" value="{{ team.email or '' }}"></label>
     </div>
     <fieldset class="form-col">
       <legend>Utilizador</legend>
@@ -50,9 +48,8 @@
           {% for account in users_by_id.values() %}<option value="{{ account.id }}" {% if team.user and team.user.id == account.id %}selected{% endif %}>@{{ account.username }} — {{ account.name }}</option>{% endfor %}
         </select>
       </label>
-      <p class="muted">O mesmo utilizador pode entrar em várias equipas: vê e controla os turnos de todas elas.</p>
+      <p class="muted">O mesmo utilizador pode entrar em várias equipas: vê e controla os turnos de todas elas, e recebe os e-mails delas no seu endereço.</p>
     </fieldset>
-    <label class="check"><input type="checkbox" name="notify_email" {% if team.notify_email %}checked{% endif %}> Notificações por e-mail</label>
     <label class="check"><input type="checkbox" name="is_active" {% if team.is_active %}checked{% endif %}> Ativa</label>
     <div><button class="primary" type="submit">Guardar</button></div>
     {% if team.id in removable_ids %}<div><a class="button danger" href="{{ app_path('/admin/teams/' ~  team.id  ~ '/delete') }}">Remover</a></div>{% endif %}

@@ -17,9 +17,16 @@ def send_email_notification(
     subject: str,
     body: str,
 ) -> NotificationLog:
-    recipient = team.email
+    """Send one notification for an event the `team` is concerned by.
+
+    The address is the user's, never the team's: several teams of the same user
+    are one recipient, and a rota-only team has nobody to write to.
+    """
+    user = team.user
+    recipient = user.email if user else None
     log = NotificationLog(
         team_id=team.id,
+        user_id=user.id if user else None,
         event_type=event_type,
         channel="email",
         recipient=recipient,
@@ -28,7 +35,13 @@ def send_email_notification(
         status="skipped",
     )
 
-    if not team.notify_email or not recipient:
+    if user is None:
+        log.error = "A equipa não tem utilizador a quem enviar notificações"
+        db.add(log)
+        db.commit()
+        return log
+
+    if not user.notify_email or not recipient:
         log.error = "Notificações por e-mail desativadas ou sem endereço de e-mail"
         db.add(log)
         db.commit()
@@ -71,9 +84,16 @@ def send_many(
     subject: str,
     body: str,
 ) -> None:
-    seen: set[int] = set()
+    """One message per user: teams sharing a signer-in are a single recipient."""
+    seen_users: set[int] = set()
+    seen_teams: set[int] = set()
     for team in teams:
-        if team.id in seen:
+        if team.id in seen_teams:
             continue
-        seen.add(team.id)
+        seen_teams.add(team.id)
+        user = team.user
+        if user is not None:
+            if user.id in seen_users:
+                continue
+            seen_users.add(user.id)
         send_email_notification(db, team, event_type, subject, body)

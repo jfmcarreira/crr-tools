@@ -180,7 +180,15 @@ def _notify_assignment_changes(db: Session, changed: Sequence[tuple[Assignment, 
                 f"Está atribuído ao turno de {assignment.schedule.name} a {day_numeric_long(assignment.date)}.\n\n"
                 f"Ver a escala: {settings.normalized_base_url}/",
             )
-        if old_team and (not new_team or old_team.id != new_team.id):
+        # One user, one mail: moving a shift between two of its own teams only
+        # announces the shift it ends up with.
+        same_user = (
+            old_team is not None
+            and new_team is not None
+            and old_team.user_id is not None
+            and old_team.user_id == new_team.user_id
+        )
+        if old_team and not same_user and (not new_team or old_team.id != new_team.id):
             send_email_notification(
                 db,
                 old_team,
