@@ -170,7 +170,6 @@ def login(
     request.session["user_id"] = user.id
     teams = _user_teams(db, user)
     who = ", ".join(team.name for team in teams) or _user_label(user)
-    _flash(request, f"Bem-vindo(a), {who}.")
     return _redirect("/")
 
 

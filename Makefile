@@ -29,7 +29,7 @@ tournament-build:
 
 shifts-dev:
 	mkdir -p apps/shifts/backend/data
-	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+	cd apps/shifts/backend && "$(abspath .venv/bin/python)" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 shifts-test:
 	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python -m pytest

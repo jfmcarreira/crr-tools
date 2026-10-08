@@ -4,7 +4,8 @@
 <div class="page-head">
   <div>
     <h1>Equipas</h1>
-    <p class="muted">Quem entra na rota. Uma equipa é quem fica com um turno, e pode ser uma pessoa ou várias. Os utilizadores que entram na aplicação criam-se em <a href="{{ app_path('/admin/users') }}">Utilizadores</a>; aqui escolhe-se apenas quem entra para cada equipa.</p>
+    <p class="muted">Uma equipa é quem fica com um turno, e pode ser uma pessoa ou várias.</p>
+    <p class="muted">Os utilizadores que entram na aplicação criam-se em <a href="{{ app_path('/admin/users') }}">Utilizadores</a>; aqui escolhe-se apenas quem gera cada equipa.</p>
   </div>
 </div>
 <section class="panel">
@@ -16,7 +17,6 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="form-col">
       <label>Nome<input name="name" required></label>
-      <p class="muted">O e-mail e as notificações por e-mail ficam no utilizador que entra, em <a href="{{ app_path('/admin/users') }}">Utilizadores</a>.</p>
     </div>
     <fieldset class="form-col">
       <legend>Utilizador <span class="muted">(opcional)</span></legend>

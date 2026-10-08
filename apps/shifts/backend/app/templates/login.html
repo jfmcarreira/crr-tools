@@ -6,7 +6,6 @@
     <img src="{{ url_for('brand', path='assets/logo.png') }}" alt="">
   </div>
   <h1>Entrar</h1>
-  <p class="muted">Use o seu utilizador e a sua palavra-passe da escala.</p>
   <form method="post" action="{{ app_path('/login') }}" class="stack">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <label>Utilizador
