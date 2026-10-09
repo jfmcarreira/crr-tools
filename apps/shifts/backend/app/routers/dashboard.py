@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 import calendar
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 from ..database import get_db
-from ..models import Assignment, SwapRequest
+from ..models import AccessPin, Assignment, SwapRequest
+from ..config import settings
+from ..services.door_access import LISBON_TZ, can_request_pin, expire_pins
 from ..i18n import month_name
 from ..services.scheduling import assignments_by_date, ensure_month_assignments
 from .dependencies import _context, _current_user, _month_nav, _parse_month, _user_team_ids
@@ -69,9 +71,29 @@ def dashboard(
         }
 
     today = date.today()
+    now = datetime.now(timezone.utc)
+    active_pins = []
+    expired_pins = []
+    access_assignments = []
+    if user:
+        expire_pins(db, now)
+        user_pins = db.scalars(select(AccessPin).where(AccessPin.user_id == user.id)).all()
+        active_pins = [pin for pin in user_pins if pin.status == "active"]
+        expired_pins = sorted(
+            [pin for pin in user_pins if pin.status == "expired"], key=lambda pin: pin.id, reverse=True,
+        )[:5]
+        issued = {pin.assignment_id for pin in user_pins if pin.lock_id == settings.ttlock_lock_id}
+        if settings.ttlock_enabled and user.can_request_pin:
+            local_today = now.astimezone(LISBON_TZ).date()
+            candidates = db.scalars(select(Assignment).where(
+                Assignment.team_id.in_(my_ids),
+                Assignment.date.in_([local_today, local_today - timedelta(days=1)]),
+            )).all()
+            access_assignments = [a for a in candidates if a.id not in issued and can_request_pin(db, user, a.id, now)]
     return request.app.state.templates.TemplateResponse(
         request=request,
         name="dashboard.html",
+        headers={"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"},
         context=_context(
             request,
             db,
@@ -89,5 +111,8 @@ def dashboard(
                 db, {request.assignment.schedule_id for request in admin_requests.values()}
             ),
             today=today,
+            active_pins=active_pins,
+            expired_pins=expired_pins,
+            access_assignments=access_assignments,
         ),
     )

@@ -39,6 +39,13 @@ on startup, as they do in production.
 - `services/pdf.py`: ReportLab-rendered A4 schedule lists, with embedded Unicode fonts and
   adaptive layout to keep the selected range on one page.
 - `backend/app/cli.py`: maintenance commands that can be run manually or by cron.
+- `packages/ttlock`: standalone TTLock API client and CLI (list locks/passcodes,
+  generate timed/one-time PINs). `services/ttlock.py` adapts live app settings and
+  the configured lock. Shifts uses generated period codes for the current and
+  next UTC hour; authorization, the encrypted issuance ledger, reconciliation
+  and cleanup stay in Shifts. Reservations are committed without digits before
+  generation. Confirmed codes retain the actual returned validity dates; old
+  records retain their original expiry. No database schema migration is needed.
 - `packages/crr-python`: shared synchronous engine/threading and Alembic-config
   construction. Each app supplies its own database setting, script location and
   migration policy; the package contains no models or authentication code.

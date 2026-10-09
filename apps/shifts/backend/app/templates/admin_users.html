@@ -29,6 +29,7 @@
       {% endfor %}
     </fieldset>
     <label class="check"><input type="checkbox" name="is_admin"> Administrador</label>
+    <label class="check"><input type="checkbox" name="can_request_pin"> Pode pedir código de acesso</label>
     <label class="check"><input type="checkbox" name="notify_email" checked> Notificações por e-mail</label>
   </form>
 </section>
@@ -52,6 +53,7 @@
     </fieldset>
     <label class="check"><input type="checkbox" name="is_admin" {% if account.is_admin %}checked{% endif %}> Administrador</label>
     <label class="check"><input type="checkbox" name="is_active" {% if account.is_active %}checked{% endif %}> Ativo</label>
+    <label class="check"><input type="checkbox" name="can_request_pin" {% if account.can_request_pin %}checked{% endif %}> Pode pedir código de acesso</label>
     <label class="check"><input type="checkbox" name="notify_email" {% if account.notify_email %}checked{% endif %}> Notificações por e-mail</label>
     <div><button class="primary" type="submit">Guardar</button></div>
     {% if account.id in removable_ids %}

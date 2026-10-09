@@ -101,6 +101,7 @@ def register(
         password_hash=password_hash,
         is_admin=False,
         is_active=True,
+        can_request_pin=False,
     )
     try:
         db.add(user)

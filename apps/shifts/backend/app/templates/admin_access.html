@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Acesso à porta</h1>
+<p>Desativar a permissão impede novos pedidos, mas não revoga códigos emitidos. Os códigos gerados funcionam sem ligação à Internet; remover o registo na aplicação TTLock pode não os revogar na fechadura. Em caso de emergência, contacte o proprietário e confirme a revogação na porta.</p>
+{% for pin in pins %}
+<section class="card">
+  <p>{{ pin.user.name }} · Turno {{ pin.assignment_id }} · {{ pin.status }}</p>
+  <p>Emitido: {{ pin.valid_from_utc }} UTC · Expira: {{ pin.valid_until_utc }} UTC</p>
+  {% if pin.status in ['pending', 'uncertain'] %}
+  <form method="post" action="{{ app_path('/admin/access/' ~ pin.id ~ '/reconcile') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit">Confirmar na fechadura</button>
+  </form>
+  {% endif %}
+</section>
+{% else %}<p>Não existem códigos emitidos.</p>{% endfor %}
+{% endblock %}

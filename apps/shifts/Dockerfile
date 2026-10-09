@@ -7,6 +7,7 @@ COPY pyproject.toml uv.lock ./
 COPY apps/shifts/backend/pyproject.toml apps/shifts/backend/pyproject.toml
 COPY apps/tournament/backend/pyproject.toml apps/tournament/backend/pyproject.toml
 COPY packages/crr-python/ packages/crr-python/
+COPY packages/ttlock/ packages/ttlock/
 RUN uv sync --frozen --package crr-shifts --no-dev --no-editable
 COPY apps/shifts/backend/ apps/shifts/backend/
 COPY packages/crr-brand/ packages/crr-brand/

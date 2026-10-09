@@ -55,6 +55,7 @@ def admin_create_user(
     email: str = Form(""),
     team_ids: list[str] = Form([]),
     is_admin: str = Form(""),
+    can_request_pin: str = Form(""),
     notify_email: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
@@ -64,6 +65,7 @@ def admin_create_user(
     _require_admin(request, db)
     user, error = _new_user(
         db, name, username, password, email=email, is_admin=bool(is_admin),
+        can_request_pin=bool(can_request_pin),
         notify_email=bool(notify_email),
     )
     if error:
@@ -79,7 +81,7 @@ def admin_create_user(
 
 def _new_user(
     db: Session, name: str, username: str, password: str, *, email: str = "",
-    is_admin: bool, notify_email: bool = True,
+    is_admin: bool, can_request_pin: bool = False, notify_email: bool = True,
 ) -> tuple[User | None, str | None]:
     """A user with a username and a password, unsaved, or the reason it was refused."""
     value = username.strip().lower()
@@ -102,6 +104,7 @@ def _new_user(
             email=email_value,
             is_admin=is_admin,
             is_active=True,
+            can_request_pin=can_request_pin,
             notify_email=notify_email,
         ),
         None,
@@ -127,6 +130,7 @@ def admin_update_user(
     team_ids: list[str] = Form([]),
     is_admin: str = Form(""),
     is_active: str = Form(""),
+    can_request_pin: str = Form(""),
     notify_email: str = Form(""),
     csrf_token: str = Form(...),
     db: Session = Depends(get_db),
@@ -176,6 +180,7 @@ def admin_update_user(
     user.email = email_value
     user.is_admin = bool(is_admin)
     user.is_active = True if user.id == admin.id else bool(is_active)
+    user.can_request_pin = bool(can_request_pin)
     user.notify_email = bool(notify_email)
     db.commit()
     _assign_user_to_teams(db, user, team_ids)

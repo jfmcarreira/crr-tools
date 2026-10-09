@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
 from .services.bootstrap import ensure_initial_data
+from .services.access_cleanup import run_pin_cleanup
 from .branding import BRAND_DIR
 from .config import settings
 from .database import (
@@ -47,7 +49,14 @@ async def lifespan(app: FastAPI):
     run_migrations()
     with SessionLocal() as db:
         ensure_initial_data(db)
-    yield
+    stop_cleanup = asyncio.Event()
+    cleanup_task = asyncio.create_task(run_pin_cleanup(stop_cleanup))
+    try:
+        yield
+    finally:
+        # Wake the timer and wait for any in-flight DB operation to finish.
+        stop_cleanup.set()
+        await cleanup_task
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan, root_path=settings.root_path)

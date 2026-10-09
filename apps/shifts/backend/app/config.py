@@ -43,6 +43,21 @@ class Settings(BaseSettings):
     # Secure by default; set false only for plain-HTTP development.
     session_https_only: bool = True
 
+    # TTLock app-level control: disabled unless a working timed PIN flow is configured.
+    ttlock_enabled: bool = False
+    ttlock_client_id: str = ""
+    ttlock_client_secret: str = ""
+    ttlock_username: str = ""
+    ttlock_password: str = ""
+    ttlock_lock_id: str = ""
+    ttlock_api_base_url: str = "https://euopen.ttlock.com"
+    ttlock_eligible_schedule_slugs: str = ""
+    ttlock_encryption_key: str = ""
+
+    @property
+    def ttlock_eligible_schedule_ids(self) -> set[str]:
+        return {slug.strip() for slug in self.ttlock_eligible_schedule_slugs.split(",") if slug.strip()}
+
     @model_validator(mode="after")
     def _require_strong_secret_key(self) -> Settings:
         if len(self.secret_key) < 32:

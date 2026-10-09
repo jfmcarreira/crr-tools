@@ -6,6 +6,7 @@ Two independently runnable applications in one monorepo:
 - [Shifts](apps/shifts/README.md): FastAPI, Jinja, SQLAlchemy and Alembic on Python 3.13.
 - [CRR brand](packages/crr-brand/README.md): shared logo, favicon and CSS primitives.
 - [CRR Python](packages/crr-python/README.md): shared engine/threading and Alembic configuration helpers.
+- [TTLock](packages/ttlock/README.md): standalone lock API client and diagnostic CLI, consumed by Shifts.
 
 ## Development
 
@@ -16,6 +17,7 @@ make tournament-install
 make tournament-test tournament-build
 make shifts-test
 make python-common-test
+make ttlock-test
 make test
 ```
 

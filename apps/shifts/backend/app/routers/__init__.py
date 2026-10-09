@@ -6,6 +6,7 @@ from .calendar import router as calendar_router
 from .exports import router as exports_router
 from .dashboard import router as dashboard_router
 from .swaps import router as swaps_router
+from .access import router as access_router
 from .admin.teams import router as admin_teams_router
 from .admin.users import router as admin_users_router
 from .admin.schedules import router as admin_schedules_router
@@ -20,6 +21,7 @@ for domain_router in (
     exports_router,
     dashboard_router,
     swaps_router,
+    access_router,
     admin_teams_router,
     admin_users_router,
     admin_schedules_router,

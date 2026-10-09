@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import code
 import sys
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -179,11 +179,20 @@ def main() -> None:
         "seed-demo": seed_demo,
         "db-shell": db_shell,
         "send-reminders": send_reminders,
+        "expire-access-pins": expire_access_pins,
     }
     if command not in commands:
-        print("Usage: python -m app.cli [init-db|migrate|seed-demo|db-shell|send-reminders]")
+        print("Usage: python -m app.cli [init-db|migrate|seed-demo|db-shell|send-reminders|expire-access-pins]")
         raise SystemExit(2)
     commands[command]()
+
+
+def expire_access_pins() -> None:
+    from .services.door_access import expire_pins
+
+    with SessionLocal() as db:
+        expire_pins(db, datetime.now(timezone.utc))
+    print("Expired access PIN digits cleared. No lock codes were deleted.")
 
 
 if __name__ == "__main__":

@@ -5,14 +5,36 @@
     <h1>{{ month_name }} {{ year }}</h1>
   </div>
   <div class="month-nav">
+    {% if active_pins %}
+    {% set pin = active_pins|sort(attribute='id', reverse=true)|first %}
+    <a class="button secondary" href="{{ app_path('/access/pins/' ~ pin.id) }}" aria-label="Ver Código da Porta">Código porta</a>
+    {% elif access_assignments %}
+    {% set assignment = access_assignments|first %}
+    <form class="inline-form" method="post" action="{{ app_path('/access/pins') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
+      <button class="button secondary" type="submit" aria-label="Pedir acesso à porta — {{ assignment.schedule.name }}">Código porta</button>
+    </form>
+    {% endif %}
+
     {% if current_user %}
     <a class="button secondary" href="{{ app_path('/calendar') }}">Calendário</a>
     <a class="button primary" href="{{ app_path('/swaps/new?year=' ~  year  ~ '&month=' ~  month ) }}">Pedir troca</a>
     {% endif %}
+
     <a class="button secondary" href="{{ app_path('/?year=' ~  prev[0]  ~ '&month=' ~  prev[1] ) }}">← Anterior</a>
     <a class="button secondary" href="{{ app_path('/?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
   </div>
 </div>
+
+{% if expired_pins %}
+<section class="card">
+  <h2>Acesso à porta</h2>
+  {% for pin in expired_pins %}
+  <p>Turno {{ pin.assignment_id }}: O código expirou.</p>
+  {% endfor %}
+</section>
+{% endif %}
 
 <div class="calendar-list">
 {% for day, assignments in month_days %}

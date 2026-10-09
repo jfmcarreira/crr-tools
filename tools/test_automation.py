@@ -19,6 +19,10 @@ class ChangedPaths(unittest.TestCase):
     def test_documentation_does_not_build_apps(self):
         self.assertEqual(affected(["README.md", "docs/RELEASES.md"]), {"tournament": False, "shifts": False})
 
+    def test_ttlock_selects_only_its_consumer(self):
+        self.assertEqual(affected(["packages/ttlock/src/ttlock/client.py"]), {"tournament": False, "shifts": True})
+        self.assertEqual(affected(["packages/ttlock/tests/test_client.py", "apps/tournament/Dockerfile"]), {"tournament": True, "shifts": True})
+
 
 class ReleaseTags(unittest.TestCase):
     def setUp(self):

@@ -26,7 +26,7 @@ jobs:
       - if: steps.plan.outputs.app == 'tournament'
         run: make tournament-install tournament-test tournament-build
       - if: steps.plan.outputs.app == 'shifts'
-        run: make shifts-test
+        run: make shifts-test ttlock-test
       - run: make python-common-test
       - uses: docker/login-action@v3
         with:

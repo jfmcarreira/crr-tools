@@ -23,6 +23,7 @@ class User(Base):
     email: Mapped[str | None] = mapped_column(String(254), unique=True, nullable=True)
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    can_request_pin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     notify_email: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 

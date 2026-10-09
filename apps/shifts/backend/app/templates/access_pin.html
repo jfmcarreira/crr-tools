@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+  <h1>Código de acesso</h1>
+  <p><strong id="access-code">{{ digits }}</strong></p>
+  <p>Válido até {{ expires }}.</p>
+  <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('access-code').textContent)">Copiar código</button>
+  <p>O código pode ser utilizado até expirar. Desativar a permissão não revoga este código.</p>
+  <a class="button secondary" href="{{ app_path('/') }}">Voltar</a>
+</section>
+{% endblock %}

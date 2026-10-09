@@ -77,6 +77,13 @@ def cleanup_database() -> Iterator[None]:
 
 
 @pytest.fixture(autouse=True)
+def isolate_background_cleanup(monkeypatch):
+    # Production's clock must not expire fixtures using a fixed synthetic date.
+    from app.services import access_cleanup
+    monkeypatch.setattr(access_cleanup, "_clear_expired_pins", lambda: None)
+
+
+@pytest.fixture(autouse=True)
 def reset_rate_limiter() -> Iterator[None]:
     """Failed logins accumulate on the shared app; start every test fresh."""
     app.state.limiter = LoginRateLimiter()

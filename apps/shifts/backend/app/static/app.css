@@ -116,6 +116,7 @@ th{font-size:.8rem;color:var(--muted);background:#fff7f7}
   .swap-form{min-width:0;width:100%}
   .month-nav{width:100%}
   .month-nav .button{flex:1;text-align:center}
+  .month-nav .inline-form{flex:1}
   .panel{padding:14px}
   .auth-card{margin-top:36px;padding:22px}
 }

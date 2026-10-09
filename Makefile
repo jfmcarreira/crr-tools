@@ -2,13 +2,17 @@ UV ?= uv
 PYTHON ?= python3
 .DEFAULT_GOAL := test
 
-.PHONY: images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-build shifts-dev shifts-test shifts-build test
+.PHONY: images-smoke-test python-common-test tournament-install tournament-backend-dev tournament-frontend-dev tournament-test tournament-build shifts-dev shifts-debug shifts-test shifts-build test
 
 images-smoke-test:
 	$(PYTHON) tools/check_images.py
 
 python-common-test:
 	$(UV) run --directory packages/crr-python --package crr-python --locked python -m pytest
+
+.PHONY: ttlock-test
+ttlock-test:
+	$(UV) run --directory packages/ttlock --package ttlock --locked python -m pytest
 
 tournament-install:
 	npm --prefix apps/tournament/frontend ci
@@ -31,13 +35,17 @@ shifts-dev:
 	mkdir -p apps/shifts/backend/data
 	cd apps/shifts/backend && "$(abspath .venv/bin/python)" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
+shifts-debug:
+	mkdir -p apps/shifts/backend/data
+	cd apps/shifts/backend && "$(abspath .venv/bin/python)" -Xfrozen_modules=off -m debugpy --listen 127.0.0.1:5678 --wait-for-client -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+
 shifts-test:
 	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python -m pytest
 
 shifts-build:
 	docker build -f apps/shifts/Dockerfile -t crr-shifts .
 
-test: python-common-test tournament-test shifts-test tooling-test
+test: python-common-test ttlock-test tournament-test shifts-test tooling-test
 
 .PHONY: tooling-test release-plan
 tooling-test:

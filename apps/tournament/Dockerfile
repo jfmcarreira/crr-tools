@@ -17,6 +17,7 @@ COPY pyproject.toml uv.lock ./
 COPY apps/tournament/backend/pyproject.toml apps/tournament/backend/pyproject.toml
 COPY apps/shifts/backend/pyproject.toml apps/shifts/backend/pyproject.toml
 COPY packages/crr-python/ packages/crr-python/
+COPY packages/ttlock/pyproject.toml packages/ttlock/pyproject.toml
 RUN uv sync --frozen --package crr-tournament --no-dev --no-editable
 COPY apps/tournament/backend/ apps/tournament/backend/
 COPY --from=frontend /workspace/apps/tournament/frontend/dist apps/tournament/frontend/dist/

@@ -37,6 +37,7 @@ def ensure_initial_data(db: Session) -> None:
                     email=settings.initial_admin_email or None,
                     is_admin=True,
                     is_active=True,
+                    can_request_pin=False,
                 ),
                 is_active=True,
             )
