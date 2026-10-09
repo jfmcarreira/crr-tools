@@ -1,4 +1,5 @@
 import calendar
+import re
 from datetime import date, timedelta
 
 import pytest
@@ -7,7 +8,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import Assignment, Schedule, SwapRequest, Team
+from app.models import Assignment, Schedule, SwapRequest, Team, User
 from app.routers.swap_helpers import _complete_swap
 from app.services.scheduling import (
     ensure_month_assignments,
@@ -213,8 +214,7 @@ def test_create_swap_refuses_beyond_shifts(
 def test_complete_swap_refuses_out_of_window(
     db: Session, schedule: Schedule, team: Team
 ) -> None:
-    """Accept/approve/admin-assign all settle through _complete_swap, so its guard
-    protects every completion path against stale requests outside the window."""
+    """Completion must refuse existing shifts beyond the horizon."""
     other = Team(name="Equipa Sul")
     db.add(other)
     db.commit()
@@ -234,13 +234,16 @@ def test_complete_swap_refuses_out_of_window(
         _complete_swap(db, swap, other)
     assert "Só é possível agendar turnos" in str(exc.value.detail)
     db.refresh(rows[0])
-    assert rows[0].team_id == team.id  # untouched by the refused completion
+    db.refresh(rows[1])
+    assert rows[0].team_id == team.id
+    assert rows[1].team_id == other.id
+    assert swap.status == "open"
 
 
 def test_swap_new_hides_beyond_months(
     db: Session, logged_in: TestClient, schedule: Schedule
 ) -> None:
-    """The offer page stops at the horizon month and lists no far-future shifts."""
+    """There is no month navigation or far-future shift selection."""
     horizon = scheduling_horizon()
     next_year, next_month = _shift_month(horizon.year, horizon.month, 1)
 
@@ -256,14 +259,111 @@ def test_swap_new_hides_beyond_months(
         f"/swaps/new?year={horizon.year}&month={horizon.month}",
         follow_redirects=False,
     )
-    # "Seguinte →" is clamped to the horizon month instead of escaping it.
-    assert f"/swaps/new?year={horizon.year}&amp;month={horizon.month}" in at_horizon.text
+    assert "Seguinte →" not in at_horizon.text
+    assert "Anterior" not in at_horizon.text
+
+
+def test_swap_page_lists_existing_targets_across_months_without_generating(
+    db: Session, logged_in: TestClient, schedule: Schedule, team: Team, admin: User
+) -> None:
+    team.user_id = admin.id
+    admin.is_admin = False
+    other = Team(name="Equipa Sul")
+    another_schedule = Schedule(name="Outra escala", slug="outra", schedule_type="fixed", weekdays="5")
+    db.add_all([other, another_schedule])
+    db.flush()
+    today = date.today()
+    year, month = _shift_month(today.year, today.month, 2)
+    future = date(year, month, 15)
+    offer = Assignment(schedule_id=schedule.id, date=today, team_id=team.id)
+    later_offer = Assignment(schedule_id=schedule.id, date=future - timedelta(days=1), team_id=team.id)
+    wanted = Assignment(schedule_id=schedule.id, date=future, team_id=other.id)
+    unassigned = Assignment(schedule_id=schedule.id, date=future + timedelta(days=1))
+    past = Assignment(schedule_id=schedule.id, date=today - timedelta(days=1), team_id=other.id)
+    wrong_schedule = Assignment(schedule_id=another_schedule.id, date=future, team_id=other.id)
+    beyond = Assignment(
+        schedule_id=schedule.id,
+        date=scheduling_horizon() + timedelta(days=1),
+        team_id=other.id,
+    )
+    db.add_all([offer, later_offer, wanted, unassigned, past, wrong_schedule, beyond])
+    db.commit()
+    before = set(db.scalars(select(Assignment.id)).all())
+
+    page = logged_in.get(f"/swaps/new?year={today.year}&month={today.month}")
+    assert page.status_code == 200
+    offered_options = re.search(r'<select name="assignment_id" required>(.*?)</select>', page.text, re.S)
+    wanted_options = re.search(r'<select name="target_assignment_id" required>(.*?)</select>', page.text, re.S)
+    assert offered_options is not None and wanted_options is not None
+    assert re.findall(r'<option value="(\d+)"', offered_options.group(1)) == [str(offer.id), str(later_offer.id)]
+    assert re.findall(r'<option value="(\d+)"', wanted_options.group(1)) == [str(wanted.id)]
+    assert set(db.scalars(select(Assignment.id)).all()) == before
+    assert f"<h2>{schedule.name}</h2>" in page.text
+    assert f"<h2>{another_schedule.name}</h2>" not in page.text
+    assert "Seguinte →" not in page.text
+    assert 'name="message"' not in page.text
+    assert 'class="swap-request-form"' in page.text
+    assert '<button class="primary" type="submit">Enviar pedido</button>' in page.text
+    assert '<div class="row end"><button' not in page.text
+    assert "Não consigo fazer este dia" not in page.text
+
+    later_page = logged_in.get(f"/swaps/new?year={year}&month={month}")
+    assert f'<option value="{wanted.id}">' in later_page.text
+    assert f'<option value="{offer.id}">' in later_page.text
+
+    beyond_page = logged_in.get(f"/swaps/new?year={beyond.date.year}&month={beyond.date.month}")
+    assert f'<option value="{later_offer.id}">' in beyond_page.text
+    assert f'<option value="{beyond.id}">' not in beyond_page.text
+
+    response = logged_in.post(
+        "/swaps/new",
+        data={"assignment_id": offer.id, "target_assignment_id": wanted.id,
+              "csrf_token": page.text.split('name="csrf_token" value="')[1].split('"')[0]},
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+    swap = db.scalar(select(SwapRequest).where(SwapRequest.assignment_id == offer.id))
+    assert swap is not None and swap.target_assignment_id == wanted.id
+    assert swap.message is None
+    _complete_swap(db, swap, other)
+    db.refresh(offer)
+    db.refresh(wanted)
+    assert offer.team_id == other.id and wanted.team_id == team.id
+
+
+@pytest.mark.parametrize("past_side", ["offered", "target"])
+def test_complete_swap_still_refuses_past_shifts(
+    db: Session, schedule: Schedule, team: Team, past_side: str
+) -> None:
+    other = Team(name="Equipa Sul")
+    db.add(other)
+    db.flush()
+    today = date.today()
+    offer = Assignment(
+        schedule_id=schedule.id,
+        date=today - timedelta(days=1) if past_side == "offered" else today,
+        team_id=team.id,
+    )
+    target = Assignment(
+        schedule_id=schedule.id,
+        date=today - timedelta(days=1) if past_side == "target" else today + timedelta(days=1),
+        team_id=other.id,
+    )
+    db.add_all([offer, target])
+    db.flush()
+    swap = SwapRequest(assignment_id=offer.id, target_assignment_id=target.id,
+                       requester_id=team.id, target_team_id=other.id, status="open")
+    db.add(swap)
+    db.commit()
+    with pytest.raises(HTTPException, match="Turnos passados"):
+        _complete_swap(db, swap, other)
+    assert offer.team_id == team.id and target.team_id == other.id
 
 
 def test_revert_swap_refuses_out_of_window(
     db: Session, logged_in: TestClient, schedule: Schedule, team: Team
 ) -> None:
-    """Revert is also a rota change: refused when either shift sits outside the window."""
+    """Revert refuses either shift beyond the scheduling horizon."""
     other = Team(name="Equipa Sul")
     db.add(other)
     db.commit()
@@ -293,7 +393,11 @@ def test_revert_swap_refuses_out_of_window(
     assert response.status_code == 400
     assert "Só é possível agendar turnos" in response.text
     db.refresh(rows[0])
-    assert rows[0].team_id == other.id  # untouched by the refused revert
+    db.refresh(rows[1])
+    db.refresh(swap)
+    assert rows[0].team_id == other.id
+    assert rows[1].team_id == team.id
+    assert swap.status == "approved"
 
 
 def test_admin_assign_navigation_clamps_at_horizon(

@@ -79,7 +79,11 @@ month one, October 2026 allows scheduling until 30 April 2027
   the monthly grid, applying the pattern, clearing or applying the rotation,
   regenerating one shift, the day-by-day `/admin/assign` picker, and opening,
   completing or reverting change requests (both the offered shift and the one
-  wanted in return). The rotation/clear/pattern actions only touch days from
+  wanted in return).
+  The swap page groups shifts by schedule and lists already-assigned future
+  shifts from all months within the horizon in both selectors; it generates no
+  assignments and has no month navigation.
+  The rotation/clear/pattern actions only touch days from
   today on, so a month that started in the past is partially editable within the
   current month; saving a night pattern only fills open nights from today on.
 - Dates outside it are read-only: months before today and after the horizon still
@@ -87,7 +91,7 @@ month one, October 2026 allows scheduling until 30 April 2027
   write endpoint refuses them with a Portuguese message ("Turnos passados não
   podem ser alterados" or "Só é possível agendar turnos nos próximos 6 meses…").
 - Month and day navigation stops at the limits: **Seguinte →** clamps to the
-  horizon month on the schedule and swap pages, `/admin/assign` hides **Dia
+  horizon month on the schedule pages, `/admin/assign` hides **Dia
   seguinte** at the horizon and **Dia anterior** before today, and the week count
   in notifications keeps reminding only a few days ahead. Navigating further ahead
   by hand still shows the future rota as a read-only preview.

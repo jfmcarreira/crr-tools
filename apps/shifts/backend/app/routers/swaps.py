@@ -8,11 +8,11 @@ from sqlalchemy.orm import Session, selectinload
 from ..config import settings
 from ..database import get_db
 from ..models import Assignment, SwapRequest, Team
-from ..i18n import day_numeric_long, day_short, month_name
+from ..i18n import day_numeric_long, day_short
 from ..services.notifications import send_email_notification, send_many
-from ..services.scheduling import ensure_month_assignments, in_scheduling_window, scheduling_horizon
+from ..services.scheduling import in_scheduling_window, scheduling_horizon
 from .admin.user_helpers import _admin_teams
-from .dependencies import _beyond_horizon_message, _check_csrf, _context, _flash, _month_nav, _parse_month, _redirect, _require_admin, _require_user, _safe_back, _user_label, _user_team_ids
+from .dependencies import _beyond_horizon_message, _check_csrf, _context, _flash, _redirect, _require_admin, _require_user, _safe_back, _user_label, _user_team_ids
 from .schedule_helpers import _active_schedules, _schedule_teams_map
 from .swap_helpers import _accepting_team, _active_request, _complete_swap, _reject_swap, _rejectable, _swap_ownership_holds, _swap_partner, _swap_side
 
@@ -66,8 +66,17 @@ def new_swap_page(
     """Its own page, so the rota keeps showing only who works each day."""
     user = _require_user(request, db)
     my_ids = _user_team_ids(db, user)
-    year, month = _parse_month(year, month)
-    assignments = ensure_month_assignments(db, year, month)
+    today = date.today()
+    horizon = scheduling_horizon()
+    # Both sides list all already assigned future shifts within the horizon.
+    # Legacy month query parameters do not narrow the list or generate shifts.
+    assignments = db.scalars(
+        select(Assignment).where(
+            Assignment.date >= today,
+            Assignment.date <= horizon,
+            Assignment.team_id.is_not(None),
+        )
+    ).all()
     taken = set(
         db.scalars(
             select(SwapRequest.assignment_id).where(
@@ -78,7 +87,6 @@ def new_swap_page(
     # One team can work several days, so the shift to offer is chosen here,
     # and each schedule only offers the teams who work that same schedule.
     names = {t.id: t.name for t in db.scalars(select(Team)).all()}
-    horizon = scheduling_horizon()
     groups: list[dict] = []
     for schedule in _active_schedules(db):
         mine = [
@@ -86,8 +94,6 @@ def new_swap_page(
             if a.schedule_id == schedule.id
             and a.team_id
             and (a.team_id in my_ids or user.is_admin)
-            and a.date >= date.today()
-            and a.date <= horizon
             and a.id not in taken
         ]
         theirs = [
@@ -95,8 +101,6 @@ def new_swap_page(
             if a.schedule_id == schedule.id
             and a.team_id
             and a.team_id not in my_ids
-            and a.date >= date.today()
-            and a.date <= horizon
             and a.id not in taken
         ]
         if not mine or not theirs:
@@ -117,23 +121,12 @@ def new_swap_page(
                 ],
             }
         )
-    prev, nxt = _month_nav(year, month)
-    today = date.today()
-    if (prev[0], prev[1]) < (today.year, today.month):
-        prev = (today.year, today.month)
-    if (nxt[0], nxt[1]) > (horizon.year, horizon.month):
-        nxt = (horizon.year, horizon.month)
     return request.app.state.templates.TemplateResponse(
         request=request,
         name="swap_new.html",
         context=_context(
             request,
             db,
-            year=year,
-            month=month,
-            month_name=month_name(month),
-            prev=prev,
-            nxt=nxt,
             groups=groups,
         ),
     )
