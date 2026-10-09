@@ -3,11 +3,10 @@
 {% block content %}
 <div class="page-head">
   <div>
-    <p class="eyebrow"><a href="{{ app_path('/') }}">Rota</a></p>
     <h1>A minha conta</h1>
     <p class="muted">{{ current_user.name or current_user.username }} · @{{ current_user.username }}</p>
     {% if current_teams %}
-    <p class="muted">Este utilizador entra em nome de {{ current_teams|length }} equipa(s): {{ current_teams|map(attribute='name')|join(', ') }}. Vê e controla os turnos de todas.</p>
+    <p class="muted">Este utilizador entra em nome de {{ current_teams|length }} equipa(s): {{ current_teams|map(attribute='name')|join(', ') }}. </p>
     {% endif %}
   </div>
 </div>

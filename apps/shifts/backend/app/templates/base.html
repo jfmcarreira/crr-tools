@@ -19,8 +19,8 @@
         <img class="crr-topbar__logo brand-logo" src="{{ url_for('brand', path='assets/logo.png') }}" alt="CRR">
         <span class="crr-topbar__name brand-name">{{ settings.app_name }}</span>
       </a>
+      {% if current_user %}
       <nav class="crr-topbar__nav nav" aria-label="Navegação principal">
-        {% if current_user %}
           <a href="{{ app_path('/swaps') }}">Trocas</a>
         {% if current_user.is_admin %}
           <a href="{{ app_path('/admin/schedules') }}">Gerir escalas</a>
@@ -29,8 +29,8 @@
           <a href="{{ app_path('/admin/access') }}">Acesso à porta</a>
           <a href="{{ app_path('/admin/notifications') }}">Registo de e-mails</a>
         {% endif %}
-        {% endif %}
       </nav>
+      {% endif %}
       {% if current_user %}
       <div class="crr-topbar__account account">
         <a class="account-link" href="{{ app_path('/account') }}" title="A minha conta">

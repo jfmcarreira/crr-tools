@@ -27,15 +27,6 @@
   </div>
 </div>
 
-{% if expired_pins %}
-<section class="card">
-  <h2>Acesso à porta</h2>
-  {% for pin in expired_pins %}
-  <p>Turno {{ pin.assignment_id }}: O código expirou.</p>
-  {% endfor %}
-</section>
-{% endif %}
-
 <div class="calendar-list">
 {% for day, assignments in month_days %}
   <section class="day-card {% if day == today %}today{% endif %}">

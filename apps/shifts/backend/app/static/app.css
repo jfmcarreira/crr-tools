@@ -16,6 +16,16 @@
 body{font-size:16px;line-height:1.45}
 .container{width:min(1100px,calc(100% - 28px));margin:auto}
 .topbar{margin-bottom:28px}
+.topbar-inner{height:auto;padding:10px 0;flex-wrap:wrap;gap:4px 16px}
+.topbar .brand{flex:0 1 auto}
+.topbar .brand-name{white-space:normal;overflow-wrap:anywhere;line-height:1.2}
+.topbar .nav{display:contents}
+.topbar .nav a{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.topbar .account{min-width:0;max-width:100%}
+.topbar .account-link{min-width:0;max-width:220px}
+.topbar .account-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .account form{flex-shrink:0}
+.topbar .nav a,.topbar .link-button{display:inline-flex;align-items:center;min-height:44px}
 .page-head{display:flex;justify-content:space-between;gap:20px;align-items:end;flex-wrap:wrap;margin-bottom:20px}
 h1,h2,h3{line-height:1.2}
 h1{margin:0 0 6px;font-size:1.8rem}
@@ -106,6 +116,7 @@ th{font-size:.8rem;color:var(--muted);background:#fff7f7}
 .inline-form select{width:auto;min-width:190px}
 .inline-form input[type=text]{min-width:260px;flex:1}
 @media(max-width:700px){
+  .topbar .account-link{min-height:44px;justify-content:center}
   .form-grid{grid-template-columns:1fr}
   .calendar-subscribe-actions{grid-template-columns:1fr}
   .calendar-url-row button{width:100%;min-height:44px}
