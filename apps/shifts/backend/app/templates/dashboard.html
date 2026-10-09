@@ -89,4 +89,14 @@
   <p class="muted">Não tens dias atribuídos.</p>
 {% endfor %}
 </div>
+{% if not personal and year == today.year and month == today.month %}
+<script>
+  window.addEventListener('load', function() {
+    // Preserve explicit anchors and the browser's back/forward scroll restoration.
+    const navigation = performance.getEntriesByType('navigation')[0];
+    if (window.location.hash || navigation?.type === 'back_forward') return;
+    document.querySelector('.day-card.today')?.scrollIntoView({behavior: 'instant', block: 'start'});
+  }, {once: true});
+</script>
+{% endif %}
 {% endblock %}
