@@ -18,7 +18,10 @@ body{font-size:16px;line-height:1.45}
 .topbar{margin-bottom:28px}
 .topbar-inner{height:auto;padding:10px 0;flex-wrap:wrap;gap:4px 16px}
 .topbar .brand{flex:0 1 auto}
-.topbar .brand-name{white-space:normal;overflow-wrap:anywhere;line-height:1.2}
+.topbar .brand-name{white-space:nowrap;line-height:1.2}
+.topbar-inner.compact-brand .brand-name{display:none}
+.topbar-inner.measure-header{flex-wrap:nowrap}
+.topbar-inner.measure-header .brand,.topbar-inner.measure-header .nav a,.topbar-inner.measure-header .account{flex-shrink:0;max-width:none;width:max-content;white-space:nowrap}
 .topbar .nav{display:contents}
 .topbar .nav a{max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .topbar .account{min-width:0;max-width:100%}
@@ -47,6 +50,9 @@ a{color:var(--brand-dark)}
 .wrap{flex-wrap:wrap}
 .gap{gap:14px}
 .month-nav,.actions,.inline-form{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.month-navigation-buttons{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;flex:1 0 auto}
+.month-navigation-buttons .button{flex:1;text-align:center}
+.month-nav .swap-request-button,.month-nav .next-month-button,.month-nav .previous-month-button{min-width:max-content;white-space:nowrap}
 .button,button{border-radius:var(--crr-radius-control);border-width:1px;border-style:solid;padding:9px 12px;text-decoration:none;display:inline-block;font-weight:600}
 button:not(.secondary):not(.danger){border-color:transparent}
 .danger{background:#fff;color:var(--danger);border-color:#e7c3c3}

@@ -10,5 +10,10 @@
   responsibility. Shared request/session/CSRF/flash/context helpers belong in
   `routers/dependencies.py`; password and token primitives belong in `security/`.
 - Preserve manual/swapped assignments, atomic swaps, and commit-before-email rules.
+- Always enforce the configured scheduling horizon for upcoming assignment lists,
+  calendars and shift selectors, including “Meus dias”: today through
+  `scheduling_horizon()`, inclusive. Reuse `scheduling_horizon()` and
+  `in_scheduling_window()` rather than hard-coding maximum dates. Keep explicitly
+  historical views separate; existing out-of-window assignments remain read-only.
 - Run `make shifts-test` from the repository root after relevant changes.
 - Version and release this application independently using `shifts-v...` tags.

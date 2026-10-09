@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+{% block title %}{% if personal %}Meus dias — {% endif %}{{ settings.app_name }}{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
+    {% if personal %}
+    <h1>Meus dias</h1>
+    {% else %}
     <h1>{{ month_name }} {{ year }}</h1>
+    {% endif %}
   </div>
   <div class="month-nav">
     {% if active_pins %}
@@ -19,16 +24,23 @@
 
     {% if current_user %}
     <a class="button secondary" href="{{ app_path('/calendar') }}">Calendário</a>
-    <a class="button primary" href="{{ app_path('/swaps/new?year=' ~  year  ~ '&month=' ~  month ) }}">Pedir troca</a>
+    <a class="button primary swap-request-button" href="{{ app_path('/swaps/new') if personal else app_path('/swaps/new?year=' ~ year ~ '&month=' ~ month) }}">Pedir troca</a>
     {% endif %}
 
-    <a class="button secondary" href="{{ app_path('/?year=' ~  prev[0]  ~ '&month=' ~  prev[1] ) }}">← Anterior</a>
-    <a class="button secondary" href="{{ app_path('/?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
+    {% if not personal %}
+    <div class="month-navigation-buttons">
+    <a class="button secondary previous-month-button" href="{{ app_path(dashboard_path ~ '?year=' ~  prev[0]  ~ '&month=' ~  prev[1] ) }}">← Anterior</a>
+    <a class="button secondary next-month-button" href="{{ app_path(dashboard_path ~ '?year=' ~  nxt[0]  ~ '&month=' ~  nxt[1] ) }}">Seguinte →</a>
+    </div>
+    {% endif %}
   </div>
 </div>
 
 <div class="calendar-list">
 {% for day, assignments in month_days %}
+  {% if personal and (loop.first or day.year != loop.previtem[0].year or day.month != loop.previtem[0].month) %}
+  <h2>{{ month_names[day.month] }} {{ day.year }}</h2>
+  {% endif %}
   <section class="day-card {% if day == today %}today{% endif %}">
     <div class="day-label">
       <strong>{{ day|dia_curto }}</strong>
@@ -36,7 +48,7 @@
     </div>
     <div class="day-assignments">
       {% for assignment in assignments %}
-      <article class="assignment {% if assignment.id in my_assignment_ids %}mine{% endif %}">
+      <article class="assignment {% if not personal and assignment.id in my_assignment_ids %}mine{% endif %}">
         <div>
           <div class="assignment-title">{{ assignment.schedule.name }}</div>
           <div class="assignment-team">
@@ -73,6 +85,8 @@
       {% endfor %}
     </div>
   </section>
+{% else %}
+  <p class="muted">Não tens dias atribuídos.</p>
 {% endfor %}
 </div>
 {% endblock %}

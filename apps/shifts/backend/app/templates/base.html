@@ -21,6 +21,7 @@
       </a>
       {% if current_user %}
       <nav class="crr-topbar__nav nav" aria-label="Navegação principal">
+          <a href="{{ app_path('/my-days') }}">Meus dias</a>
           <a href="{{ app_path('/swaps') }}">Trocas</a>
         {% if current_user.is_admin %}
           <a href="{{ app_path('/admin/schedules') }}">Gerir escalas</a>
@@ -54,6 +55,32 @@
     {% block content %}{% endblock %}
   </main>
   <script>
+    const header = document.querySelector('.topbar-inner');
+    function fitHeaderTitle() {
+      header.classList.remove('compact-brand');
+      header.classList.add('measure-header');
+      const items = header.querySelectorAll(':scope > .brand, :scope > .nav > a, :scope > .account');
+      const gap = parseFloat(getComputedStyle(header).columnGap) || 0;
+      const requiredWidth = Array.from(items).reduce(
+        (width, item) => width + item.getBoundingClientRect().width, 0
+      ) + gap * (items.length - 1);
+      header.classList.toggle('compact-brand', requiredWidth > header.clientWidth);
+      header.classList.remove('measure-header');
+    }
+    fitHeaderTitle();
+    let headerWidth = header.clientWidth;
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => {
+        if (header.clientWidth !== headerWidth) {
+          headerWidth = header.clientWidth;
+          fitHeaderTitle();
+        }
+      }).observe(header);
+    } else {
+      window.addEventListener('resize', fitHeaderTitle);
+    }
+    if (document.fonts) document.fonts.ready.then(fitHeaderTitle);
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('{{ url_for('static', path='sw.js') }}')
