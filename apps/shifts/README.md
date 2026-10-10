@@ -191,7 +191,7 @@ Preserve the encryption key while PINs are valid; replacing it makes stored PINs
 unreadable. PINs and access tokens never go in session cookies or user-facing URLs. Keep HTTP
 wire/body debugging disabled in production and keep clocks synchronized.
 
-Enable “Pode pedir código de acesso” only for approved users in the admin user
+Enable “Códigos da Porta” only for approved users in the admin user
 page. They may request a code during the first hour of an actual assigned shift,
 including overnight shifts. Validity covers the current and next UTC hour even
 when the shift ends sooner; the actual dates returned by the module are stored.

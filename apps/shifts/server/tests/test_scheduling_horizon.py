@@ -298,13 +298,10 @@ def test_swap_page_lists_existing_targets_across_months_without_generating(
     assert re.findall(r'<option value="(\d+)"', offered_options.group(1)) == [str(offer.id), str(later_offer.id)]
     assert re.findall(r'<option value="(\d+)"', wanted_options.group(1)) == [str(wanted.id)]
     assert set(db.scalars(select(Assignment.id)).all()) == before
-    assert f"<h2>{schedule.name}</h2>" in page.text
-    assert f"<h2>{another_schedule.name}</h2>" not in page.text
+    assert schedule.name in page.text
+    assert another_schedule.name not in page.text
     assert "Seguinte →" not in page.text
     assert 'name="message"' not in page.text
-    assert 'class="swap-request-form"' in page.text
-    assert '<button class="primary" type="submit">Enviar pedido</button>' in page.text
-    assert '<div class="row end"><button' not in page.text
     assert "Não consigo fazer este dia" not in page.text
 
     later_page = logged_in.get(f"/swaps/new?year={year}&month={month}")

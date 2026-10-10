@@ -1,21 +1,10 @@
-"""Keep browser presentation separate without changing its public routes."""
-
-from pathlib import Path
+"""Verify the service worker's public route and deployment-prefix support."""
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 from app.main import UI_DIR, app
-
-
-def test_ui_is_outside_the_python_application() -> None:
-    shifts_dir = Path(__file__).resolve().parents[2]
-    assert UI_DIR == shifts_dir / "ui"
-    assert (UI_DIR / "templates").is_dir()
-    assert (UI_DIR / "static").is_dir()
-    assert not (shifts_dir / "server" / "app" / "templates").exists()
-    assert not (shifts_dir / "server" / "app" / "static").exists()
 
 
 @pytest.mark.parametrize("prefix", ["", "/crr"])

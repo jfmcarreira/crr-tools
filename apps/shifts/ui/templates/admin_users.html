@@ -23,22 +23,27 @@
     </div>
     <fieldset class="form-col">
       <legend>Equipas <span class="muted">(pode escolher várias)</span></legend>
+      <div class="team-selection-list" tabindex="0" role="region" aria-label="Equipas disponíveis">
       {% for team in teams %}
       <label class="check"><input type="checkbox" name="team_ids" value="{{ team.id }}"> {{ team.name }}</label>
       {% else %}
       <p class="muted">Ainda não há equipas. Crie-as em <a href="{{ app_path('/admin/teams') }}">Equipas</a>.</p>
       {% endfor %}
+      </div>
     </fieldset>
     {{ boolean_toggle('is_admin', 'Administrador', id='new-user-is-admin') }}
-    {{ boolean_toggle('can_request_pin', 'Pode pedir código de acesso', id='new-user-can-request-pin') }}
+    {{ boolean_toggle('can_request_pin', 'Códigos da Porta', id='new-user-can-request-pin') }}
     {{ boolean_toggle('notify_email', 'Notificações por e-mail', true, 'new-user-notify-email') }}
   </form>
 </section>
 <div class="stack gap-lg top-space">
 {% for account in users %}
 <details class="panel">
-  <summary><strong>@{{ account.username }}</strong> <span class="muted">{{ account.name }}{% if account.email %} · {{ account.email }}{% endif %}{% if account.is_admin %} · administrador{% endif %}{% if not account.is_active %} · inativo{% endif %} · {{ account.teams|length }} equipa(s)</span></summary>
-  <form method="post" action="{{ app_path('/admin/users/' ~  account.id  ~ '/update') }}" class="form-grid top-space">
+  <summary class="user-account-summary">
+    <span class="user-account-heading"><strong>@{{ account.username }}</strong> <span class="muted">{{ account.name }}{% if account.email %} · {{ account.email }}{% endif %}{% if account.is_admin %} · administrador{% endif %}{% if not account.is_active %} · inativo{% endif %} · {{ account.teams|length }} equipa(s)</span></span>
+    {{ boolean_toggle('is_active', 'Ativo', account.is_active, 'user-' ~ account.id ~ '-is-active', form='edit-user-' ~ account.id, classes='user-active-toggle') }}
+  </summary>
+  <form id="edit-user-{{ account.id }}" method="post" action="{{ app_path('/admin/users/' ~  account.id  ~ '/update') }}" class="form-grid top-space">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <div class="form-col">
       <label>Nome<input name="name" value="{{ account.name }}" required></label>
@@ -47,14 +52,15 @@
       <label>E-mail <span class="muted">(para as notificações)</span><input type="email" name="email" value="{{ account.email or '' }}"></label>
     </div>
     <fieldset class="form-col">
-      <legend>Equipas que entra</legend>
+      <legend>Equipas</legend>
+      <div class="team-selection-list" tabindex="0" role="region" aria-label="Equipas de {{ account.username }}">
       {% for team in teams %}
       <label class="check"><input type="checkbox" name="team_ids" value="{{ team.id }}" {% if team.user and team.user.id == account.id %}checked{% endif %}> {{ team.name }}</label>
       {% endfor %}
+      </div>
     </fieldset>
     {{ boolean_toggle('is_admin', 'Administrador', account.is_admin, 'user-' ~ account.id ~ '-is-admin') }}
-    {{ boolean_toggle('is_active', 'Ativo', account.is_active, 'user-' ~ account.id ~ '-is-active') }}
-    {{ boolean_toggle('can_request_pin', 'Pode pedir código de acesso', account.can_request_pin, 'user-' ~ account.id ~ '-can-request-pin') }}
+    {{ boolean_toggle('can_request_pin', 'Códigos da Porta', account.can_request_pin, 'user-' ~ account.id ~ '-can-request-pin') }}
     {{ boolean_toggle('notify_email', 'Notificações por e-mail', account.notify_email, 'user-' ~ account.id ~ '-notify-email') }}
     <div><button class="primary" type="submit">Guardar</button></div>
     {% if account.id in removable_ids %}
