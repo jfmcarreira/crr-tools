@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
   <link rel="manifest" href="{{ url_for('static', path='manifest.webmanifest') }}">
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <header class="crr-topbar topbar">
     <div class="crr-topbar__inner topbar-inner">
       <a class="crr-topbar__brand brand" href="{{ app_path('/') }}" aria-label="{{ settings.app_name }} — início">
@@ -21,6 +21,7 @@
       </a>
       {% if current_user %}
       <nav class="crr-topbar__nav nav" aria-label="Navegação principal">
+          <a href="{{ app_path('/') }}">Ínicio</a>
           <a href="{{ app_path('/my-days') }}">Meus dias</a>
           <a href="{{ app_path('/swaps') }}">Trocas</a>
         {% if current_user.is_admin %}
@@ -28,7 +29,7 @@
           <a href="{{ app_path('/admin/teams') }}">Equipas</a>
           <a href="{{ app_path('/admin/users') }}">Utilizadores</a>
           <a href="{{ app_path('/admin/access') }}">Acesso à porta</a>
-          <a href="{{ app_path('/admin/notifications') }}">Registo de e-mails</a>
+          <a href="{{ app_path('/admin/notifications') }}">Notificações</a>
         {% endif %}
       </nav>
       {% endif %}
@@ -83,7 +84,7 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('{{ url_for('static', path='sw.js') }}')
+        navigator.serviceWorker.register('{{ app_path('/sw.js') }}', {scope: '{{ app_path('/') }}'})
           .then(function(reg) { console.log('Service worker registered.', reg); })
           .catch(function(err) { console.error('Service worker registration failed:', err); });
       });

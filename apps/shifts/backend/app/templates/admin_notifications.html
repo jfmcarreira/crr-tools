@@ -1,8 +1,23 @@
 {% extends "base.html" %}
-{% block title %}Registo de e-mails · {{ settings.app_name }}{% endblock %}
+{% block title %}Notificações · {{ settings.app_name }}{% endblock %}
 {% block content %}
-<div class="page-head"><div><h1>Registo de e-mails</h1><p class="muted">«ignorado» significa que a equipa não tem utilizador, que o utilizador não tem e-mail ou tem as notificações desligadas, ou que o SMTP não está configurado.</p></div></div>
-<div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Evento</th><th>Utilizador</th><th>Equipa</th><th>Destinatário</th><th>Estado</th><th>Assunto</th></tr></thead><tbody>
-{% for log in logs %}<tr><td>{{ log.created_at|momento }}</td><td>{{ log.event_type|evento }}</td><td>{{ log.user.label if log.user else '—' }}</td><td>{{ log.team.name if log.team else '—' }}</td><td>{{ log.recipient or '—' }}</td><td><span class="status status-{{ log.status }}">{{ log.status|estado_email }}</span></td><td>{{ log.subject }}</td></tr>{% else %}<tr><td colspan="7">Ainda não há notificações.</td></tr>{% endfor %}
+<div class="page-head"><div><h1>Notificações</h1><p class="muted">«ignorado» significa que a equipa não tem utilizador, que o utilizador não tem e-mail ou tem as notificações desligadas, ou que o SMTP não está configurado.</p></div></div>
+<p class="muted">Inclui também as notificações push enviadas aos dispositivos subscritos.</p>
+<section class="panel">
+  <h2>Interruptor geral de notificações</h2>
+  <p class="muted">Pausa ou retoma todo o envio de e-mails e notificações push. Não altera as preferências pessoais nem as subscrições dos dispositivos.</p>
+  <form method="post" action="{{ app_path('/admin/notifications/settings') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="notifications-enabled">
+      <input id="notifications-enabled" type="checkbox" name="notifications_enabled" value="on"
+          {% if notifications_enabled %}checked{% endif %}>
+      Envio de notificações ativo
+    </label>
+    <button class="primary" type="submit">Guardar</button>
+  </form>
+</section>
+<p class="muted">Durante a pausa, os avisos ficam registados como «ignorado». Ao retomar, só são enviados novos avisos; os anteriores não são reenviados.</p>
+<div class="table-wrap"><table><thead><tr><th>Data e hora</th><th>Evento</th><th>Canal</th><th>Utilizador</th><th>Equipa</th><th>Destinatário</th><th>Estado</th><th>Assunto</th></tr></thead><tbody>
+{% for log in logs %}<tr><td>{{ log.created_at|momento }}</td><td>{{ log.event_type|evento }}</td><td>{{ 'Push' if log.channel == 'push' else 'E-mail' }}</td><td>{{ log.user.label if log.user else '—' }}</td><td>{{ log.team.name if log.team else '—' }}</td><td>{{ log.recipient or '—' }}</td><td><span class="status status-{{ log.status }}">{{ log.status|estado_email }}</span></td><td>{{ log.subject }}</td></tr>{% else %}<tr><td colspan="8">Ainda não há notificações.</td></tr>{% endfor %}
 </tbody></table></div>
 {% endblock %}

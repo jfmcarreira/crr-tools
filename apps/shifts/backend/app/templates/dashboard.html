@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{% if personal %}Meus dias — {% endif %}{{ settings.app_name }}{% endblock %}
+{% block body_class %}{% if not personal %}homepage-dashboard{% endif %}{% endblock %}
 {% block content %}
 <div class="page-head">
   <div>
@@ -36,7 +37,7 @@
   </div>
 </div>
 
-<div class="calendar-list">
+<div class="calendar-list" {% if not personal %}tabindex="0" role="region" aria-label="Lista de turnos"{% endif %}>
 {% for day, assignments in month_days %}
   {% if personal and (loop.first or day.year != loop.previtem[0].year or day.month != loop.previtem[0].month) %}
   <h2>{{ month_names[day.month] }} {{ day.year }}</h2>
@@ -95,7 +96,14 @@
     // Preserve explicit anchors and the browser's back/forward scroll restoration.
     const navigation = performance.getEntriesByType('navigation')[0];
     if (window.location.hash || navigation?.type === 'back_forward') return;
-    document.querySelector('.day-card.today')?.scrollIntoView({behavior: 'instant', block: 'start'});
+    const list = document.querySelector('.calendar-list');
+    const today = list?.querySelector('.day-card.today');
+    if (!today) return;
+    // Move only the list, never the page/header or month navigation.
+    list.scrollTo({
+      top: list.scrollTop + today.getBoundingClientRect().top - list.getBoundingClientRect().top - 16,
+      behavior: 'instant'
+    });
   }, {once: true});
 </script>
 {% endif %}

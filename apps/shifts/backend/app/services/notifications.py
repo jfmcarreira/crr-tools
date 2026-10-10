@@ -8,6 +8,8 @@ from sqlalchemy.orm import Session
 
 from ..config import settings
 from ..models import NotificationLog, Team
+from .push import send_push_notification
+from .notification_settings import notification_enabled
 
 
 def send_email_notification(
@@ -21,7 +23,10 @@ def send_email_notification(
 
     The address is the user's, never the team's: several teams of the same user
     are one recipient, and a rota-only team has nobody to write to.
+    Also deliver to subscribed devices, independently of the email preference.
+    Callers must commit domain changes before invoking this delivery boundary.
     """
+    send_push_notification(db, team, event_type, subject, body)
     user = team.user
     recipient = user.email if user else None
     log = NotificationLog(
@@ -34,6 +39,12 @@ def send_email_notification(
         body=body,
         status="skipped",
     )
+
+    if not notification_enabled(db):
+        log.error = "Envio de notificações em pausa pelo interruptor geral"
+        db.add(log)
+        db.commit()
+        return log
 
     if user is None:
         log.error = "A equipa não tem utilizador a quem enviar notificações"

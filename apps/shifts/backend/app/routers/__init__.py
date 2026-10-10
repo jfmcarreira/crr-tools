@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from .auth import router as auth_router
 from .account import router as account_router
 from .calendar import router as calendar_router
+from .push import router as push_router
 from .exports import router as exports_router
 from .dashboard import router as dashboard_router
 from .swaps import router as swaps_router
@@ -18,6 +19,7 @@ for domain_router in (
     auth_router,
     account_router,
     calendar_router,
+    push_router,
     exports_router,
     dashboard_router,
     swaps_router,

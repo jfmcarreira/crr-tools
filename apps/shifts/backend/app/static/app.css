@@ -77,6 +77,14 @@ input,select{padding:9px 10px}
 .flash{padding:12px 14px;border-radius:9px;margin-bottom:18px;background:var(--brand-soft);border-left:4px solid var(--brand)}
 .flash.error{border-left-color:var(--danger)}
 .calendar-list{display:flex;flex-direction:column;gap:8px;padding-bottom:35px}
+/* Only the homepage rota scrolls; header height may change as navigation wraps. */
+.homepage-dashboard{height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+.homepage-dashboard>.topbar{flex-shrink:0}
+.homepage-dashboard>.container{flex:1;min-height:0;margin:0 auto;display:flex;flex-direction:column}
+.homepage-dashboard>.container>.page-head,.homepage-dashboard>.container>.flash{flex-shrink:0}
+.homepage-dashboard .calendar-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior-y:contain;padding:3px 3px max(35px,env(safe-area-inset-bottom));scrollbar-gutter:stable}
+.homepage-dashboard .calendar-list>*{flex-shrink:0}
+.homepage-dashboard .calendar-list:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
 .calendar-subscribe-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
 .calendar-subscribe-actions .button{display:flex;align-items:center;justify-content:center;text-align:center;min-height:48px}
 .calendar-feed label{display:block;margin-bottom:6px;font-size:.9rem;font-weight:600}

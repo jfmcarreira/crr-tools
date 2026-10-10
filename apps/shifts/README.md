@@ -77,6 +77,58 @@ runs the backend pytest suite; production dependencies come from
 See `docs/DOMAIN.md` for domain rules and `docs/ARCHITECTURE.md` for the current
 module layout, application lifecycle and deployment commands.
 
+## PWA push notifications
+
+Administrators can pause/resume all delivery on **Notificações** using the
+single **Interruptor geral de notificações** checkbox and **Guardar** button.
+The master switch defaults to on and gates every event, for both email and push,
+without modifying user email preferences or device subscriptions. When resumed,
+those personal preferences still apply. Paused notifications are recorded as
+skipped (push only for configured, subscribed devices), not queued for later.
+The switch persists in the database using the `(__master__, all)` setting from
+migration `0007_notification_settings`; legacy per-event rows are not consulted.
+
+The **Calendário** page has an **Ativar notificações** button and a per-device
+disable button. Push follows the existing shift changes, swaps and CLI reminders,
+independently of email preferences/SMTP. Each user's subscribed devices receive
+one push per event; failures are recorded with `channel=push` in notification logs.
+Expired subscriptions (HTTP 404/410) are removed automatically. Sending is
+best-effort, not a guarantee of delivery; it currently runs synchronously with a
+10-second timeout per device. The existing reminder CLI still needs its scheduled
+invocation; push does not add a new reminder timer.
+
+Configure `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` in
+`backend/.env`. The subject should be a contact such as `mailto:admin@example.com`.
+Generate a key pair locally (keep the private key secret):
+
+```sh
+uv run --directory apps/shifts/backend --package crr-shifts --locked python - <<'PY'
+import base64
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+key = ec.generate_private_key(ec.SECP256R1())
+encode = lambda value: base64.urlsafe_b64encode(value).decode().rstrip("=")
+print("VAPID_PRIVATE_KEY=" + encode(key.private_numbers().private_value.to_bytes(32, "big")))
+print("VAPID_PUBLIC_KEY=" + encode(key.public_key().public_bytes(Encoding.X962, PublicFormat.UncompressedPoint)))
+PY
+```
+
+Keep the same keys across deployments; changing them requires devices to
+unsubscribe and enable notifications again. Restart the app after configuring
+them; migration `0006_push_subscriptions` runs on startup without changing
+existing accounts. Serve over HTTPS (localhost is suitable for development).
+On iPhone/iPad, iOS 16.4+ requires adding the PWA to the Home Screen and opening
+it there before enabling notifications. Browser-blocked permissions must be
+changed in browser settings. Notifications may show shift details on the lock
+screen; on shared devices, disable notifications before signing out. Signing out
+does not remove a subscription, so reminders still arrive while the app is closed.
+
+The root-scoped `/sw.js` route and subscription requests honor `ROOT_PATH`.
+Subscription endpoints are limited to the standard Google, Mozilla, Apple and
+Windows push providers to prevent server-side requests to arbitrary hosts.
+Verify on a real device by enabling notifications and triggering a shift-change
+or reminder event; automated tests mock provider delivery.
+
 ## TTLock timed door PINs
 
 The API client lives in [`packages/ttlock`](../../packages/ttlock/README.md), with

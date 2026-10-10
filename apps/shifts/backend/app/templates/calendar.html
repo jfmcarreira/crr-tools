@@ -10,6 +10,18 @@
 </div>
 
 <div class="stack gap-lg">
+  <section class="panel" id="push-notifications"
+      data-key="{{ settings.vapid_public_key if settings.push_enabled else '' }}"
+      data-endpoint="{{ app_path('/push/subscriptions') }}"
+      data-worker="{{ app_path('/sw.js') }}"
+      data-scope="{{ app_path('/') }}"
+      data-csrf="{{ csrf_token }}">
+    <h2>Notificações no telemóvel</h2>
+    <p class="muted">Recebe avisos de alterações, trocas e lembretes dos teus turnos neste dispositivo, mesmo com a app fechada.</p>
+    <button class="primary" type="button" id="enable-push" disabled>Ativar notificações</button>
+    <p class="muted" id="push-status" role="status">A verificar disponibilidade…</p>
+    <p class="muted">No iPhone / iPad (iOS 16.4 ou posterior), adiciona primeiro a app ao ecrã principal e abre-a a partir daí.</p>
+  </section>
 {% for feed in feeds %}
   <section class="panel calendar-feed">
     <h2>{{ feed.title }}</h2>
@@ -61,6 +73,7 @@
   <p class="muted">Escolhe uma subscrição por endereço, em vez de importar um ficheiro .ics, para receber futuras alterações. A atualização depende da app e pode demorar algumas horas. Para Google e Outlook, o endereço tem de estar acessível pela Internet.</p>
 </section>
 
+<script src="{{ url_for('static', path='push.js') }}" defer></script>
 <script>
   // Clipboard permissions can fail even on HTTPS; keep a mobile-friendly fallback.
   document.querySelectorAll("[data-copy]").forEach(function (button) {

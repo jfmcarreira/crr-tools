@@ -37,6 +37,14 @@ class Settings(BaseSettings):
     smtp_from: str = "bar-rota@example.com"
     smtp_starttls: bool = True
     reminder_days_ahead: int = 1
+    vapid_public_key: str = ""
+    vapid_private_key: str = ""
+    vapid_subject: str = ""
+
+    @property
+    def push_enabled(self) -> bool:
+        return bool(self.vapid_public_key and self.vapid_private_key and self.vapid_subject)
+
     # How far ahead the rota may be scheduled, in whole months from the current one:
     # booking windows span today up to the end of the 6th month ahead (included).
     scheduling_horizon_months: int = 6

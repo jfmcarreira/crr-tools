@@ -6,6 +6,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -93,3 +94,10 @@ templates.env.filters.update(
 templates.env.globals["app_path"] = settings.url
 app.state.templates = templates
 app.include_router(router)
+
+
+@app.get("/sw.js", include_in_schema=False)
+def service_worker():
+    # Serve at app root so the worker controls calendar and notification destinations.
+    return FileResponse(BASE_DIR / "static" / "sw.js", media_type="application/javascript",
+                        headers={"Cache-Control": "no-cache"})
