@@ -45,7 +45,7 @@ def test_can_request_pin_requires_permission_and_window(db, monkeypatch):
     db.add_all([user, team, schedule, assignment])
     db.commit()
 
-    now = datetime(2026, 10, 10, 12, 30, tzinfo=timezone.utc)
+    now = datetime(2026, 10, 10, 12, 0, tzinfo=timezone.utc)  # 13:00 Lisbon, at shift start
     assert can_request_pin(db, user, assignment.id, now) is True
 
     user.can_request_pin = False
@@ -54,5 +54,5 @@ def test_can_request_pin_requires_permission_and_window(db, monkeypatch):
 
     user.can_request_pin = True
     db.commit()
-    later = datetime(2026, 10, 10, 13, 0, tzinfo=timezone.utc)
+    later = datetime(2026, 10, 10, 18, 0, tzinfo=timezone.utc)
     assert can_request_pin(db, user, assignment.id, later) is False

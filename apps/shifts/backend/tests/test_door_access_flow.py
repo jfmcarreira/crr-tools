@@ -10,10 +10,10 @@ from sqlalchemy import select
 from app.config import settings
 from app.models import AccessPin, Assignment, Schedule, Team, User
 from app.services import door_access
-from app.services.door_access import DoorAccessError, as_utc, can_request_pin, issue_pin, visible_pin
+from app.services.door_access import DoorAccessError, as_utc, issue_pin, visible_pin
 from app.services.ttlock import TTLockError
 
-NOW = datetime(2026, 10, 10, 12, 30, tzinfo=timezone.utc)  # 13:30 Lisbon
+NOW = datetime(2026, 10, 10, 12, 0, tzinfo=timezone.utc)  # 13:00 Lisbon, at shift start
 
 
 def generated_result(now=NOW, **overrides):
@@ -93,24 +93,29 @@ def test_denial_never_calls_api_or_inserts(db, admin, assignment, configured, mo
     configured.assert_not_called()
 
 
-def test_window_boundaries_and_expiry_no_replacement(db, admin, assignment, configured):
-    start = NOW - timedelta(minutes=30)
-    assert not can_request_pin(db, admin, assignment.id, start - timedelta(microseconds=1))
-    assert can_request_pin(db, admin, assignment.id, start)
-    assert not can_request_pin(db, admin, assignment.id, start + timedelta(hours=1))
-    pin = issue_pin(db, admin, assignment.id, start)
-    expiry = start + timedelta(hours=2)
+@pytest.mark.parametrize("offset", [timedelta(hours=-6), timedelta(hours=6)], ids=["before-shift", "after-shift"])
+def test_outside_request_window_never_calls_api_or_inserts(db, admin, assignment, configured, offset):
+    with pytest.raises(DoorAccessError) as failure:
+        issue_pin(db, admin, assignment.id, NOW + offset)
+    assert failure.value.status_code == 403
+    assert db.scalar(select(AccessPin)) is None
+    configured.assert_not_called()
+
+
+def test_expired_pin_cannot_be_replaced(db, admin, assignment, configured):
+    pin = issue_pin(db, admin, assignment.id, NOW)
+    expired_at = as_utc(pin.valid_until_utc) + timedelta(hours=1)
     # Even an administrator moving this assignment into a new eligible window
     # must not allow a replacement for the expired reservation.
-    assignment.schedule.start_time = time(15)
-    assignment.schedule.end_time = time(16)
+    assignment.schedule.start_time = time(16)
+    assignment.schedule.end_time = time(17)
     db.commit()
     with pytest.raises(DoorAccessError, match="expirou"):
-        issue_pin(db, admin, assignment.id, expiry)
-    door_access.expire_pins(db, expiry)
+        issue_pin(db, admin, assignment.id, expired_at)
+    door_access.expire_pins(db, expired_at)
     assert db.get(AccessPin, pin.id).encrypted_pin is None
     with pytest.raises(DoorAccessError):
-        visible_pin(db, admin, pin.id, expiry)
+        visible_pin(db, admin, pin.id, expired_at)
     configured.assert_called_once()
 
 
@@ -166,15 +171,6 @@ def test_other_users_and_pending_cannot_view(db, admin, assignment, configured):
     db.commit()
     with pytest.raises(DoorAccessError):
         visible_pin(db, admin, pin.id, NOW)
-
-
-def test_overnight_and_dst_interval(db, admin, assignment, configured):
-    assignment.date = date(2026, 10, 24)
-    assignment.schedule.start_time = time(23, 30)
-    assignment.schedule.end_time = time(2)
-    db.commit()
-    assert can_request_pin(db, admin, assignment.id, datetime(2026, 10, 24, 23, 15, tzinfo=timezone.utc))
-    assert not can_request_pin(db, admin, assignment.id, datetime(2026, 10, 24, 23, 30, tzinfo=timezone.utc))
 
 
 def test_http_auth_csrf_and_disabled_permission(logged_in, db, admin, assignment, configured):
@@ -314,9 +310,9 @@ def test_real_adapter_generates_after_digit_free_reservation(db, admin, assignme
     assert calls == ["/oauth2/token", "/v3/keyboardPwd/get"]
 
 
-def test_actual_generation_window_survives_crossing_hour_boundary(db, admin, assignment, configured):
+def test_pin_uses_provider_generation_window(db, admin, assignment, configured):
     configured.return_value = generated_result(NOW + timedelta(hours=1))
-    pin = issue_pin(db, admin, assignment.id, NOW.replace(minute=59, second=59))
+    pin = issue_pin(db, admin, assignment.id, NOW)
     assert as_utc(pin.valid_from_utc) == NOW.replace(minute=0) + timedelta(hours=1)
     assert as_utc(pin.valid_until_utc) == NOW.replace(minute=0) + timedelta(hours=3)
     assert visible_pin(db, admin, pin.id, NOW.replace(minute=0) + timedelta(hours=1)) == "012345678"
@@ -328,7 +324,7 @@ def test_uncertain_generation_keeps_actual_window_for_reconciliation(db, admin, 
     error.start_date, error.end_date = result["startDate"], result["endDate"]
     configured.side_effect = error
     with pytest.raises(DoorAccessError):
-        issue_pin(db, admin, assignment.id, NOW.replace(minute=59, second=59))
+        issue_pin(db, admin, assignment.id, NOW)
     pin = db.scalar(select(AccessPin))
     assert as_utc(pin.valid_until_utc) == NOW.replace(minute=0) + timedelta(hours=3)
     assert pin.encrypted_pin is None
