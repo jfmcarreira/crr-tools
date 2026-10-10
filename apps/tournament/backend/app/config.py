@@ -22,7 +22,10 @@ class Settings(BaseSettings):
     session_cookie_secure: bool | None = None
     session_lifetime_ms: int = 7 * 24 * 60 * 60 * 1000
 
-    model_config = SettingsConfigDict(env_file=Path(__file__).resolve().parents[2] / ".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=Path(__file__).resolve().parents[4] / ".env",
+        env_file_encoding="utf-8", extra="ignore",
+    )
 
     @field_validator("app_base_path")
     @classmethod

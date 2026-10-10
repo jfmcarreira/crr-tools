@@ -1,2 +1,2 @@
 [tool.uv.workspace]
-members = ["apps/shifts/backend", "apps/tournament/backend", "packages/crr-python", "packages/ttlock"]
+members = ["apps/shifts/server", "apps/tournament/backend", "packages/crr-python", "packages/ttlock"]

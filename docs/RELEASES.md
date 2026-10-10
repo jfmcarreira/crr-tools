@@ -8,7 +8,7 @@ no monorepo release number and no automatic deployment of the other app.
 - Tournament: `tournament-vX.Y.Z`, matching both
   `apps/tournament/backend/pyproject.toml` and
   `apps/tournament/frontend/package.json` (regenerate its lockfile when versioning).
-- Shifts: `shifts-vX.Y.Z`, matching `apps/shifts/backend/pyproject.toml`.
+- Shifts: `shifts-vX.Y.Z`, matching `apps/shifts/server/pyproject.toml`.
 - Prerelease tags such as `shifts-v0.2.0-rc.1` publish the versioned image without
   promoting `latest`. Stable tags publish the version and that app's `latest`.
 

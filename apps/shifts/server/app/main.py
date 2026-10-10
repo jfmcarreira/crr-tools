@@ -35,7 +35,7 @@ from .i18n import (
 from .routers import router
 from .security.rate_limit import LoginRateLimiter
 
-BASE_DIR = Path(__file__).resolve().parent
+UI_DIR = Path(__file__).resolve().parents[2] / "ui"
 
 
 @asynccontextmanager
@@ -73,9 +73,9 @@ app.add_middleware(
     https_only=settings.session_https_only,
     max_age=60 * 60 * 24 * 30,
 )
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
+app.mount("/static", StaticFiles(directory=UI_DIR / "static"), name="static")
 app.mount("/brand", StaticFiles(directory=BRAND_DIR), name="brand")
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
+templates = Jinja2Templates(directory=UI_DIR / "templates")
 templates.env.filters.update(
     {
         "dia": day_short,
@@ -99,5 +99,5 @@ app.include_router(router)
 @app.get("/sw.js", include_in_schema=False)
 def service_worker():
     # Serve at app root so the worker controls calendar and notification destinations.
-    return FileResponse(BASE_DIR / "static" / "sw.js", media_type="application/javascript",
+    return FileResponse(UI_DIR / "static" / "sw.js", media_type="application/javascript",
                         headers={"Cache-Control": "no-cache"})

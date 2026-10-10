@@ -2,7 +2,9 @@
 
 - Preserve Portuguese messages, Jinja templates, form fields, routes, session auth,
   CSRF, `ROOT_PATH` deployment, existing SQLite data, and Alembic history.
-- Backend commands run from `backend/`.
+- Backend commands run from `server/`; Python application code belongs in
+  `server/app/`. Server-rendered Jinja templates and browser assets belong in
+  `ui/templates/` and `ui/static/`, separate from backend/domain logic.
 - `services/` owns bootstrap, scheduling, calendar feeds, notifications and PDF
   rendering. `models/` contains app-specific persistence classes; its package
   exports the established model names.

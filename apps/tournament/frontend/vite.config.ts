@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 // PWA plugin removed for CI parity
 
 const brandRoot = fileURLToPath(new URL('../../../packages/crr-brand', import.meta.url));
+const envDir = fileURLToPath(new URL('../../../', import.meta.url));
 
 function deploymentBase(base: string | undefined): string {
   const value = base ?? '/';
@@ -14,9 +15,10 @@ function deploymentBase(base: string | undefined): string {
 }
 
 export default defineConfig(({ mode }) => {
-  const base = deploymentBase(loadEnv(mode, fileURLToPath(new URL('..', import.meta.url)), '').VITE_BASE_PATH);
+  const base = deploymentBase(loadEnv(mode, envDir, 'VITE_').VITE_BASE_PATH);
 
   return {
+    envDir,
     base,
     publicDir: `${brandRoot}/assets`,
     plugins: [vue()],

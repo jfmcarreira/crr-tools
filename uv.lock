@@ -250,7 +250,7 @@ dev = [{ name = "pytest", specifier = ">=8,<9" }]
 [[package]]
 name = "crr-shifts"
 version = "0.1.0"
-source = { virtual = "apps/shifts/backend" }
+source = { virtual = "apps/shifts/server" }
 dependencies = [
     { name = "alembic" },
     { name = "crr-python" },

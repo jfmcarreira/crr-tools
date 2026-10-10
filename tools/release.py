@@ -15,7 +15,8 @@ def release_plan(tag: str, root: Path = ROOT, owner: str = "", registry: str = "
     if not match:
         raise ValueError("Use an independent tournament-vX.Y.Z or shifts-vX.Y.Z tag")
     app, version = match.groups()
-    metadata = tomllib.loads((root / f"apps/{app}/backend/pyproject.toml").read_text())
+    server_folder = "server" if app == "shifts" else "backend"
+    metadata = tomllib.loads((root / f"apps/{app}/{server_folder}/pyproject.toml").read_text())
     if metadata["project"]["version"] != version:
         raise ValueError(f"{tag} does not match the {app} backend version")
     if app == "tournament":

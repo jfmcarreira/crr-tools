@@ -21,10 +21,12 @@ make tournament-backend-dev
 make tournament-frontend-dev
 ```
 
-Copy `apps/tournament/.env.example` to `apps/tournament/.env` and configure
+Copy the repository-root `.env.example` to `.env` and configure
 `ADMIN_PASSWORD` and `SESSION_SECRET` (at least 32 random characters; the app
 refuses to start while either is empty). Uvicorn listens on port 8080 and Vite on
-5173. Development data is stored in `apps/tournament/tournament.sqlite`.
+5173. `make tournament-backend-dev` creates repository-root `data/tournament/`
+and stores development data in `data/tournament/tournament.sqlite`, overriding
+`DATABASE_PATH` from `.env`. Existing databases at older paths are not moved.
 Use consistent `APP_BASE_PATH` and `VITE_BASE_PATH`; `/jogo/` is the example
 deployment prefix, while both also support `/`.
 
@@ -32,7 +34,7 @@ deployment prefix, while both also support `/`.
 docker compose up --build tournament
 ```
 
-Compose loads `apps/tournament/.env`; `TOURNAMENT_BASE_PATH` in the root shell
+Compose loads the repository-root `.env`; `TOURNAMENT_BASE_PATH` in that file or the shell
 controls both the frontend build path and backend path (default `/jogo/`). The
 `tournament-data` volume contains `/data/tournament.sqlite`. The image is
 `crr-tournament`; app version `1.0.0` is recorded in the frontend package and

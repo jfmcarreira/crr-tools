@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -7,10 +8,30 @@ from ci_changes import affected
 from release import release_plan
 
 
+class LocalDataPaths(unittest.TestCase):
+    def test_local_servers_use_repository_root_data(self):
+        root = Path(__file__).resolve().parents[1]
+        for target, folder, database in [
+            ("shifts-dev", "shifts", "bar_rota.db"),
+            ("shifts-debug", "shifts", "bar_rota.db"),
+            ("tournament-backend-dev", "tournament", "tournament.sqlite"),
+        ]:
+            with self.subTest(target=target):
+                command = subprocess.check_output(
+                    ["make", "--dry-run", target], cwd=root, text=True,
+                )
+                self.assertIn(f"mkdir -p data/{folder}", command)
+                path = root / "data" / folder / database
+                setting = "DATABASE_URL" if folder == "shifts" else "DATABASE_PATH"
+                value = f"sqlite:///{path}" if folder == "shifts" else str(path)
+                self.assertIn(f'{setting}="{value}"', command)
+
+
 class ChangedPaths(unittest.TestCase):
     def test_each_app_is_selected_independently(self):
         self.assertEqual(affected(["apps/tournament/frontend/src/App.vue"]), {"tournament": True, "shifts": False})
-        self.assertEqual(affected(["apps/shifts/backend/app/routers/auth.py"]), {"tournament": False, "shifts": True})
+        self.assertEqual(affected(["apps/shifts/server/app/routers/auth.py"]), {"tournament": False, "shifts": True})
+        self.assertEqual(affected(["apps/shifts/ui/templates/login.html"]), {"tournament": False, "shifts": True})
 
     def test_common_changes_select_both(self):
         for path in ["packages/crr-brand/styles/tokens.css", "packages/crr-python/src/crr_common/database.py", "uv.lock", "Makefile", ".github/workflows/ci.yaml"]:
@@ -30,7 +51,8 @@ class ReleaseTags(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         for app, version in [("tournament", "1.0.0"), ("shifts", "0.1.0")]:
-            folder = self.root / f"apps/{app}/backend"
+            server_folder = "server" if app == "shifts" else "backend"
+            folder = self.root / f"apps/{app}/{server_folder}"
             folder.mkdir(parents=True)
             (folder / "pyproject.toml").write_text(f'[project]\nversion="{version}"\n')
         folder = self.root / "apps/tournament/frontend"
@@ -63,7 +85,7 @@ class ReleaseTags(unittest.TestCase):
             release_plan("tournament-v1.0.0", self.root)
 
     def test_prereleases_do_not_promote_latest(self):
-        (self.root / "apps/shifts/backend/pyproject.toml").write_text('[project]\nversion="0.2.0-rc.1"\n')
+        (self.root / "apps/shifts/server/pyproject.toml").write_text('[project]\nversion="0.2.0-rc.1"\n')
         self.assertEqual(release_plan("shifts-v0.2.0-rc.1", self.root)["publish_latest"], "false")
 
 

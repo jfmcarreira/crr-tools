@@ -1,7 +1,7 @@
 {
-  "include": ["apps/shifts/backend/app", "apps/shifts/backend/tests", "apps/tournament/backend/app", "apps/tournament/backend/tests", "packages/crr-python/src", "packages/crr-python/tests", "packages/ttlock/src", "packages/ttlock/tests"],
+  "include": ["apps/shifts/server/app", "apps/shifts/server/tests", "apps/tournament/backend/app", "apps/tournament/backend/tests", "packages/crr-python/src", "packages/crr-python/tests", "packages/ttlock/src", "packages/ttlock/tests"],
   "executionEnvironments": [
-    {"root": "apps/shifts/backend"},
+    {"root": "apps/shifts/server"},
     {"root": "apps/tournament/backend"},
     {"root": "packages/crr-python", "extraPaths": ["packages/crr-python/src"]},
     {"root": "packages/ttlock", "extraPaths": ["packages/ttlock/src"]}

@@ -26,12 +26,22 @@ the root `.venv`. Each backend runs from its own directory and owns its database
 models, authentication and Alembic history.
 
 Run `make tournament-backend-dev` and `make tournament-frontend-dev` in separate
-terminals, or `make shifts-dev` for Shifts. App-specific environment setup is
-documented in each application's README.
+terminals, or `make shifts-dev` for Shifts. Both servers load `.env` from the
+repository root, regardless of their working directory. Copy `.env.example` to
+`.env` and configure the secrets for the apps you run. Environment variables
+override file values; database paths remain relative to each server's working
+directory. Tournament's Vite frontend also reads the root file, exposing only
+`VITE_`-prefixed values to browser code. App-specific settings are documented
+in each application's README.
+
+Local Make dev/debug targets create repository-root `data/shifts/` and
+`data/tournament/` and explicitly use their independent SQLite files, overriding
+database settings in `.env`. Existing databases at older paths are not moved.
+Automated tests continue to use isolated temporary databases.
 
 ## Deployment
 
-Docker Compose 2.24+ supports optional per-app environment files:
+Docker Compose 2.24+ loads the same optional repository-root `.env` for both apps:
 
 ```sh
 docker compose up --build tournament
@@ -39,7 +49,8 @@ docker compose up --build shifts
 ```
 
 Each service has its own Dockerfile, image, database volume and credentials.
-Set the application's secrets in its environment file before deployment.
+Set the application's secrets in the root `.env` before deployment. Compose
+injects the values as environment variables; the file is not copied into images.
 Release tags are app-specific: `tournament-v...` and `shifts-v...`. Tag workflows
 validate each app's version and publish only its image. See
 [release setup and commands](docs/RELEASES.md).

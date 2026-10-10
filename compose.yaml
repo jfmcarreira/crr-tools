@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - path: apps/tournament/.env
+      - path: .env
         required: false
     environment:
       APP_BASE_PATH: ${TOURNAMENT_BASE_PATH:-/jogo/}
@@ -25,7 +25,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - path: apps/shifts/backend/.env
+      - path: .env
         required: false
     environment:
       DATABASE_URL: sqlite:////data/bar_rota.db

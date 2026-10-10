@@ -9,10 +9,24 @@ The limiter is process-local; use one worker or enforce a shared limit at the
 reverse proxy, and configure trusted proxy addresses correctly. A team name is
 not a secret: enable this only when name-based claiming is appropriate.
 
-The server-rendered FastAPI application lives in `backend/`. Its models,
-services, security primitives and domain routers are organized separately, with
-the established Jinja/form contracts and `0001_initial` Alembic history. Python
-dependencies are managed with `uv` and the root `uv.lock`.
+The FastAPI server lives in `server/`; the server-rendered UI lives in `ui/`.
+Models, services, security primitives and domain routers remain separate from
+Jinja templates and browser assets, with the established Jinja/form contracts
+and `0001_initial` Alembic history. Python dependencies are managed with `uv`
+and the root `uv.lock`.
+
+```text
+apps/shifts/
+├── server/
+│   ├── app/          # Python routes, domain logic, persistence and security
+│   ├── migrations/   # Independent Alembic history
+│   └── tests/        # Server and UI integration tests
+└── ui/
+    ├── templates/    # Jinja HTML pages
+    └── static/       # CSS, JavaScript, PWA manifest and service worker
+```
+
+The UI is served by FastAPI, not a separate frontend process or build.
 
 The internal `crr-python` workspace dependency supplies synchronous engine
 construction and Alembic configuration. Shifts owns its sessions, backups,
@@ -21,8 +35,8 @@ as a wheel alongside the app's dependencies.
 
 The canonical logo, favicon and common CSS live in `packages/crr-brand`, mounted
 at `/brand` with root-path-aware Jinja links. PDF exports read that same logo.
-App-specific layouts and forms remain in `backend/app/static/app.css`; Docker
-copies the brand package into the image alongside the backend.
+App-specific layouts and forms remain in `ui/static/app.css`; Docker
+copies the UI and brand package into the image alongside the server.
 
 From the repository root:
 
@@ -32,15 +46,17 @@ make shifts-dev
 make shifts-debug
 ```
 
-Copy `apps/shifts/.env.example` to `apps/shifts/backend/.env` and configure
+Copy the repository-root `.env.example` to `.env` and configure
 `SECRET_KEY`, `INITIAL_ADMIN_PASSWORD`, and the remaining deployment settings.
 Both are enforced: startup fails without a `SECRET_KEY` of at least 32 random
 characters (e.g. `openssl rand -hex 24`), and the first start refuses to create
 the administrator with an empty or placeholder `INITIAL_ADMIN_PASSWORD`.
 The local server listens on port 8000. Migrations, backups and initial data run
-on startup; SQLite data defaults to `backend/data/bar_rota.db`. `make shifts-dev`
-creates its data directory. Create that directory before using CLI initialization
-directly if using the default database URL.
+on startup. `make shifts-dev` and `make shifts-debug` create repository-root
+`data/shifts/` and use `data/shifts/bar_rota.db`, overriding `DATABASE_URL` from
+`.env`. Existing databases at older paths are not moved. For manual CLI runs,
+the root `.env.example` uses that same location relative to `server/`; create
+`data/shifts/` from the repository root before initializing the database.
 
 `make shifts-debug` uses the workspace's `.venv/bin/python` directly (like
 `shifts-dev`), so it does not invoke pyenv or uv at runtime. The environment must
@@ -51,14 +67,14 @@ on port 8000 and disables auto-reload. Stop any backend already using port 8000
 first. In VS Code, install the Python Debugger extension and use an attach
 configuration with `"type": "debugpy"`, `"request": "attach"` and
 `"connect": {"host": "127.0.0.1", "port": 5678}`. Do not expose the debugger port
-publicly. The same backend `.env` and startup database behavior apply.
+publicly. The same repository-root `.env` and startup database behavior apply.
 
 ```sh
 docker compose up --build shifts
 make shifts-build
 ```
 
-Compose loads `apps/shifts/backend/.env`. The `shifts-data` volume contains
+Compose loads the repository-root `.env`. The `shifts-data` volume contains
 `/data/bar_rota.db`; this database is independent from Tournament. The image is
 `crr-shifts`, targeting Python 3.13. Initial Python project version is `0.1.0`;
 future release tags use `shifts-v...`.
@@ -66,8 +82,8 @@ future release tags use `shifts-v...`.
 For administrative CLI commands:
 
 ```sh
-uv run --directory apps/shifts/backend --package crr-shifts --locked python -m app.cli init-db
-uv run --directory apps/shifts/backend --package crr-shifts --locked python -m app.cli seed-demo
+uv run --directory apps/shifts/server --package crr-shifts --locked python -m app.cli init-db
+uv run --directory apps/shifts/server --package crr-shifts --locked python -m app.cli seed-demo
 ```
 
 Tests use isolated synthetic SQLite data and disabled SMTP. `make shifts-test`
@@ -100,11 +116,11 @@ best-effort, not a guarantee of delivery; it currently runs synchronously with a
 invocation; push does not add a new reminder timer.
 
 Configure `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` in
-`backend/.env`. The subject should be a contact such as `mailto:admin@example.com`.
+the repository-root `.env`. The subject should be a contact such as `mailto:admin@example.com`.
 Generate a key pair locally (keep the private key secret):
 
 ```sh
-uv run --directory apps/shifts/backend --package crr-shifts --locked python - <<'PY'
+uv run --directory apps/shifts/server --package crr-shifts --locked python - <<'PY'
 import base64
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
@@ -135,7 +151,7 @@ or reminder event; automated tests mock provider delivery.
 
 The API client lives in [`packages/ttlock`](../../packages/ttlock/README.md), with
 standalone discovery/listing and generated timed/one-time PIN CLI commands.
-`backend/app/services/ttlock.py` adapts Shifts' live settings and configured lock.
+`server/app/services/ttlock.py` adapts Shifts' live settings and configured lock.
 Shifts uses **generated period codes**, not custom or one-time codes; permissions,
 the encrypted ledger and reconciliation remain owned by Shifts.
 The CLI reads exported `TTLOCK_*` credentials (not `.env` automatically) and does
@@ -153,7 +169,7 @@ calendar hour**: a request at 12:50 UTC covers 12:00–14:00 UTC, leaving 1 hour
 Clock/timezone configuration on the lock must be correct.
 There is no callback/webhook requirement: leave TTLock's unlock-record callback unset.
 
-Configure these privately in `backend/.env` (never commit or send credentials):
+Configure these privately in the repository-root `.env` (never commit or send credentials):
 
 - `TTLOCK_CLIENT_ID` and `TTLOCK_CLIENT_SECRET`: Open Platform application credentials.
 - `TTLOCK_USERNAME` and `TTLOCK_PASSWORD`: the **TTLock mobile-app account** owning
@@ -165,7 +181,7 @@ Configure these privately in `backend/.env` (never commit or send credentials):
 - `TTLOCK_ELIGIBLE_SCHEDULE_SLUGS`: comma-separated schedule slugs; empty means no
   eligible schedules. Find slugs in the admin schedule configuration.
 - `TTLOCK_ENCRYPTION_KEY`: a separate Fernet key, different from `SECRET_KEY`.
-  Generate locally from `backend/` with:
+  Generate locally from `server/` with:
 
   ```sh
   uv run --package crr-shifts --locked python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'

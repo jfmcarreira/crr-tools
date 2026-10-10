@@ -7,13 +7,7 @@
   <a class="button primary" href="{{ app_path('/admin/assign') }}">Atribuir Manualmente</a>
 </div>
 <div class="stack gap">
-{% if schedules %}
-<section class="panel" id="export-pdf">
-  <h2>Exportar PDF</h2>
-  <p class="muted">Escolhe uma escala e as datas para descarregar a lista de dias e equipas numa única folha A4.</p>
-  {% include "_schedule_export_form.html" %}
-</section>
-{% endif %}
+
 {% for card in cards %}
 {% set schedule = card.schedule %}
 <section class="panel">
@@ -23,7 +17,6 @@
       <p class="muted">{{ card.kind_label }} · {{ schedule|horario }}{% if not schedule.is_active %} · inativa{% endif %}</p>
     </div>
     <div class="actions">
-      {% if schedule.is_active %}<a class="button secondary" href="{{ app_path('/admin/schedules?schedule_id=' ~  schedule.id ~ '#export-pdf') }}">Exportar PDF</a>{% endif %}
       <a class="button primary" href="{{ app_path('/admin/schedules/' ~  schedule.id ) }}">Configurar</a>
     </div>
   </div>
@@ -37,7 +30,7 @@
     {% else %}<li class="muted">Ainda não há membros.</li>{% endfor %}
   </ol>
   {% else %}
-  <h3>Padrão</h3>
+  <h3>Rotação</h3>
   <ul class="link-list">
     {% for day, team_name in card.pattern %}
     <li><span>{{ day }}</span> <strong>{{ team_name }}</strong></li>
@@ -48,10 +41,16 @@
 {% else %}
 <div class="empty">Ainda não há escalas. Execute <code>python -m app.cli init-db</code> para criar as predefinidas.</div>
 {% endfor %}
+{% if schedules %}
+<section class="panel" id="export-pdf">
+  <h2>Exportar PDF</h2>
+  <p class="muted">Escolhe uma escala e as datas para descarregar a lista de dias e equipas numa única folha A4.</p>
+  {% include "_schedule_export_form.html" %}
+</section>
+{% endif %}
 <section class="panel">
-  <h2>Calendário da equipa</h2>
+  <h2>Calendário Completo</h2>
   <p class="muted">Um único endereço com a rota completa, para qualquer calendário.</p>
-  <p><a class="button secondary" href="{{ app_path('/calendar') }}">Adicionar ao calendário do telemóvel</a></p>
   <div class="inline-form">
     <input type="text" readonly value="{{ calendar_feed_url }}" aria-label="Endereço do calendário da equipa">
     <button class="secondary" type="button" data-copy="{{ calendar_feed_url }}">Copiar</button>

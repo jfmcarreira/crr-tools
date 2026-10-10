@@ -15,7 +15,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_PROJECT_ENVIRONMENT=/opt/ven
 WORKDIR /workspace
 COPY pyproject.toml uv.lock ./
 COPY apps/tournament/backend/pyproject.toml apps/tournament/backend/pyproject.toml
-COPY apps/shifts/backend/pyproject.toml apps/shifts/backend/pyproject.toml
+COPY apps/shifts/server/pyproject.toml apps/shifts/server/pyproject.toml
 COPY packages/crr-python/ packages/crr-python/
 COPY packages/ttlock/pyproject.toml packages/ttlock/pyproject.toml
 RUN uv sync --frozen --package crr-tournament --no-dev --no-editable

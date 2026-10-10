@@ -18,7 +18,8 @@ tournament-install:
 	npm --prefix apps/tournament/frontend ci
 
 tournament-backend-dev:
-	DATABASE_PATH=$(abspath apps/tournament/tournament.sqlite) $(UV) run --directory apps/tournament/backend --package crr-tournament --locked python -m uvicorn app.main:create_app --factory --reload --host 127.0.0.1 --port 8080 --no-proxy-headers
+	mkdir -p data/tournament
+	DATABASE_PATH="$(abspath data/tournament/tournament.sqlite)" $(UV) run --directory apps/tournament/backend --package crr-tournament --locked python -m uvicorn app.main:create_app --factory --reload --host 127.0.0.1 --port 8080 --no-proxy-headers
 
 tournament-frontend-dev:
 	npm --prefix apps/tournament/frontend run dev:client
@@ -32,15 +33,15 @@ tournament-build:
 	npm --prefix apps/tournament/frontend run build
 
 shifts-dev:
-	mkdir -p apps/shifts/backend/data
-	cd apps/shifts/backend && "$(abspath .venv/bin/python)" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+	mkdir -p data/shifts
+	cd apps/shifts/server && DATABASE_URL="sqlite:///$(abspath data/shifts/bar_rota.db)" "$(abspath .venv/bin/python)" -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 shifts-debug:
-	mkdir -p apps/shifts/backend/data
-	cd apps/shifts/backend && "$(abspath .venv/bin/python)" -Xfrozen_modules=off -m debugpy --listen 127.0.0.1:5678 --wait-for-client -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+	mkdir -p data/shifts
+	cd apps/shifts/server && DATABASE_URL="sqlite:///$(abspath data/shifts/bar_rota.db)" "$(abspath .venv/bin/python)" -Xfrozen_modules=off -m debugpy --listen 127.0.0.1:5678 --wait-for-client -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
 shifts-test:
-	$(UV) run --directory apps/shifts/backend --package crr-shifts --locked python -m pytest
+	$(UV) run --directory apps/shifts/server --package crr-shifts --locked python -m pytest
 
 shifts-build:
 	docker build -f apps/shifts/Dockerfile -t crr-shifts .
