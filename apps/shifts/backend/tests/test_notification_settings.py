@@ -14,36 +14,42 @@ from app.services.push import send_push_notification
 from conftest import sign_in
 
 
-def master_form(client, enabled=True):
+def master_form(client, email=True, push=True):
     page = client.get("/admin/notifications")
     token = re.search(r'name="csrf_token" value="([^"]+)"', page.text).group(1)
-    return {"csrf_token": token, **({"notifications_enabled": "on"} if enabled else {})}
+    return {"csrf_token": token, **({"email_enabled": "on"} if email else {}),
+            **({"push_enabled": "on"} if push else {})}
 
 
-def test_defaults_enabled_with_one_checkbox(logged_in, db):
+def test_defaults_enabled_with_two_checkboxes(logged_in, db):
     page = logged_in.get("/admin/notifications")
     assert page.status_code == 200
-    assert "Interruptor geral de notificações" in page.text
-    assert page.text.count('type="checkbox"') == 1
-    assert re.search(r'name="notifications_enabled"[^>]*checked', page.text)
-    assert notification_enabled(db)
+    assert "Interruptores gerais de notificações" in page.text
+    assert page.text.count('type="checkbox"') == 2
+    for channel in ("email", "push"):
+        assert re.search(rf'name="{channel}_enabled"[^>]*checked', page.text)
+        assert notification_enabled(db, channel)
 
 
 def test_pause_and_resume_persist_without_changing_users(logged_in, db, admin, monkeypatch):
     admin.notify_email = False
     db.add(PushSubscription(user_id=admin.id, endpoint="https://fcm.googleapis.com/send/test", p256dh="unused", auth="unused"))
     db.commit()
-    response = logged_in.post("/admin/notifications/settings", data=master_form(logged_in, False))
-    assert "Envio de notificações em pausa." in response.text
-    assert not notification_enabled(db)
-    assert not re.search(r'name="notifications_enabled"[^>]*checked', logged_in.get("/admin/notifications").text)
-    assert len(list(db.scalars(select(NotificationSetting)))) == 1
+    response = logged_in.post("/admin/notifications/settings", data=master_form(logged_in, email=False))
+    assert "Opções de envio de notificações guardadas." in response.text
+    assert not notification_enabled(db, "email")
+    assert notification_enabled(db, "push")
+    page = logged_in.get("/admin/notifications")
+    assert not re.search(r'name="email_enabled"[^>]*checked', page.text)
+    assert re.search(r'name="push_enabled"[^>]*checked', page.text)
+    assert len(list(db.scalars(select(NotificationSetting)))) == 2
     form = master_form(logged_in)
     monkeypatch.setattr(settings, "root_path", "/crr")
     response = logged_in.post("/admin/notifications/settings", data=form, follow_redirects=False)
     assert response.status_code == 303
     assert response.headers["location"] == "/crr/admin/notifications"
-    assert notification_enabled(db)
+    assert notification_enabled(db, "email")
+    assert notification_enabled(db, "push")
     db.refresh(admin)
     assert not admin.notify_email
     assert db.scalar(select(PushSubscription)).user_id == admin.id
@@ -85,22 +91,25 @@ def delivery(db, admin, team, monkeypatch):
 
 
 @pytest.mark.parametrize("event", [*EVENT_TYPE_LABELS, "future_event"])
-@pytest.mark.parametrize("enabled", [True, False])
-def test_master_gates_every_event_and_channel(db, team, delivery, event, enabled):
+@pytest.mark.parametrize("email,push_enabled", [(True, True), (True, False), (False, True), (False, False)])
+def test_master_gates_every_event_and_channel(db, team, delivery, event, email, push_enabled):
     smtp, push = delivery
-    db.add(NotificationSetting(event_type=MASTER_SETTING_KEY[0], channel=MASTER_SETTING_KEY[1], enabled=enabled))
+    for channel, enabled in (("email", email), ("push", push_enabled)):
+        db.add(NotificationSetting(event_type=MASTER_SETTING_KEY[0], channel=channel, enabled=enabled))
     db.commit()
     send_email_notification(db, team, event, "Aviso", "O turno foi alterado.")
-    assert smtp.called is enabled
-    assert push.called is enabled
+    assert smtp.called is email
+    assert push.called is push_enabled
     logs = list(db.scalars(select(NotificationLog)))
     assert {log.channel for log in logs} == {"email", "push"}
-    assert all(log.status == ("sent" if enabled else "skipped") for log in logs)
+    for log in logs:
+        enabled = email if log.channel == "email" else push_enabled
+        assert log.status == ("sent" if enabled else "skipped")
 
 
 def test_direct_push_honors_master(db, team, delivery):
     _, push = delivery
-    db.add(NotificationSetting(event_type=MASTER_SETTING_KEY[0], channel=MASTER_SETTING_KEY[1], enabled=False))
+    db.add(NotificationSetting(event_type=MASTER_SETTING_KEY[0], channel="push", enabled=False))
     db.commit()
     send_push_notification(db, team, "swap_requested", "Pedido de troca", "Novo pedido")
     push.assert_not_called()
@@ -114,6 +123,22 @@ def test_enabled_master_still_respects_email_preference(db, admin, team, deliver
     send_email_notification(db, team, "swap_requested", "Aviso", "Novo pedido")
     smtp.assert_not_called()
     push.assert_called_once()
+
+
+@pytest.mark.parametrize("enabled", [True, False])
+def test_legacy_master_inherited_until_channels_saved(logged_in, db, enabled):
+    db.add(NotificationSetting(event_type=MASTER_SETTING_KEY[0], channel=MASTER_SETTING_KEY[1], enabled=enabled))
+    db.commit()
+    for channel in ("email", "push"):
+        assert notification_enabled(db, channel) is enabled
+    page = logged_in.get("/admin/notifications")
+    for channel in ("email", "push"):
+        assert bool(re.search(rf'name="{channel}_enabled"[^>]*checked', page.text)) is enabled
+    logged_in.post("/admin/notifications/settings", data=master_form(logged_in, email=True, push=False))
+    assert notification_enabled(db, "email")
+    assert not notification_enabled(db, "push")
+    # Preserve the legacy setting, but explicit channel flags now take priority.
+    assert db.get(NotificationSetting, MASTER_SETTING_KEY).enabled is enabled
 
 
 def test_old_per_event_settings_do_not_act_as_master(db, team, delivery):

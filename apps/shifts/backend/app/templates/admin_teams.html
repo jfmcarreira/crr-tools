@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/forms.html" import boolean_toggle %}
 {% block title %}Equipas · {{ settings.app_name }}{% endblock %}
 {% block content %}
 <div class="page-head">
@@ -48,7 +49,7 @@
       </label>
       <p class="muted">O mesmo utilizador pode entrar em várias equipas: vê e controla os turnos de todas elas, e recebe os e-mails delas no seu endereço.</p>
     </fieldset>
-    <label class="check"><input type="checkbox" name="is_active" {% if team.is_active %}checked{% endif %}> Ativa</label>
+    {{ boolean_toggle('is_active', 'Ativa', team.is_active, 'team-' ~ team.id ~ '-is-active') }}
     <div><button class="primary" type="submit">Guardar</button></div>
     {% if team.id in removable_ids %}<div><a class="button danger" href="{{ app_path('/admin/teams/' ~  team.id  ~ '/delete') }}">Remover</a></div>{% endif %}
   </form>

@@ -80,13 +80,15 @@ module layout, application lifecycle and deployment commands.
 ## PWA push notifications
 
 Administrators can pause/resume all delivery on **Notificações** using the
-single **Interruptor geral de notificações** checkbox and **Guardar** button.
-The master switch defaults to on and gates every event, for both email and push,
-without modifying user email preferences or device subscriptions. When resumed,
+**Interruptores gerais de notificações** checkboxes and **Guardar** button.
+Email and push have independent global flags, gating every event without
+modifying user email preferences or device subscriptions. When resumed,
 those personal preferences still apply. Paused notifications are recorded as
 skipped (push only for configured, subscribed devices), not queued for later.
-The switch persists in the database using the `(__master__, all)` setting from
-migration `0007_notification_settings`; legacy per-event rows are not consulted.
+The flags persist as `(__master__, email)` and `(__master__, push)` settings in
+the table from migration `0007_notification_settings` (no new schema required).
+Until saved, each flag inherits the previous `(__master__, all)` switch, or
+defaults to on when no switch exists. Legacy per-event rows are not consulted.
 
 The **Calendário** page has an **Ativar notificações** button and a per-device
 disable button. Push follows the existing shift changes, swaps and CLI reminders,

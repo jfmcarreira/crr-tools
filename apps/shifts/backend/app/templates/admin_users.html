@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/forms.html" import boolean_toggle %}
 {% block title %}Utilizadores · {{ settings.app_name }}{% endblock %}
 {% block content %}
 <div class="page-head">
@@ -28,9 +29,9 @@
       <p class="muted">Ainda não há equipas. Crie-as em <a href="{{ app_path('/admin/teams') }}">Equipas</a>.</p>
       {% endfor %}
     </fieldset>
-    <label class="check"><input type="checkbox" name="is_admin"> Administrador</label>
-    <label class="check"><input type="checkbox" name="can_request_pin"> Pode pedir código de acesso</label>
-    <label class="check"><input type="checkbox" name="notify_email" checked> Notificações por e-mail</label>
+    {{ boolean_toggle('is_admin', 'Administrador', id='new-user-is-admin') }}
+    {{ boolean_toggle('can_request_pin', 'Pode pedir código de acesso', id='new-user-can-request-pin') }}
+    {{ boolean_toggle('notify_email', 'Notificações por e-mail', true, 'new-user-notify-email') }}
   </form>
 </section>
 <div class="stack gap-lg top-space">
@@ -51,10 +52,10 @@
       <label class="check"><input type="checkbox" name="team_ids" value="{{ team.id }}" {% if team.user and team.user.id == account.id %}checked{% endif %}> {{ team.name }}</label>
       {% endfor %}
     </fieldset>
-    <label class="check"><input type="checkbox" name="is_admin" {% if account.is_admin %}checked{% endif %}> Administrador</label>
-    <label class="check"><input type="checkbox" name="is_active" {% if account.is_active %}checked{% endif %}> Ativo</label>
-    <label class="check"><input type="checkbox" name="can_request_pin" {% if account.can_request_pin %}checked{% endif %}> Pode pedir código de acesso</label>
-    <label class="check"><input type="checkbox" name="notify_email" {% if account.notify_email %}checked{% endif %}> Notificações por e-mail</label>
+    {{ boolean_toggle('is_admin', 'Administrador', account.is_admin, 'user-' ~ account.id ~ '-is-admin') }}
+    {{ boolean_toggle('is_active', 'Ativo', account.is_active, 'user-' ~ account.id ~ '-is-active') }}
+    {{ boolean_toggle('can_request_pin', 'Pode pedir código de acesso', account.can_request_pin, 'user-' ~ account.id ~ '-can-request-pin') }}
+    {{ boolean_toggle('notify_email', 'Notificações por e-mail', account.notify_email, 'user-' ~ account.id ~ '-notify-email') }}
     <div><button class="primary" type="submit">Guardar</button></div>
     {% if account.id in removable_ids %}
     <div><button class="danger" type="submit" formaction="{{ app_path('/admin/users/' ~  account.id  ~ '/delete') }}">Remover utilizador</button></div>

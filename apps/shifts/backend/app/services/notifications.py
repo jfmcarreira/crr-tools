@@ -40,8 +40,8 @@ def send_email_notification(
         status="skipped",
     )
 
-    if not notification_enabled(db):
-        log.error = "Envio de notificações em pausa pelo interruptor geral"
+    if not notification_enabled(db, "email"):
+        log.error = "Envio de e-mails em pausa pelo interruptor geral"
         db.add(log)
         db.commit()
         return log

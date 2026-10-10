@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/forms.html" import boolean_toggle %}
 {% block content %}
 {% set schedule = card.schedule %}
 <div class="page-head">
@@ -11,8 +12,8 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <label>Das horas<input type="time" name="start_time" value="{{ schedule.start_time.strftime('%H:%M') }}" required></label>
     <label>Às horas<input type="time" name="end_time" value="{{ schedule.end_time.strftime('%H:%M') }}" required></label>
-    <label class="check"><input type="checkbox" name="requires_manager_approval" {% if schedule.requires_manager_approval %}checked{% endif %}> Aprovação da gestão</label>
-    <label class="check"><input type="checkbox" name="is_active" {% if schedule.is_active %}checked{% endif %}> Ativa</label>
+    {{ boolean_toggle('requires_manager_approval', 'Aprovação da gestão', schedule.requires_manager_approval) }}
+    {{ boolean_toggle('is_active', 'Ativa', schedule.is_active) }}
     <button class="secondary" type="submit">Guardar</button>
   </form>
 </div>

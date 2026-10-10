@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/forms.html" import boolean_toggle %}
 {% block title %}A minha conta · {{ settings.app_name }}{% endblock %}
 {% block content %}
 <div class="page-head">
@@ -26,7 +27,7 @@
   <form method="post" action="{{ app_path('/account/email') }}" class="form-grid">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <label>E-mail<input type="email" name="email" value="{{ current_user.email or '' }}" placeholder="nome@exemplo.pt"></label>
-    <label class="check"><input type="checkbox" name="notify_email" {% if current_user.notify_email %}checked{% endif %}> Receber as notificações por e-mail</label>
+    {{ boolean_toggle('notify_email', 'Receber as notificações por e-mail', current_user.notify_email) }}
     <div><button class="primary" type="submit">Guardar</button></div>
   </form>
 </section>

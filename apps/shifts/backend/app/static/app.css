@@ -74,6 +74,16 @@ button:not(.secondary):not(.danger){border-color:transparent}
 input,select{padding:9px 10px}
 .check{flex-direction:row!important;align-items:center!important;font-weight:500!important}
 .check input{width:auto;accent-color:var(--brand-deep)}
+label.boolean-toggle{position:relative;display:flex;flex-direction:row;align-items:center;gap:14px;min-width:0;min-height:58px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font-weight:600;font-size:.9rem;transition:border-color .2s,background .2s}
+.boolean-toggle:hover{border-color:var(--brand)}
+.boolean-toggle:has(input:checked){background:var(--brand-soft);border-color:var(--brand)}
+.boolean-toggle input{position:absolute;width:1px;height:1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.boolean-toggle-track{position:relative;flex:0 0 52px;width:52px;height:30px;border-radius:999px;background:var(--muted);box-shadow:inset 0 1px 3px rgb(0 0 0 / 12%);transition:background .2s}
+.boolean-toggle-track::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:var(--card);box-shadow:0 2px 4px rgb(0 0 0 / 18%);transition:transform .2s}
+.boolean-toggle input:checked+.boolean-toggle-track{background:var(--brand)}
+.boolean-toggle input:checked+.boolean-toggle-track::after{transform:translateX(22px)}
+.boolean-toggle input:focus-visible+.boolean-toggle-track{outline:var(--crr-focus-outline);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.boolean-toggle,.boolean-toggle-track,.boolean-toggle-track::after{transition:none}}
 .flash{padding:12px 14px;border-radius:9px;margin-bottom:18px;background:var(--brand-soft);border-left:4px solid var(--brand)}
 .flash.error{border-left-color:var(--danger)}
 .calendar-list{display:flex;flex-direction:column;gap:8px;padding-bottom:35px}

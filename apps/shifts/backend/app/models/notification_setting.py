@@ -5,7 +5,7 @@ from ..database import Base
 
 
 class NotificationSetting(Base):
-    """Delivery settings; the (__master__, all) row is the global delivery gate."""
+    """Global email/push gates; (__master__, all) is the legacy fallback."""
 
     __tablename__ = "notification_settings"
 

@@ -1,19 +1,20 @@
 {% extends "base.html" %}
+{% from "macros/forms.html" import boolean_toggle %}
 {% block title %}Notificações · {{ settings.app_name }}{% endblock %}
 {% block content %}
 <div class="page-head"><div><h1>Notificações</h1><p class="muted">«ignorado» significa que a equipa não tem utilizador, que o utilizador não tem e-mail ou tem as notificações desligadas, ou que o SMTP não está configurado.</p></div></div>
 <p class="muted">Inclui também as notificações push enviadas aos dispositivos subscritos.</p>
 <section class="panel">
-  <h2>Interruptor geral de notificações</h2>
-  <p class="muted">Pausa ou retoma todo o envio de e-mails e notificações push. Não altera as preferências pessoais nem as subscrições dos dispositivos.</p>
-  <form method="post" action="{{ app_path('/admin/notifications/settings') }}">
+  <h2>Interruptores gerais de notificações</h2>
+  <p class="muted">Pausa ou retoma o envio de e-mails e de notificações push de forma independente. Não altera as preferências pessoais nem as subscrições dos dispositivos.</p>
+  <form class="stack" method="post" action="{{ app_path('/admin/notifications/settings') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <label for="notifications-enabled">
-      <input id="notifications-enabled" type="checkbox" name="notifications_enabled" value="on"
-          {% if notifications_enabled %}checked{% endif %}>
-      Envio de notificações ativo
-    </label>
-    <button class="primary" type="submit">Guardar</button>
+    {% for channel in notification_channels %}
+    {{ boolean_toggle(channel ~ '_enabled', 'Envio de e-mails ativo' if channel == 'email' else 'Envio de notificações push ativo', notifications_enabled[channel], channel ~ '-enabled') }}
+    {% endfor %}
+    <div class="row end">
+      <button class="primary" type="submit">Guardar</button>
+    </div>
   </form>
 </section>
 <p class="muted">Durante a pausa, os avisos ficam registados como «ignorado». Ao retomar, só são enviados novos avisos; os anteriores não são reenviados.</p>

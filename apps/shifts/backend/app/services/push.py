@@ -17,7 +17,7 @@ def send_push_notification(db: Session, team: Team, event_type: str, subject: st
     if not settings.push_enabled or user is None or not user.is_active:
         return
     subscriptions = list(db.scalars(select(PushSubscription).where(PushSubscription.user_id == user.id)))
-    enabled = notification_enabled(db)
+    enabled = notification_enabled(db, "push")
     for subscription in subscriptions:
         log = NotificationLog(
             team_id=team.id, user_id=user.id, event_type=event_type, channel="push",
@@ -25,7 +25,7 @@ def send_push_notification(db: Session, team: Team, event_type: str, subject: st
         )
         if not enabled:
             log.status = "skipped"
-            log.error = "Envio de notificações em pausa pelo interruptor geral"
+            log.error = "Envio de notificações push em pausa pelo interruptor geral"
             db.add(log)
             db.commit()
             continue

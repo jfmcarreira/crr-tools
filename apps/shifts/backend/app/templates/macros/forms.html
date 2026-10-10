@@ -1,0 +1,8 @@
+{% macro boolean_toggle(name, label, checked=false, id=none) -%}
+<label class="boolean-toggle" for="{{ id or name }}">
+  <input id="{{ id or name }}" type="checkbox" role="switch" name="{{ name }}" value="on"
+      {% if checked %}checked{% endif %}>
+  <span class="boolean-toggle-track" aria-hidden="true"></span>
+  <span>{{ label }}</span>
+</label>
+{%- endmacro %}
